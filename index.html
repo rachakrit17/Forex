@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>เริ่มเรียน FOREX จากศูนย์ - Pro Trading Workspace</title>
+
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="container pt-3">
+    <div class="base-card d-flex justify-content-between align-items-center">
+      <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+        <i class="bi bi-list fs-5"></i>
+      </button>
+
+      <div class="text-center">
+        <span class="fw-bold fs-6 d-block text-dark">
+          <i class="bi bi-mortarboard-fill text-warning me-1"></i> FOREX PRO WORKSPACE
+        </span>
+        <small class="text-muted" style="font-size: 0.68rem;">คู่มือปฏิบัติการเทรดฉบับสมบูรณ์ 1000%</small>
+      </div>
+
+      <span id="header-badge" class="badge bg-warning-subtle text-warning-emphasis border border-warning px-2.5 py-1" style="font-size: 0.72rem;">
+        Part 1: พื้นฐานกลไก
+      </span>
+    </div>
+  </header>
+
+  <!-- ==================== OFFCANVAS SIDEBAR ==================== -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 350px;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <h6 class="offcanvas-title fw-bold text-dark mb-0">
+        <i class="bi bi-grid-fill text-warning me-1"></i> สารบัญระบบเทรดครบวงจร
+      </h6>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT (4 TABS FULL DETAIL) ==================== -->
+  <main class="container mt-3">
+
+    <!-- ==================== TAB 1: พื้นฐานกลไก & คณิตศาสตร์ตลาด (FULL 1000%) ==================== -->
+    <div id="view-1" class="page-view">
+      
+      <div class="base-card mb-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h5 class="fw-bold text-dark mb-0">📚 เสาที่ 1: กลไกตลาด & ระบบคณิตศาสตร์ Forex</h5>
+          <span class="badge bg-primary-subtle text-primary">Micro-Economics</span>
+        </div>
+        <p class="small text-muted mb-0">เข้าใจโครงสร้างการจับคู่ค่าเงิน การคำนวณมูลค่าสัญญา ความคุ้มค่า และการป้องกันการล้างพอร์ตเชิงคณิตศาสตร์</p>
+      </div>
+
+      <!-- 1.1 การแบ่งกลุ่มคู่เงิน & กลไกอัตราแลกเปลี่ยน -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-secondary me-1">1.1</span> กลไกคู่เงิน (Currency Pairs) & การทำกำไร 2 ฝั่ง (Two-Way Market)
+          </h6>
+          <span class="badge bg-light text-muted border">Base / Quote</span>
+        </div>
+        <p class="small text-muted mb-2">
+          Forex ไม่ใช่การซื้อสินทรัพย์เดี่ยว แต่เป็นการ <strong>"ซื้อสกุลเงินหนึ่ง พร้อมกับขายอีกสกุลเงินหนึ่งพร้อมกัน"</strong> โดยตัวหน้าคือ <strong>สกุลเงินหลัก (Base Currency)</strong> และตัวหลังคือ <strong>สกุลเงินอ้างอิง (Quote/Counter Currency)</strong>
+        </p>
+
+        <div class="row g-2 small mb-3">
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-success d-block mb-1">🟢 คำสั่ง BUY (Long Position)</strong>
+              <span class="text-muted">• คาดการณ์ว่า <strong>"ตัวหน้าจะแข็งค่าขึ้น"</strong> เมื่อเทียบกับตัวหลัง<br>• หรือราคากราฟกำลังจะวิ่งขึ้น ยิ่งกราฟพุ่งสูง กำไรยิ่งเพิ่มขึ้น</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">🔴 คำสั่ง SELL (Short Position)</strong>
+              <span class="text-muted">• คาดการณ์ว่า <strong>"ตัวหน้าจะอ่อนค่าลง"</strong> เมื่อเทียบกับตัวหลัง<br>• สามารถทำกำไรในสภาวะตลาดขาลงได้ ยิ่งกราฟดิ่งลง กำไรยิ่งเพิ่มขึ้น</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-2 small mb-2">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-white shadow-sm h-100">
+              <strong class="text-primary d-block mb-1">1. Major Pairs (คู่เงินหลัก)</strong>
+              <span class="text-muted" style="font-size: 0.72rem;">คู่เงินที่มี USD จับคู่กับประเทศมหาอำนาจ เช่น EUR/USD, GBP/USD, USD/JPY (สเปรดแคบที่สุด สภาพคล่องสูงที่สุด วิ่งตามเทรนด์ดี)</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-white shadow-sm h-100">
+              <strong class="text-primary d-block mb-1">2. Minor / Cross Pairs</strong>
+              <span class="text-muted" style="font-size: 0.72rem;">คู่เงินหลักที่ไม่มี USD เช่น EUR/GBP, GBP/JPY, AUD/NZD (สวิงแรงในบางช่วง สเปรดปานกลาง มีรอบคลื่นชัดเจน)</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-white shadow-sm h-100">
+              <strong class="text-danger d-block mb-1">3. Commodities & Exotic</strong>
+              <span class="text-muted" style="font-size: 0.72rem;"><strong>XAU/USD (ทองคำ):</strong> สินทรัพย์ยอดนิยม วิ่งแรง กำไรไว แต่ความผันผวนสูงมาก / คู่เงินประเทศเกิดใหม่ (สเปรดกว้าง)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-box small text-muted">
+          <strong class="text-dark d-block mb-1">💡 ถอดรหัสราคาจริงของทองคำ (XAU/USD):</strong>
+          XAU = ทองคำบริสุทธิ์น้ำหนัก 1 ทรอยออนซ์ (ประมาณ 31.1035 กรัม), USD = สกุลเงินดอลลาร์สหรัฐ<br>
+          ถ้าราคาหน้ากระดานอยู่ที่ <strong>2,500.50</strong> หมายความว่า <em>"ทองคำ 1 ออนซ์ มีมูลค่าแลกเปลี่ยนเท่ากับ 2,500 ดอลลาร์ กับอีก 50 เซนต์"</em>
+        </div>
+      </div>
+
+      <!-- 1.2 วิธีนับระยะทาง Pip vs Point vs Pipette -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-secondary me-1">1.2</span> ระบบหน่วยวัดระยะทาง: Pip, Point และ Pipette
+          </h6>
+          <span class="badge bg-light text-muted border">Distance Metrics</span>
+        </div>
+        <p class="small text-muted mb-2">
+          ในตลาดโลก เราไม่บอกว่าราคาวิ่งไปกี่บาท แต่วัดระยะการเคลื่อนที่ด้วย <strong>Point (จุด)</strong> และ <strong>Pip (ปิป)</strong> เพื่อใช้คำนวณกำไรขาดทุนที่เป็นมาตรฐานสากล
+        </p>
+
+        <div class="table-responsive mb-2">
+          <table class="table table-bordered table-sm small text-center mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ประเภทสินทรัพย์</th>
+                <th>ทศนิยม</th>
+                <th>ราคาเดิม ➔ ราคาใหม่</th>
+                <th>ระยะ Point (จุด)</th>
+                <th>ระยะ Pip</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="fw-bold text-warning-emphasis">ทองคำ (XAUUSD)</td>
+                <td>2 ตำแหน่ง</td>
+                <td>2500.00 ➔ 2502.50</td>
+                <td class="text-success fw-bold">+250 จุด ($2.50)</td>
+                <td>25 Pips</td>
+              </tr>
+              <tr>
+                <td class="fw-bold text-primary">คู่เงิน 5 ตำแหน่ง (EURUSD)</td>
+                <td>5 ตำแหน่ง</td>
+                <td>1.08500 ➔ 1.08565</td>
+                <td class="text-success fw-bold">+65 จุด</td>
+                <td>6.5 Pips</td>
+              </tr>
+              <tr>
+                <td class="fw-bold text-info">คู่เงินเยน (USDJPY)</td>
+                <td>3 ตำแหน่ง</td>
+                <td>155.200 ➔ 155.600</td>
+                <td class="text-success fw-bold">+400 จุด</td>
+                <td>40 Pips</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-2 rounded-2 bg-light border small text-muted">
+          📌 <strong>กฎทองคำ:</strong> <code>1 Pip = 10 Points (จุด)</code> | ตัวเลขทศนิยมตำแหน่งสุดท้ายสุดบนหน้าจอโปรแกรม MT4/MT5 คือ <strong>Point</strong>
+        </div>
+      </div>
+
+      <!-- 1.3 ขนาดสัญญา Lot Size & การคิดกำไรขาดทุนจริง -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-secondary me-1">1.3</span> ขนาดสัญญา (Lot Size) & มูลค่าเงินต่อจุด (Notional Value)
+          </h6>
+          <span class="badge bg-light text-muted border">Position Sizing</span>
+        </div>
+        <p class="small text-muted mb-2">
+          <strong>Lot Size</strong> คือหน่วยบอกขนาดคำสั่งซื้อขาย ยิ่งเปิด Lot ใหญ่ มูลค่าต่อการขยับ 1 จุดจะยิ่งสูงขึ้น (ทั้งกำไรและขาดทุน)
+        </p>
+
+        <div class="row g-2 text-center small mb-2">
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-dark">0.01 Lot (Micro)</div>
+              <small class="text-muted d-block" style="font-size: 0.68rem;">สัญญา 1,000 units</small>
+              <div class="text-primary fw-bold mt-1">100 จุด = $1.00</div>
+              <span class="badge bg-success-subtle text-success mt-1" style="font-size: 0.62rem;">ปลอดภัยสูงสุด</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-dark">0.10 Lot (Mini)</div>
+              <small class="text-muted d-block" style="font-size: 0.68rem;">สัญญา 10,000 units</small>
+              <div class="text-warning-emphasis fw-bold mt-1">100 จุด = $10.00</div>
+              <span class="badge bg-warning-subtle text-warning-emphasis mt-1" style="font-size: 0.62rem;">ปานกลาง</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-dark">1.00 Lot (Standard)</div>
+              <small class="text-muted d-block" style="font-size: 0.68rem;">สัญญา 100,000 units</small>
+              <div class="text-danger fw-bold mt-1">100 จุด = $100.00</div>
+              <span class="badge bg-danger-subtle text-danger mt-1" style="font-size: 0.62rem;">เสี่ยงสูงมาก</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-box small text-muted">
+          <strong class="text-dark d-block mb-1">🧮 สูตรคำนวณกำไร/ขาดทุนจริง:</strong>
+          <code>กำไร/ขาดทุน ($) = ขนาด Lot × ระยะทางที่ราคาวิ่ง (Points)</code><br>
+          • <strong>ตัวอย่าง:</strong> เปิด BUY ทองคำ <strong>0.05 Lot</strong> ที่ราคา 2,500.00 แล้วไปปิดทำกำไรที่ 2,508.00 (ราคาวิ่งบวกขึ้น 800 จุด)<br>
+          • <strong>ผลลัพธ์:</strong> <code>0.05 × 800 = +$40.00 ดอลลาร์</code>
+        </div>
+      </div>
+
+      <!-- 1.4 ประเภทคำสั่งซื้อขาย Order Types -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">1.4</span> คำสั่งซื้อขาย 6 ประเภท (Market & Pending Orders)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-12 col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">⚡ 1. Market Execution (เข้าทันที)</strong>
+              <span class="text-muted">• <strong>Buy:</strong> ซื้อทันทีที่ราคา Ask ปัจจุบัน (มองว่าราคาจะขึ้น)<br>• <strong>Sell:</strong> ขายทันทีที่ราคา Bid ปัจจุบัน (มองว่าราคาจะลง)</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">⏳ 2. Limit Orders (ดักย่อ / ดักเด้ง)</strong>
+              <span class="text-muted">• <strong>Buy Limit:</strong> ตั้งดักซื้อใต้ราคาปัจจุบัน (รอราคาย่อตัวลงมาชนแนวรับ)<br>• <strong>Sell Limit:</strong> ตั้งดักขายเหนือราคาปัจจุบัน (รอราคาดีดตัวขึ้นไปชนแนวต้าน)</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <strong class="text-dark d-block mb-1">🚀 3. Stop Orders (ดักตามน้ำเมื่อเบรกเอาต์)</strong>
+              <span class="text-muted">• <strong>Buy Stop:</strong> ตั้งดักซื้อเหนือราคาปัจจุบัน เมื่อราคาวิ่งทะลุแนวต้านขึ้นไป ระบบจะเปิด BUY ตามทันที<br>• <strong>Sell Stop:</strong> ตั้งดักขายใต้ราคาปัจจุบัน เมื่อราคาทุบทะลุแนวรับลงมา ระบบจะเปิด SELL ตามทันที</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.5 กลไก Bid, Ask, Spread -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">1.5</span> Bid, Ask & ทำไมเปิดออเดอร์แล้วติดลบทันที? (Spread Markup)
+        </h6>
+        <div class="row g-2 small mb-2">
+          <div class="col-6">
+            <div class="p-2 border rounded-3 bg-light text-center">
+              <strong class="text-primary d-block">Bid (ราคาเสนอซื้อ)</strong>
+              <span class="text-muted">ราคาที่โบรกเกอร์รับซื้อจากเรา (ใช้ตอนกด SELL และตอนปิดไม้ BUY)</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-2 border rounded-3 bg-light text-center">
+              <strong class="text-primary d-block">Ask (ราคาเสนอขาย)</strong>
+              <span class="text-muted">ราคาที่โบรกเกอร์ขายให้เรา (ใช้ตอนกด BUY และตอนปิดไม้ SELL)</span>
+            </div>
+          </div>
+        </div>
+        <div class="example-box small text-muted">
+          📌 <strong>ส่วนต่าง Ask - Bid = Spread:</strong> เปรียบเสมือนเวลาซื้อทองที่ร้านทอง ราคาขายออกจะแพงกว่าราคารับซื้อคืนเสมอ ดังนั้นเมื่อเปิดออเดอร์ ออเดอร์จะเริ่มจากติดลบค่า Spread ก่อน เมื่อราคาวิ่งเลยจุดคุ้มทุนจึงเริ่มกลายเป็นกำไร
+        </div>
+      </div>
+
+      <!-- 1.6 โครงสร้างพอร์ต & Margin Mathematics -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-secondary me-1">1.6</span> โครงสร้างเงินทุน & คณิตศาสตร์ Margin (ป้องกันพอร์ตแตก)
+          </h6>
+          <span class="badge bg-danger text-white">Risk Protocol</span>
+        </div>
+        
+        <ul class="small text-muted ps-3 mb-2 space-y-1">
+          <li><strong>Balance (ยอดเงินจริง):</strong> เงินทุนคงเหลือจริงในบัญชี (ไม่รวมผลกำไร/ขาดทุนของไม้ที่กำลังวิ่ง)</li>
+          <li><strong>Equity (มูลค่าสุทธิ):</strong> เงินทุนรวมผลกำไร/ขาดทุนแบบ Real-time (<code>Equity = Balance + Floating P&L</code>)</li>
+          <li><strong>Margin (หลักประกัน):</strong> เงินที่โบรกเกอร์ล็อกไว้เพื่อค้ำประกันออเดอร์ (<code>Margin = (Lot × Contract Size × Price) ÷ Leverage</code>)</li>
+          <li><strong>Free Margin (หลักประกันคงเหลือ):</strong> เงินที่เหลือสำหรับเปิดไม้ใหม่ หรือใช้ทนลาก (<code>Equity - Margin</code>)</li>
+          <li><strong>Margin Level (% ดัชนีความปลอดภัย):</strong> ยิ่งสูงยิ่งปลอดภัย (<code>Margin Level = (Equity ÷ Margin) × 100</code>)</li>
+        </ul>
+
+        <div class="alert alert-danger py-2 px-3 small mb-0 rounded-3 border-danger">
+          ⚠️ <strong>จุดล้างพอร์ต (Stop Out Level):</strong> หาก Margin Level ลดลงต่ำกว่า 20% - 50% (ขึ้นอยู่กับโบรกเกอร์) ระบบจะบังคับปิดออเดอร์ทิ้งทีละไม้โดยอัตโนมัติเพื่อป้องกันยอดเงินติดลบ
+        </div>
+      </div>
+
+      <!-- 1.7 ค่าธรรมเนียมแฝง -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">1.7</span> 3 ค่าธรรมเนียมแฝงที่ต้องระวัง (Commission, Swap & Slippage)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block">1. Commission</strong>
+              <span class="text-muted">ค่าคอมมิชชั่นต่อ Lot มักคิดในบัญชี ECN/Raw Spread ที่ให้สเปรด 0.0</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block">2. Swap & Triple Swap</strong>
+              <span class="text-muted">ดอกเบี้ยถือข้ามคืน (มีทั้งบวกและลบ) | 🔥 <strong>คืนวันพุธคิด Swap 3 เท่า</strong> เพื่อชดเชยวันหยุดเสาร์-อาทิตย์</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block">3. Slippage (ราคาข้าม)</strong>
+              <span class="text-muted">ส่วนต่างราคาที่สั่งกับราคาที่ได้จริง มักเกิดช่วงข่าวกล่องแดงแรงที่สภาพคล่องขาดช่วง</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.8 รอบเวลาตลาดโลก -->
+      <div class="lesson-box mb-3">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">1.8</span> 4 รอบเวลาตลาดการเงินโลก & Golden Hours (เวลาไทย)
+        </h6>
+        <div class="row g-2 text-center small mb-2">
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <div class="fw-bold">🇦🇺 ซิดนีย์</div>
+              <small class="text-muted d-block">04:00 - 13:00</small>
+              <span class="badge bg-secondary text-light mt-1" style="font-size: 0.65rem;">สเปรดกว้างช่วงเปิด</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <div class="fw-bold">🇯🇵 โตเกียว</div>
+              <small class="text-muted d-block">06:00 - 15:00</small>
+              <span class="badge bg-secondary text-light mt-1" style="font-size: 0.65rem;">กรอบแคบ/ไซด์เวย์</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <div class="fw-bold">🇬🇧 ลอนดอน</div>
+              <small class="text-muted d-block">14:00 - 23:00</small>
+              <span class="badge bg-primary text-light mt-1" style="font-size: 0.65rem;">วอลุ่มสูง/เริ่มเทรนด์</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <div class="fw-bold">🇺🇸 นิวยอร์ก</div>
+              <small class="text-muted d-block">19:00 - 04:00</small>
+              <span class="badge bg-danger text-light mt-1" style="font-size: 0.65rem;">ผันผวนสูงสุด</span>
+            </div>
+          </div>
+        </div>
+        <div class="example-box small text-muted">
+          🎯 <strong>Golden Hours (19:00 - 22:00 น.):</strong> ตลาดลอนดอนและนิวยอร์กเปิดซ้อนกัน มีวอลุ่มมากกว่า 70% ของโลก ราคาทองคำและคู่เงิน USD วิ่งเป็นเทรนด์แรงที่สุด
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: การอ่านกราฟ & SMC (FULL 1000%) ==================== -->
+    <div id="view-2" class="page-view d-none">
+      
+      <div class="base-card mb-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h5 class="fw-bold text-dark mb-0">📈 เสาที่ 2: การอ่านกราฟ & Smart Money Concepts</h5>
+          <span class="badge bg-success-subtle text-success">Price Action Pro</span>
+        </div>
+        <p class="small text-muted mb-0">เจาะลึกจิตวิทยาโครงสร้างราคา การตามรอยรายใหญ่ (Order Blocks, FVG, Liquidity Sweeps) และการวิเคราะห์หลายไทม์เฟรม</p>
+      </div>
+
+      <!-- 2.1 โครงสร้างแนวโน้มราคา Market Structure -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">2.1</span> โครงสร้างแนวโน้มราคา (Market Structure: HH, HL, LH, LL)
+        </h6>
+        <div class="row g-2 small mb-2">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-success d-block mb-1">📈 เทรนด์ขาขึ้น (Uptrend)</strong>
+              <span class="text-muted">ยก <span class="structure-tag bg-success text-white">HH</span> (Higher High) และยก <span class="structure-tag bg-success text-white">HL</span> (Higher Low) สูงขึ้นเรื่อยๆ ➔ <em>รอ BUY ที่ HL</em></span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">📉 เทรนด์ขาลง (Downtrend)</strong>
+              <span class="text-muted">ทำ <span class="structure-tag bg-danger text-white">LL</span> (Lower Low) และทำ <span class="structure-tag bg-danger text-white">LH</span> (Lower High) ต่ำลงเรื่อยๆ ➔ <em>รอ SELL ที่ LH</em></span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-secondary d-block mb-1">↔️ ไซด์เวย์ (Sideways / Consolidation)</strong>
+              <span class="text-muted">ราคาวิ่งบีบในกรอบ ไม่ทำ High ใหม่ และไม่หลุด Low เดิม สะสมพลังเพื่อเตรียมระเบิดเทรนด์</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.2 BOS vs CHoCH vs Liquidity Sweep -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">2.2</span> การทะลุโครงสร้าง (BOS) vs สัญญาณเปลี่ยนทิศ (CHoCH) vs ล้างสภาพคล่อง (Sweep)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">🚀 BOS (Break of Structure)</strong>
+              <p class="text-muted mb-0">เนื้อเทียนปิดทะลุ High เดิม (ในขาขึ้น) หรือ Low เดิม (ในขาลง) ยืนยันว่า <strong>เทรนด์เดิมแข็งแกร่งและจะไปต่อ</strong></p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-warning-emphasis d-block mb-1">🔄 CHoCH (Change of Character)</strong>
+              <p class="text-muted mb-0">ราคาหลุดจุดสวิงสำคัญแรก เตือนว่าโครงสร้างพังทลาย และมีโอกาส <strong>กลับทิศทางเป็นเทรนด์ใหม่</strong></p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">🎯 Liquidity Sweep (กวาด SL)</strong>
+              <p class="text-muted mb-0">ทิ้งเฉพาะไส้เทียนทะลุแนวรับ-ต้าน แล้วปิดแท่งมุดกลับเข้ากรอบ สถาบันเข้าล่า Stop Loss เม่าแล้วดึงราคากลับ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.3 SMC: Order Block & Fair Value Gap -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">2.3</span> ท่าไม้ตายสถาบัน: Order Block (OB) & Fair Value Gap (FVG)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">🧱 Order Block (OB)</strong>
+              <span class="text-muted">• <strong>Bullish OB:</strong> แท่งแดงสุดท้ายก่อนเกิดการระเบิดราคาพุ่งขึ้นอย่างรุนแรง (BOS)<br>• <strong>Bearish OB:</strong> แท่งเขียวสุดท้ายก่อนเกิดการทุบราคาร่วงลงอย่างรุนแรง</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">⚡ Fair Value Gap (FVG / Imbalance)</strong>
+              <span class="text-muted">• ช่องว่างระหว่างไส้เทียนแท่งที่ 1 และ 3 ที่เกิดจากแท่งที่ 2 วิ่งเร็วเกินไปจนคำสั่งไม่สมดุล<br>• ราคามักถูกดึงกลับมาเป็นแม่เหล็กเพื่อเติมเต็มคำสั่งซื้อขายที่ตกค้าง</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.4 Premium vs Discount Zone -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">2.4</span> การแบ่งโซนต้นทุน: Premium vs Discount (Fibo Equilibrium)
+        </h6>
+        <p class="small text-muted mb-2">กฎเหล็กของธุรกิจและสถาบัน: <em>"ห้ามซื้อของแพง และห้ามขายของถูก"</em> ใช้ระดับ Fibonacci 50% แบ่งครึ่งสวิงราคา</p>
+        <div class="row g-2 small text-center">
+          <div class="col-6">
+            <div class="p-2 border rounded-3 bg-danger-subtle border-danger-subtle">
+              <strong class="text-danger d-block">Premium Zone (> 50%)</strong>
+              <small class="text-muted">โซนของแพง: <strong>โฟกัสเฉพาะหน้า SELL</strong></small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-2 border rounded-3 bg-success-subtle border-success-subtle">
+              <strong class="text-success d-block">Discount Zone (< 50%)</strong>
+              <small class="text-muted">โซนของถูก: <strong>โฟกัสเฉพาะหน้า BUY (OTE 61.8%-78.6%)</strong></small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.5 Multi-Timeframe Analysis Top-Down -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">2.5</span> การวิเคราะห์หลายไทม์เฟรม (Top-Down Multi-Timeframe Analysis)
+        </h6>
+        <div class="row g-2 small text-center">
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-primary">1. Macro (D1 / H4)</div>
+              <small class="text-muted d-block mt-1">ดูแนวโน้มใหญ่ & กำหนด Bias ว่าวันนี้จะ BUY หรือ SELL</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-warning-emphasis">2. Setup (H1 / M15)</div>
+              <small class="text-muted d-block mt-1">หาโซนได้เปรียบ POI (Order Block, S/R Flip, FVG)</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2.5 border rounded-3 bg-light">
+              <div class="fw-bold text-success">3. Trigger (M5 / M1)</div>
+              <small class="text-muted d-block mt-1">หาแท่งเทียนกลับตัว (Hammer / Engulfing / CHoCH) เพื่อยิงออเดอร์</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.6 กราฟสด TradingView Real-Time -->
+      <div class="lesson-box mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0"><span class="badge bg-secondary me-1">2.6</span> ฝึกวิเคราะห์กราฟสด (XAUUSD Live Chart)</h6>
+          <span class="badge bg-success-subtle text-success">Live Stream</span>
+        </div>
+        <div style="height: 420px; border-radius: 12px; overflow: hidden; border: 1px solid #e7e5e4;">
+          <iframe 
+            src="https://s.tradingview.com/widgetembed/?frameElementId=tv_study_desk&symbol=OANDA%3AXAUUSD&interval=15&theme=light&style=1&timezone=Asia%2FBangkok&locale=th_TH"
+            style="width: 100%; height: 100%; border: 0;"
+            scrolling="no">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 3: การบริหารเงินทุน & จิตวิทยา (FULL 1000%) ==================== -->
+    <div id="view-3" class="page-view d-none">
+      
+      <div class="base-card mb-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h5 class="fw-bold text-dark mb-0">🛡️ เสาที่ 3: การบริหารความเสี่ยง & จิตวิทยาเทรดเดอร์</h5>
+          <span class="badge bg-danger-subtle text-danger">Capital Preservation</span>
+        </div>
+        <p class="small text-muted mb-0">วิเคราะห์กราฟแม่นแค่ไหน ถ้าคุมความเสี่ยงไม่เป็น พอร์ตก็แตกได้ | การอยู่รอดในระยะยาวขึ้นอยู่กับคณิตศาสตร์ความเสี่ยง 100%</p>
+      </div>
+
+      <!-- 3.1 Pro Interactive Calculator Tool -->
+      <div class="lesson-box" style="background: linear-gradient(180deg, #ffffff 0%, #fffbf7 100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-warning-subtle text-warning-emphasis me-1">Pro Tool</span> 🧮 เครื่องคำนวณ Lot Size, มูลค่าความเสี่ยง & RR
+          </h6>
+          <span class="badge bg-dark text-white">XAUUSD / Forex</span>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-6 col-md-3">
+            <label class="small text-muted mb-1 fw-bold">ทุนในพอร์ต ($)</label>
+            <input type="number" id="calc-balance" class="form-control" value="500">
+          </div>
+          <div class="col-6 col-md-3">
+            <label class="small text-muted mb-1 fw-bold">ยอมเสี่ยงต่อไม้ (%)</label>
+            <input type="number" id="calc-risk" class="form-control" value="2" step="0.5">
+          </div>
+          <div class="col-6 col-md-3">
+            <label class="small text-muted mb-1 fw-bold">ระยะ Stop Loss (จุด)</label>
+            <input type="number" id="calc-sl-pts" class="form-control" value="300" placeholder="เช่น 300 จุด ($3 ทอง)">
+          </div>
+          <div class="col-6 col-md-3">
+            <label class="small text-muted mb-1 fw-bold">เป้า Take Profit (จุด)</label>
+            <input type="number" id="calc-tp-pts" class="form-control" value="600" placeholder="เช่น 600 จุด ($6 ทอง)">
+          </div>
+        </div>
+
+        <button onclick="calcMM()" class="btn btn-orange-action w-100 py-2.5 mb-3 shadow-sm">
+          คำนวณขนาด Lot ที่ปลอดภัย & ตรวจสอบความคุ้มค่า ⚡
+        </button>
+
+        <div class="p-3 bg-white rounded-3 border border-warning shadow-sm text-center">
+          <div class="row g-2 align-items-center">
+            <div class="col-6 col-md-3 border-end">
+              <small class="text-muted d-block" style="font-size: 0.7rem;">ขนาด Lot ที่ต้องเปิด</small>
+              <span id="res-lot-size" class="fs-4 fw-bold text-primary">0.03 Lot</span>
+            </div>
+            <div class="col-6 col-md-3 border-end">
+              <small class="text-muted d-block" style="font-size: 0.7rem;">ยอมขาดทุนสูงสุด (Risk $)</small>
+              <span id="res-risk-usd" class="fs-5 fw-bold text-danger">-$10.00</span>
+            </div>
+            <div class="col-6 col-md-3 border-end">
+              <small class="text-muted d-block" style="font-size: 0.7rem;">กำไรเมื่อชนเป้า (Reward $)</small>
+              <span id="res-reward-usd" class="fs-5 fw-bold text-success">+$20.00</span>
+            </div>
+            <div class="col-6 col-md-3">
+              <small class="text-muted d-block" style="font-size: 0.7rem;">อัตราความคุ้มค่า RR</small>
+              <span id="res-rr-ratio" class="fs-5 fw-bold text-warning-emphasis">1 : 2.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 กฎ 1% - 2% Rule -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">3.1</span> กฎเหล็กความเสี่ยง 1% - 2% Rule (Risk per Trade)
+        </h6>
+        <div class="row g-2 small mb-2">
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">ทำไมต้องเสี่ยงไม่เกิน 1-2%?</strong>
+              <span class="text-muted">หากเสี่ยงไม้ละ 2% คุณต้อง <strong>แพ้ติดต่อกันถึง 50 ไม้รวด</strong> พอร์ตถึงจะแตก ซึ่งในทางสถิติแทบเป็นไปไม่ได้เลย ทำให้คุณอยู่รอดในตลาดได้ยาวนาน</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">อันตรายของการ Overlot (เสี่ยง 10-20%)</strong>
+              <span class="text-muted">หากเสี่ยงไม้ละ 20% คุณแพ้ติดต่อกันเพียงแค่ <strong>4-5 ครั้ง</strong> พอร์ตจะเสียหายไปกว่า 70% และแทบเป็นไปไม่ได้ที่จะทำกำไรกู้พอร์ตกลับคืนมา</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.3 Win Rate vs Risk-Reward Matrix -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">3.2</span> ตารางความสัมพันธ์ Win Rate vs Risk-Reward Ratio (RR)
+        </h6>
+        <p class="small text-muted mb-2">ความจริงที่มือใหม่ไม่รู้: <em>"คุณไม่จำเป็นต้องเทรดชนะ 80-90% เพื่อให้พอร์ตโต"</em></p>
+        <div class="table-responsive mb-2">
+          <table class="table table-bordered table-sm small text-center mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>อัตราทด RR</th>
+                <th>Win Rate ขั้นต่ำที่ "เท่าทุน"</th>
+                <th>ถ้าชนะเพียง 50% พอร์ตจะเป็นอย่างไร? (100 ไม้)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1 : 1</strong></td>
+                <td>50.0%</td>
+                <td class="text-muted">เท่าทุนพอดี (0R)</td>
+              </tr>
+              <tr class="table-warning">
+                <td class="fw-bold text-primary">1 : 2</td>
+                <td class="fw-bold text-success">33.3%</td>
+                <td class="text-success fw-bold">พอร์ตเติบโตมหาศาล (+50R หรือกำไร +50 เท่าของความเสี่ยง!)</td>
+              </tr>
+              <tr>
+                <td class="fw-bold text-primary">1 : 3</td>
+                <td class="fw-bold text-success">25.0%</td>
+                <td class="text-success fw-bold">พอร์ตโตเร็วมาก (+100R!) ชนะแค่ 3 ใน 10 ไม้ก็กำไร</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.4 Drawdown Recovery Matrix -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">3.3</span> Drawdown Recovery Matrix (ตารางเตือนสตินักเทรด)
+        </h6>
+        <div class="table-responsive mb-2">
+          <table class="table table-bordered table-sm small text-center mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>พอร์ตเสียหาย (Drawdown %)</th>
+                <th>กำไรที่ต้องทำคืนเพื่อกลับมาเท่าทุน</th>
+                <th>ระดับความยากทางจิตวิทยา</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>-10%</td><td>+11.1%</td><td><span class="badge bg-success-subtle text-success">ปกติ</span></td></tr>
+              <tr><td>-20%</td><td>+25.0%</td><td><span class="badge bg-info-subtle text-info-emphasis">ปานกลาง</span></td></tr>
+              <tr><td>-30%</td><td>+42.9%</td><td><span class="badge bg-warning-subtle text-warning-emphasis">เริ่มยาก</span></td></tr>
+              <tr class="table-warning">
+                <td class="text-danger fw-bold">-50% (ทุน $1,000 เหลือ $500)</td>
+                <td class="text-danger fw-bold">+100.0% (ต้องทำกำไร 1 เท่าตัว!)</td>
+                <td><span class="badge bg-danger text-white">ยากมาก</span></td>
+              </tr>
+              <tr class="table-danger">
+                <td class="text-danger fw-bold">-80% (ทุน $1,000 เหลือ $200)</td>
+                <td class="text-danger fw-bold">+400.0% (ต้องทำกำไร 4 เท่าตัว!)</td>
+                <td><span class="badge bg-dark text-white">แทบเป็นไปไม่ได้</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.5 5 กับดักจิตวิทยาที่ทำให้พอร์ตแตก -->
+      <div class="lesson-box mb-3">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">3.4</span> 5 กับดักจิตวิทยาที่ล้างพอร์ตนักเทรดมากที่สุด
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">🔥 1. Revenge Trading (เทรดล้างแค้น)</strong>
+              <p class="text-muted mb-0">เพิ่งโดน Stop Loss แล้วอารมณ์เสีย รีบเปิดออเดอร์สวนทันทีเพื่อเอาคืน ทำให้เสียซ้ำซ้อน</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">💣 2. Martingale (เบิ้ล Lot สวนเทรนด์)</strong>
+              <p class="text-muted mb-0">ผิดทางแล้วเพิ่มขนาด Lot 2x 4x 8x เพื่อหวังให้ราคาเด้งนิดเดียวแล้วเท่าทุน สุดท้ายลากพอร์ตระเบิด</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">🚫 3. Moving SL (เลื่อน SL หนี)</strong>
+              <p class="text-muted mb-0">เมื่อราคาใกล้ชน Stop Loss กลับเลื่อนหนีเรื่อยๆ เพราะรับความพ่ายแพ้ไม่ได้ จนขาดทุนกู่ไม่กลับ</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">😱 4. FOMO (Fear of Missing Out)</strong>
+              <p class="text-muted mb-0">เห็นแท่งเขียวยาวพุ่งไปแล้วกลัวตกรถ รีบกระโดดเข้าซื้อกลางทาง สุดท้ายติดดอยที่ปลายไส้</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-danger d-block mb-1">⚡ 5. Overtrading (เทรดมากเกินไป)</strong>
+              <p class="text-muted mb-0">นั่งเฝ้าจอตลอดเวลาจนคันมือ หาจังหวะเข้าเทรดในจุดที่ไม่มีความได้เปรียบ เสียค่าสเปรดฟรี</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 4: ระบบเทรด & JOURNAL PRO (FULL 1000%) ==================== -->
+    <div id="view-4" class="page-view d-none">
+      
+      <div class="base-card mb-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h5 class="fw-bold text-dark mb-0">📝 เสาที่ 4: ระบบเทรด 5 ขั้นตอน & สมุดบันทึก Pro Journal</h5>
+          <span class="badge bg-warning-subtle text-warning-emphasis border border-warning">Trade Log & Analytics</span>
+        </div>
+        <p class="small text-muted mb-0">เปลี่ยนการเทรดจากการเสี่ยงดวง ให้กลายเป็นธุรกิจที่มีสถิติรองรับ | มีระบบบันทึกและส่งออกข้อมูล (Export CSV/JSON)</p>
+      </div>
+
+      <!-- 4.1 กรอบระบบเทรด 5 ขั้นตอน -->
+      <div class="lesson-box">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">4.1</span> โครงสร้างระบบเทรด 5 ขั้นตอน (Institutional Framework)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">1. Macro Bias (กำหนดทิศทาง)</strong>
+              <span class="text-muted">เปิด TF D1/H4 ดูเทรนด์หลัก วันนี้จะโฟกัสเฉพาะหน้า BUY หรือ SELL ตามกระแสเงินใหญ่</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">2. Key Zone / POI (หาจุดได้เปรียบ)</strong>
+              <span class="text-muted">รอให้ราคาเดินทางมาถึงแนวรับ-ต้าน, S/R Flip, หรือ Order Block ในโซน Discount/Premium</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">3. Trigger (หาสัญญาณยืนยัน)</strong>
+              <span class="text-muted">ดูแท่งเทียนคอนเฟิร์ม (Pinbar / Engulfing / CHoCH ใน M5) ห้ามเข้ากลางทางโดยไม่มีแท่งยืนยัน</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">4. Risk & Lot Execution</strong>
+              <span class="text-muted">คำนวณขนาด Lot ให้เสี่ยงไม่เกิน 1-2%, วาง Stop Loss หลังแนวรับ-ต้าน และตั้งเป้า TP ที่ได้ RR 1:1.5 ขึ้นไป</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-primary d-block mb-1">5. Trade Management & Review</strong>
+              <span class="text-muted">เมื่อราคาบวกถึง RR 1:1 ให้เลื่อน SL มาบังหน้าทุน (Break-Even) และแบ่งปิดทำกำไรบางส่วน (Partial TP)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.2 Interactive Pre-Flight Checklist -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold text-dark mb-0">
+            <span class="badge bg-warning-subtle text-warning-emphasis me-1">Checklist</span> ✈️ ตรวจสอบความพร้อมก่อนกดยิงออเดอร์
+          </h6>
+          <small class="text-muted">ติ๊กให้ครบ 6 ข้อก่อนกดยิงไม้</small>
+        </div>
+        <p class="small text-muted mb-2">หากมีข้อใดข้อหนึ่งไม่ผ่าน <strong>"ห้ามเปิดออเดอร์เด็ดขาด"</strong></p>
+
+        <div class="space-y-2 small">
+          <div class="form-check p-2 border rounded-3 bg-light mb-1.5">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-news">
+            <label class="form-check-label fw-medium text-dark" for="chk-news">1. เช็คปฏิทินเศรษฐกิจแล้ว ไม่มีข่าวกล่องแดงแรง (CPI / NFP / FOMC) ชนใน 30 นาทีนี้</label>
+          </div>
+          <div class="form-check p-2 border rounded-3 bg-light mb-1.5">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-trend">
+            <label class="form-check-label fw-medium text-dark" for="chk-trend">2. แผนเทรดสอดคล้องกับเทรนด์ใหญ่ (H1/H4) ไม่ได้กดสวนเทรนด์โดยไม่มีโครงสร้างกลับตัว</label>
+          </div>
+          <div class="form-check p-2 border rounded-3 bg-light mb-1.5">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-zone">
+            <label class="form-check-label fw-medium text-dark" for="chk-zone">3. ราคามาถึงโซนสำคัญ POI (แนวรับ-ต้าน / S/R Flip / Order Block / FVG)</label>
+          </div>
+          <div class="form-check p-2 border rounded-3 bg-light mb-1.5">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-candle">
+            <label class="form-check-label fw-medium text-dark" for="chk-candle">4. มีแท่งเทียนคอนเฟิร์ม (Pinbar / Engulfing / ทะลุ BOS) ชัดเจนใน TF เล็ก</label>
+          </div>
+          <div class="form-check p-2 border rounded-3 bg-light mb-1.5">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-risk">
+            <label class="form-check-label fw-medium text-dark" for="chk-risk">5. คำนวณขนาด Lot ไม่เกิน 1-2% ของพอร์ต และอัตราความคุ้มค่า RR ได้อย่างน้อย 1:1.5</label>
+          </div>
+          <div class="form-check p-2 border rounded-3 bg-light mb-0">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chk-sl">
+            <label class="form-check-label fw-medium text-dark" for="chk-sl">6. กำหนดจุด Stop Loss และ Take Profit ชัดเจน และสัญญาว่าจะไม่เลื่อน SL หนีเด็ดขาด</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.3 Advanced Trade Journal with Analytics & Export -->
+      <div class="lesson-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h6 class="fw-bold text-dark mb-0">
+              <span class="badge bg-warning-subtle text-warning-emphasis me-1">Journal</span> 📓 สมุดบันทึกสถิติการเทรด (Trade Log & Export)
+            </h6>
+            <small class="text-muted" style="font-size: 0.7rem;">บันทึกอัตโนมัติลงเครื่อง + ดาวน์โหลดเป็นไฟล์ Excel/CSV ได้</small>
+          </div>
+          <div class="d-flex gap-1">
+            <button onclick="exportJournalCSV()" class="btn btn-sm btn-outline-success border" style="font-size: 0.7rem;" title="ดาวน์โหลดเป็นไฟล์ Excel/CSV">
+              <i class="bi bi-file-earmark-spreadsheet"></i> CSV
+            </button>
+            <button onclick="exportJournalJSON()" class="btn btn-sm btn-outline-primary border" style="font-size: 0.7rem;" title="สำรองข้อมูล JSON">
+              <i class="bi bi-download"></i> Backup
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard สถิติรวม -->
+        <div class="row g-2 mb-3 text-center">
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <small class="text-muted d-block" style="font-size: 0.68rem;">จำนวนไม้ทั้งหมด</small>
+              <strong id="stat-total" class="fs-5 text-dark">0 ไม้</strong>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <small class="text-muted d-block" style="font-size: 0.68rem;">Win Rate (%)</small>
+              <strong id="stat-winrate" class="fs-5 text-primary">0%</strong>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <small class="text-muted d-block" style="font-size: 0.68rem;">กำไรสุทธิ ($)</small>
+              <strong id="stat-pnl" class="fs-5 text-success">$0.00</strong>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 border rounded-3 bg-light">
+              <small class="text-muted d-block" style="font-size: 0.68rem;">Profit Factor</small>
+              <strong id="stat-pf" class="fs-5 text-warning-emphasis">0.00</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ฟอร์มกรอกออเดอร์ใหม่ -->
+        <div class="p-3 bg-light border rounded-3 mb-3">
+          <h6 class="fw-bold small text-dark mb-2">➕ บันทึกผลการเทรดออเดอร์ใหม่</h6>
+          <div class="row g-2 mb-2">
+            <div class="col-6 col-md-3">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">คู่เงิน / สินทรัพย์</label>
+              <select id="j-pair" class="form-select form-select-sm">
+                <option value="XAUUSD">XAUUSD (ทองคำ)</option>
+                <option value="EURUSD">EURUSD</option>
+                <option value="GBPUSD">GBPUSD</option>
+                <option value="USDJPY">USDJPY</option>
+                <option value="BTCUSD">BTCUSD</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">ประเภทคำสั่ง</label>
+              <select id="j-type" class="form-select form-select-sm">
+                <option value="BUY">🟢 BUY (ซื้อ)</option>
+                <option value="SELL">🔴 SELL (ขาย)</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">ขนาด Lot</label>
+              <input type="number" id="j-lot" class="form-control form-control-sm" value="0.01" step="0.01">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">กำไร/ขาดทุน ($)</label>
+              <input type="number" id="j-pnl" class="form-control form-control-sm" placeholder="เช่น 25 หรือ -10" step="0.1">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">รูปแบบท่าเข้าเทรด (Setup)</label>
+              <select id="j-setup" class="form-select form-select-sm">
+                <option value="SMC / Order Block">SMC / Order Block</option>
+                <option value="Breakout + FVG">Breakout + FVG</option>
+                <option value="S/R Flip + Hammer">S/R Flip + Hammer</option>
+                <option value="Quasimodo (QM)">Quasimodo (QM)</option>
+                <option value="News Scalping">News Scalping</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-8">
+              <label class="text-muted small mb-1" style="font-size: 0.7rem;">บันทึกอารมณ์ / เหตุผลเข้าทำ</label>
+              <input type="text" id="j-note" class="form-control form-control-sm" placeholder="เช่น มีวินัยตามแผน ไม่รีบเข้าก่อนแท่งคอนเฟิร์ม">
+            </div>
+          </div>
+          <button onclick="addTrade()" class="btn btn-orange-action btn-sm w-100 py-2">
+            บันทึกออเดอร์ลงระบบ 💾
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="small fw-bold text-dark">ประวัติบันทึกการเทรด</span>
+          <button onclick="clearAllTrades()" class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.7rem;">
+            ล้างประวัติทั้งหมด
+          </button>
+        </div>
+
+        <!-- รายการประวัติที่บันทึก -->
+        <div id="journal-history-list" class="space-y-2"></div>
+      </div>
+
+      <!-- 4.4 4 กฎเหล็กจิตวิทยาการเทรด -->
+      <div class="lesson-box mb-3">
+        <h6 class="fw-bold text-dark mb-2">
+          <span class="badge bg-secondary me-1">4.2</span> 4 กฎเหล็กจิตวิทยาการเทรด (Elite Trader Mindset)
+        </h6>
+        <div class="row g-2 small">
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">1. ยอมรับความน่าจะเป็น (Probabilities)</strong>
+              <p class="text-muted mb-0">ไม่มีระบบไหนชนะ 100% การขาดทุนคือต้นทุนของธุรกิจ คุม RR 1:2 พอร์ตจะโตในระยะยาวแน่นอน</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">2. กฎ Circuit Breaker (หยุดเมื่อแพ้ติด)</strong>
+              <p class="text-muted mb-0">ถ้าแพ้ติดต่อกัน 2-3 ไม้ในวันเดียว ให้ปิดจอทันทีเพื่อรีเซ็ตอารมณ์ ห้ามฝืนเทรดต่อเด็ดขาด</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">3. เทรดตามแผน ไม่เทรดตามอารมณ์</strong>
+              <p class="text-muted mb-0">วางจุดเข้า SL และ TP ให้ชัดเจนก่อนกดยิงออเดอร์ เมื่อเข้าแล้วปล่อยให้ระบบสถิติทำงาน</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2.5 border rounded-3 bg-light h-100">
+              <strong class="text-dark d-block mb-1">4. โฟกัสที่กระบวนการ ไม่ใช่ตัวเงิน</strong>
+              <p class="text-muted mb-0">โฟกัสว่าทำตามกฎครบทุกข้อหรือไม่ ถ้าทำสิ่งที่ถูกต้องอย่างต่อเนื่อง ตัวเงินกำไรจะตามมาเอง</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== BOTTOM NAVBAR (4 TABS) ==================== -->
+  <nav class="bottom-nav">
+    <button class="nav-item-btn active" onclick="switchView('view-1', this, 'Part 1: พื้นฐานกลไก')">
+      <i class="bi bi-mortarboard-fill"></i>
+      <span>พื้นฐาน</span>
+    </button>
+    <button class="nav-item-btn" onclick="switchView('view-2', this, 'Part 2: อ่านกราฟ & SMC')">
+      <i class="bi bi-graph-up-arrow"></i>
+      <span>อ่านกราฟ</span>
+    </button>
+    <button class="nav-item-btn" onclick="switchView('view-3', this, 'Part 3: คุมพอร์ต & จิตวิทยา')">
+      <i class="bi bi-calculator-fill"></i>
+      <span>คุมพอร์ต</span>
+    </button>
+    <button class="nav-item-btn" onclick="switchView('view-4', this, 'Part 4: ระบบเทรด & Journal')">
+      <i class="bi bi-journal-check"></i>
+      <span>ระบบเทรด</span>
+    </button>
+  </nav>
+
+  <!-- Bootstrap 5 JS & Core Workspace JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <!-- Interactive Logic Engine -->
+  <script>
+    // 1. ฟังก์ชันสลับ 4 แท็บหลัก
+    function switchView(targetViewId, clickedBtn, badgeText) {
+      document.querySelectorAll('.page-view').forEach(view => view.classList.add('d-none'));
+      document.querySelectorAll('.nav-item-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(targetViewId).classList.remove('d-none');
+      clickedBtn.classList.add('active');
+      if (badgeText) document.getElementById('header-badge').innerText = badgeText;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 2. ฟังก์ชันคำนวณ Money Management (แท็บ 3)
+    function calcMM() {
+      const balance = parseFloat(document.getElementById('calc-balance').value) || 0;
+      const riskPercent = parseFloat(document.getElementById('calc-risk').value) || 0;
+      const slPoints = parseFloat(document.getElementById('calc-sl-pts').value) || 1;
+      const tpPoints = parseFloat(document.getElementById('calc-tp-pts').value) || 0;
+
+      const riskAmount = balance * (riskPercent / 100);
+      let lot = riskAmount / slPoints;
+      lot = Math.max(0.01, Math.round(lot * 100) / 100);
+      const rewardAmount = lot * tpPoints;
+      const rrRatio = (tpPoints / slPoints).toFixed(1);
+
+      document.getElementById('res-lot-size').innerText = lot.toFixed(2) + " Lot";
+      document.getElementById('res-risk-usd').innerText = "-$" + riskAmount.toFixed(2);
+      document.getElementById('res-reward-usd').innerText = "+$" + rewardAmount.toFixed(2);
+      document.getElementById('res-rr-ratio').innerText = "1 : " + rrRatio;
+    }
+
+    // 3. ระบบ Trade Journal อัจฉริยะ (แท็บ 4)
+    function getStoredTrades() {
+      return JSON.parse(localStorage.getItem('forex_full_journal') || '[]');
+    }
+
+    function renderJournalList() {
+      const container = document.getElementById('journal-history-list');
+      const trades = getStoredTrades();
+      let totalTrades = trades.length;
+      let winTrades = trades.filter(t => t.pnl > 0);
+      let lossTrades = trades.filter(t => t.pnl < 0);
+      let winCount = winTrades.length;
+      let totalPnl = trades.reduce((acc, t) => acc + t.pnl, 0);
+      let winRate = totalTrades > 0 ? Math.round((winCount / totalTrades) * 100) : 0;
+
+      let grossProfit = winTrades.reduce((acc, t) => acc + t.pnl, 0);
+      let grossLoss = Math.abs(lossTrades.reduce((acc, t) => acc + t.pnl, 0));
+      let profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : grossProfit > 0 ? 'MAX' : '0.00';
+
+      document.getElementById('stat-total').innerText = totalTrades + " ไม้";
+      document.getElementById('stat-winrate').innerText = winRate + "%";
+      document.getElementById('stat-pnl').innerText = (totalPnl >= 0 ? "+$" : "-$") + Math.abs(totalPnl).toFixed(2);
+      document.getElementById('stat-pnl').className = "fs-5 " + (totalPnl >= 0 ? "text-success" : "text-danger");
+      document.getElementById('stat-pf').innerText = profitFactor;
+
+      if (totalTrades === 0) {
+        container.innerHTML = '<div class="text-center text-muted small py-3 border rounded-3 bg-light">ยังไม่มีประวัติการบันทึกออเดอร์</div>';
+        return;
+      }
+
+      container.innerHTML = trades.map((t, index) => `
+        <div class="d-flex justify-content-between align-items-center p-2.5 mb-2 bg-white rounded-3 border shadow-sm">
+          <div>
+            <div class="d-flex align-items-center gap-1 mb-1">
+              <span class="badge ${t.type === 'BUY' ? 'bg-success' : 'bg-danger'}">${t.type}</span>
+              <strong class="text-dark small">${t.pair}</strong>
+              <span class="badge bg-light text-muted border">${t.lot} Lot</span>
+              <span class="badge bg-secondary-subtle text-secondary">${t.setup || 'General'}</span>
+              <small class="text-muted" style="font-size: 0.65rem;">${t.date}</small>
+            </div>
+            <div class="text-muted" style="font-size: 0.72rem;">${t.note || 'ไม่มีโน้ต'}</div>
+          </div>
+          <div class="text-end d-flex align-items-center gap-2">
+            <span class="fw-bold ${t.pnl >= 0 ? 'text-success' : 'text-danger'}">
+              ${t.pnl >= 0 ? '+' : ''}${t.pnl.toFixed(2)}$
+            </span>
+            <button onclick="deleteTrade(${index})" class="btn btn-sm btn-light text-danger border-0 p-1" title="ลบไม้นี้">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addTrade() {
+      const pair = document.getElementById('j-pair').value;
+      const type = document.getElementById('j-type').value;
+      const lot = parseFloat(document.getElementById('j-lot').value) || 0.01;
+      const pnl = parseFloat(document.getElementById('j-pnl').value);
+      const setup = document.getElementById('j-setup').value;
+      const note = document.getElementById('j-note').value;
+
+      if (isNaN(pnl)) {
+        alert('กรุณากรอกผลกำไร/ขาดทุน ($)');
+        return;
+      }
+
+      const newTrade = {
+        pair,
+        type,
+        lot: lot.toFixed(2),
+        pnl: pnl,
+        setup: setup,
+        note: note,
+        date: new Date().toLocaleDateString('th-TH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+
+      const trades = getStoredTrades();
+      trades.unshift(newTrade);
+      localStorage.setItem('forex_full_journal', JSON.stringify(trades));
+
+      document.getElementById('j-pnl').value = '';
+      document.getElementById('j-note').value = '';
+      renderJournalList();
+    }
+
+    function deleteTrade(index) {
+      const trades = getStoredTrades();
+      trades.splice(index, 1);
+      localStorage.setItem('forex_full_journal', JSON.stringify(trades));
+      renderJournalList();
+    }
+
+    function clearAllTrades() {
+      if (confirm('คุณต้องการล้างประวัติการเทรดทั้งหมดใช่หรือไม่?')) {
+        localStorage.removeItem('forex_full_journal');
+        renderJournalList();
+      }
+    }
+
+    // 4. ระบบ Export เป็น Excel / CSV (รองรับภาษาไทย)
+    function exportJournalCSV() {
+      const trades = getStoredTrades();
+      if (trades.length === 0) return alert('ยังไม่มีข้อมูลการเทรดให้ส่งออก');
+
+      let csvContent = "\uFEFFวันที่,คู่เงิน,คำสั่ง,ขนาดLot,กำไรขาดทุน($),รูปแบบSetup,โน้ต\n";
+      trades.forEach(t => {
+        csvContent += `"${t.date}","${t.pair}","${t.type}","${t.lot}","${t.pnl}","${t.setup || ''}","${(t.note || '').replace(/"/g, '""')}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Forex_Trade_Journal_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // 5. ระบบสำรองข้อมูล JSON (Backup)
+    function exportJournalJSON() {
+      const trades = getStoredTrades();
+      if (trades.length === 0) return alert('ยังไม่มีข้อมูลการเทรด');
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trades, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `Forex_Journal_Backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    // เริ่มต้นระบบเมื่อเปิดหน้าเว็บ
+    document.addEventListener('DOMContentLoaded', () => {
+      calcMM();
+      renderJournalList();
+    });
+  </script>
+</body>
+</html>

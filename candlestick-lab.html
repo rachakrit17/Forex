@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Candlestick Masterclass - คลังเจาะลึกจิตวิทยาแท่งเทียน 23 รูปแบบ</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="container pt-3">
+    <div class="base-card d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+          <i class="bi bi-fire text-warning me-1"></i> Candlestick Masterclass Pro
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-1">
+        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning px-2.5 py-1" id="total-count-badge" style="font-size: 0.72rem;">
+          23 รูปแบบแท่งเทียน
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- OFFCANVAS SIDEBAR (ควบคุมโดย workspace-core.js) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 350px;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <h6 class="offcanvas-title fw-bold text-dark mb-0"><i class="bi bi-grid-fill text-warning me-1"></i> Forex Pro Workspace</h6>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="container mt-3">
+
+    <!-- 1. แถบควบคุม: ค้นหา & หมวดหมู่ & ทิศทาง BUY/SELL -->
+    <div class="base-card mb-3">
+      
+      <!-- ช่องค้นหาแท่งเทียน Real-time -->
+      <div class="mb-2">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" id="candleSearch" class="form-control border-start-0" placeholder="พิมพ์ค้นหา เช่น Hammer, กลืนกิน, Doji, Star, ไส้ยาว..." onkeyup="filterCandles()">
+        </div>
+      </div>
+
+      <!-- แถบเลือกหมวดหมู่แท่ง -->
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <small class="text-muted fw-bold" style="font-size: 0.7rem; flex-shrink: 0;">หมวดหมู่:</small>
+        <div class="horizontal-scroll" id="catBar">
+          <button class="cat-btn active" onclick="filterCategory('all', this)">ทั้งหมด (23)</button>
+          <button class="cat-btn" onclick="filterCategory('single', this)">🕯️ แท่งเดี่ยว (8)</button>
+          <button class="cat-btn" onclick="filterCategory('dual', this)">👥 แท่งคู่ (8)</button>
+          <button class="cat-btn" onclick="filterCategory('triple', this)">🌟 แท่งสามชุด (6)</button>
+          <button class="cat-btn" onclick="filterCategory('advanced', this)">🧠 กลยุทธ์ขั้นสูง (1)</button>
+        </div>
+      </div>
+
+      <!-- แถบกรองหน้า BUY / SELL -->
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <small class="text-muted fw-bold" style="font-size: 0.7rem; flex-shrink: 0;">ทิศทาง:</small>
+        <div class="horizontal-scroll" id="dirBar">
+          <button class="cat-btn active" onclick="filterDirection('all', this)">ทุกหน้าเทรด</button>
+          <button class="cat-btn text-success" onclick="filterDirection('buy', this)">🟢 โฟกัส BUY</button>
+          <button class="cat-btn text-danger" onclick="filterDirection('sell', this)">🔴 โฟกัส SELL</button>
+          <button class="cat-btn text-secondary" onclick="filterDirection('neutral', this)">↔️ พักตัว/สะสม</button>
+        </div>
+      </div>
+
+      <!-- ปุ่มรายชื่อแท่งเทียนทั้งหมด -->
+      <div class="horizontal-scroll border-top pt-2" id="candleButtons"></div>
+    </div>
+
+    <!-- 2. กล่องแสดงพิมพ์เขียวรายละเอียด 1000% -->
+    <div class="row g-3">
+      
+      <!-- ฝั่งซ้าย: Diagram SVG + สถิติสัดส่วนแท่ง + โครงสร้างคลื่นย่อย M1/M5 -->
+      <div class="col-lg-5">
+        <div class="base-card border-warning shadow-sm mb-3">
+          
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <span class="badge" id="c-type-badge" style="font-size: 0.68rem;">Single Reversal</span>
+              <h6 class="fw-bold text-dark mb-0 mt-1" id="c-title">Hammer (ค้อนกลับตัว)</h6>
+            </div>
+            <span class="badge" id="c-direction" style="font-size: 0.72rem;">🟢 หน้า BUY</span>
+          </div>
+
+          <!-- กล่องเวกเตอร์ Diagram SVG สด คมชัด ไม่ตกขอบ -->
+          <div class="diagram-container my-2" id="diagram-box"></div>
+
+          <!-- ตารางสถิติ & สัดส่วนตัวเลขแท่งเทียนเชิงคณิตศาสตร์ -->
+          <div class="row g-2 text-center mt-2">
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded-3 bg-light h-100">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">Win Rate คาดหวัง</small>
+                <strong class="text-success" id="c-winrate" style="font-size: 0.8rem;">72 - 80%</strong>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded-3 bg-light h-100">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">สัดส่วนเนื้อ/ไส้</small>
+                <strong class="text-primary" id="c-ratio" style="font-size: 0.75rem;">ไส้ ≥ 66%</strong>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded-3 bg-light h-100">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">Timeframe แนะนำ</small>
+                <strong class="text-warning-emphasis" id="c-tf" style="font-size: 0.75rem;">M15 / H1 / H4</strong>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded-3 bg-light h-100">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">ยืนยัน Volume</small>
+                <strong class="text-dark" id="c-volume" style="font-size: 0.75rem;">Volume พุ่งสูง</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- โครงสร้างคลื่นย่อยระดับจุลภาคใน Timeframe เล็ก (M1/M5 Sub-structure Breakdown) -->
+          <div class="p-2.5 rounded-3 bg-light border mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="text-dark" style="font-size: 0.78rem;">
+                <i class="bi bi-zoom-in text-primary me-1"></i> โครงสร้างภายในบน Timeframe เล็ก (M1/M5)
+              </strong>
+              <span class="badge bg-primary text-white" style="font-size: 0.62rem;">X-Ray View</span>
+            </div>
+            <p class="text-muted mb-0" id="c-internal" style="font-size: 0.72rem;">-</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ฝั่งขวา: จิตวิทยา 1000% + แผนยิงออเดอร์ 2 สไตล์ + จุดตายที่ต้องระวัง + Confluence Matrix -->
+      <div class="col-lg-7">
+        
+        <!-- 1. จิตวิทยาและการต่อสู้ของเม็ดเงินสถาบัน (Order Flow & Psychology) -->
+        <div class="base-card mb-3" style="border-left: 4px solid var(--primary-orange);">
+          <h6 class="fw-bold text-dark mb-1" style="font-size: 0.85rem;">
+            <i class="bi bi-shield-shaded text-warning me-1"></i> จิตวิทยาการต่อสู้เบื้องหลัง (Order Flow & Trapped Liquidity)
+          </h6>
+          <p id="c-psychology" class="small text-muted mb-0" style="font-size: 0.78rem; line-height: 1.55;">-</p>
+        </div>
+
+        <!-- 2. แผนเข้าเทรด 2 รูปแบบ: Aggressive vs Conservative -->
+        <div class="base-card mb-3 bg-white">
+          <h6 class="fw-bold text-dark mb-2" style="font-size: 0.85rem;">
+            <i class="bi bi-lightning-charge-fill text-success me-1"></i> แผนการยิงออเดอร์ 2 สไตล์ (Execution Protocols)
+          </h6>
+          
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <div class="p-2.5 rounded-3 border bg-light h-100">
+                <strong class="text-primary d-block mb-1" style="font-size: 0.78rem;">
+                  ⚡ 1. สายบู๊ เข้าไว (Aggressive Entry)
+                </strong>
+                <p class="text-muted mb-0" id="c-entry-agg" style="font-size: 0.72rem;">-</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-2.5 rounded-3 border bg-light h-100">
+                <strong class="text-success d-block mb-1" style="font-size: 0.78rem;">
+                  🛡️ 2. สายชัวร์ รอคอนเฟิร์ม (Conservative Entry)
+                </strong>
+                <p class="text-muted mb-0" id="c-entry-con" style="font-size: 0.72rem;">-</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- กฎการตั้ง SL และเป้าหมาย TP -->
+          <div class="p-2.5 rounded-3 bg-white border">
+            <div class="row g-2">
+              <div class="col-sm-6 border-end-sm">
+                <small class="text-danger fw-bold d-block" style="font-size: 0.72rem;"><i class="bi bi-shield-slash"></i> จุดวาง Stop Loss ที่ปลอดภัย:</small>
+                <span class="text-muted" id="c-sl-rule" style="font-size: 0.72rem;">-</span>
+              </div>
+              <div class="col-sm-6">
+                <small class="text-success fw-bold d-block" style="font-size: 0.72rem;"><i class="bi bi-trophy"></i> เป้าหมาย Take Profit (TP1 & TP2):</small>
+                <span class="text-muted" id="c-tp-rule" style="font-size: 0.72rem;">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. เงื่อนไขที่ทำให้ทรงพัง & หลุมพรางที่เม่าติดดอย -->
+        <div class="base-card mb-3 bg-white">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="p-2.5 border rounded-3 bg-danger-subtle border-danger-subtle h-100">
+                <strong class="text-danger d-block mb-1 small">
+                  <i class="bi bi-x-octagon-fill"></i> ทรงพังทันทีเมื่อ (Invalidation Condition)
+                </strong>
+                <p id="c-invalidation" class="text-muted mb-0" style="font-size: 0.72rem;">-</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-2.5 border rounded-3 bg-warning-subtle border-warning-subtle h-100">
+                <strong class="text-warning-emphasis d-block mb-1 small">
+                  <i class="bi bi-exclamation-triangle-fill"></i> หลุมพรางรายใหญ่ล่อซื้อ (Fakeout Trap)
+                </strong>
+                <p id="c-pitfall" class="text-muted mb-0" style="font-size: 0.72rem;">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. ตัวเสริมความแม่นยำ (Confluence Matrix) -->
+        <div class="base-card bg-white">
+          <div class="p-2.5 border rounded-3 bg-success-subtle border-success-subtle">
+            <strong class="text-success d-block mb-1 small">
+              <i class="bi bi-stars"></i> สูตรคอมโบเพิ่มความแม่นยำแตะ 85%+ (Confluence Synergy)
+            </strong>
+            <p id="c-confluence" class="text-muted mb-0" style="font-size: 0.72rem;">-</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JS SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <!-- Masterclass 23 Candlestick Database & Engine -->
+  <script>
+    let currentCandle = 'hammer';
+    let currentCategory = 'all';
+    let currentDirection = 'all';
+
+    // คลังข้อมูล 23 รูปแบบแท่งเทียนระดับ Pro Trader
+    const candleData = {
+      // ================= 1. SINGLE CANDLESTICKS =================
+      hammer: {
+        name: "Hammer (ค้อนกลับตัว)",
+        category: "single",
+        direction: "buy",
+        typeBadge: "Single Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "74 - 82%",
+        ratio: "ไส้ล่าง ≥ 66% (2 เท่าเนื้อ) / ไส้บน ≤ 5%",
+        tf: "M15 / H1 / H4",
+        volume: "Volume ปูดสูงผิดปกติ",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><path d="M 30 40 L 80 85 L 130 115" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4"/><text x="30" y="30" fill="#ef4444" font-size="11" font-weight="bold">เทรนด์ขาลงนำมาก่อน</text><rect x="170" y="90" width="30" height="25" fill="#10b981" stroke="#34d399" stroke-width="2" rx="2"/><line x1="185" y1="85" x2="185" y2="90" stroke="#94a3b8" stroke-width="2"/><line x1="185" y1="115" x2="185" y2="185" stroke="#94a3b8" stroke-width="2"/><text x="210" y="150" fill="#f97316" font-size="11" font-weight="bold">ไส้ล่างยาว (ปฏิเสธราคาต่ำ)</text><line x1="150" y1="85" x2="250" y2="85" stroke="#10b981" stroke-dasharray="3" stroke-width="1.5"/><circle cx="250" cy="85" r="4" fill="#10b981"/><text x="260" y="89" fill="#10b981" font-size="11" font-weight="bold">Entry BUY</text><line x1="150" y1="185" x2="250" y2="185" stroke="#ef4444" stroke-dasharray="3" stroke-width="1.5"/><circle cx="250" cy="185" r="4" fill="#ef4444"/><text x="260" y="189" fill="#ef4444" font-size="11" font-weight="bold">Stop Loss</text></svg>`,
+        internal: "บน Timeframe M5 จะเห็นการทุบราคาหลุดแนวรับเพื่อล่าสภาพคล่อง (Liquidity Sweep) แล้วเกิดแท่งเทียนดีดกลับทำ V-Shape Reversal หรือเกิด Double Bottom พร้อมการเบรกโครงสร้าง CHoCH ขาขึ้น",
+        psychology: "ฝั่งขายพยายามเทกระจาดเพื่อกดราคาให้ทะลุแนวรับ แต่เมื่อราคาดิ่งลงไปถึงจุดที่สถาบันตั้ง Limit Order รอไว้ สถาบันจะเข้าช้อนซื้อทันทีจนเกิดแรงดันมหาศาล บีบให้คนที่กด Sell ต้องรีบ Cut Loss กลายเป็นแรงผลักให้ราคาดีดกลับขึ้นมาปิดใกล้ High",
+        entryAgg: "เปิด BUY ทันทีเมื่อแท่งเทียนถัดไปขยับผ่านจุดสูงสุด (High) ของแท่ง Hammer ขึ้นไป 20-30 จุด",
+        entryCon: "รอให้แท่ง Hammer ปิดสมบูรณ์ แล้วรอราคาย่อตัวลงมา 50% ของความยาวไส้ล่าง (Fibonacci 50%) แล้วค่อยกด BUY",
+        slRule: "วางไว้ใต้ปลายไส้ล่างสุดของแท่ง Hammer ลงไป 150-200 จุด (สำหรับทองคำ) หรือ 10-15 Pips (คู่เงิน)",
+        tpRule: "TP1 ที่แนวต้านแรก (RR 1:2), TP2 ที่ยอด High เดิมของรอบขาลงล่าสุด",
+        invalidation: "หากราคาปิดแท่งทะลุหลุดปลายไส้ล่างสุดของ Hammer แสดงว่าแรงรับพังทลาย ห้ามถือสู้เด็ดขาด",
+        pitfall: "เกิด Hammer กลางทางขณะที่ตลาดเป็น Sideway กรอบแคบ หรือเกิดแท่ง Hammer ในช่วงข่าวกล่องแดงประกาศ",
+        confluence: "เกิดซ้อนทับที่แนวรับ H1/H4 + อยู่ในโซน Fibo 61.8% + RSI เกิด Bullish Divergence"
+      },
+
+      inverted_hammer: {
+        name: "Inverted Hammer (ค้อนกลับหัวแนวรับ)",
+        category: "single",
+        direction: "buy",
+        typeBadge: "Single Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "70 - 76%",
+        ratio: "ไส้บน ≥ 66% / เนื้อเทียนอยู่ล่างสุด / เกิดที่แนวรับ",
+        tf: "M15 / H1",
+        volume: "Volume สะสมเริ่มเข้า",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><path d="M 30 40 L 80 85 L 130 115" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4"/><text x="30" y="30" fill="#ef4444" font-size="11">ขาลงนำมาก่อน</text><line x1="185" y1="25" x2="185" y2="95" stroke="#94a3b8" stroke-width="2"/><rect x="170" y="95" width="30" height="25" fill="#10b981" stroke="#34d399" stroke-width="2" rx="2"/><text x="210" y="60" fill="#10b981" font-size="11" font-weight="bold">แรงซื้อเริ่มทดสอบดันราคา</text><line x1="150" y1="25" x2="250" y2="25" stroke="#10b981" stroke-dasharray="3"/><text x="260" y="29" fill="#10b981" font-size="11" font-weight="bold">Entry BUY เมื่อแท่ง 2 เบรก</text></svg>`,
+        internal: "ใน TF ย่อย M5 ฝั่งซื้อเริ่มทดสอบดันราคาทะลุแนวต้านย่อย แม้จะโดนเทขายกดกลับมา แต่สามารถสร้างฐานยก Low สูงขึ้นได้สำเร็จ",
+        psychology: "แรงซื้อเริ่มแสดงตัวเป็นครั้งแรกหลังจากเทรนด์ขาลงยาวนาน แม้จะยังโดนแรงขายกดกลับลงมาปิดต่ำ แต่เป็นการส่งสัญญาณว่ามี 'ผู้ซื้อรายใหญ่เริ่มเข้ามาทดสอบสภาพคล่องฝั่งบน'",
+        entryAgg: "เปิด BUY เมื่อแท่งถัดไปปิดแท่งเขียวและทะลุยอด High ของ Inverted Hammer",
+        entryCon: "รอแท่งที่ 2 ปิดเขียวยืนยันเป็น Bullish Confirmation แล้วเข้าที่ราคาเปิดแท่ง 3",
+        slRule: "วางใต้จุดต่ำสุด (Low) ของแท่ง Inverted Hammer 150 จุด",
+        tpRule: "TP ที่แนวต้านถัดไปหรือจุดเริ่มของแท่งเทขายรอบก่อนหน้า",
+        invalidation: "แท่งถัดไปปิดแท่งแดงทะลุหลุดฐาน Low เดิม",
+        pitfall: "สับสนระหว่าง Inverted Hammer (เกิดที่แนวรับ = กลับตัวขึ้น) กับ Shooting Star (เกิดที่แนวต้าน = ทุบลง)",
+        confluence: "เกิดที่ Demand Zone + เส้น Stochastics ตัดขึ้นจากโซน Oversold (<20)"
+      },
+
+      shooting_star: {
+        name: "Shooting Star (ดาวตกทุบราคา)",
+        category: "single",
+        direction: "sell",
+        typeBadge: "Single Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "75 - 83%",
+        ratio: "ไส้บน ≥ 66% (2 เท่าเนื้อ) / ไส้ล่าง ≤ 5%",
+        tf: "M15 / H1 / H4",
+        volume: "Volume เทขายสูงมาก",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><path d="M 30 170 L 80 125 L 130 95" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4"/><text x="30" y="190" fill="#10b981" font-size="11">ขาขึ้นนำมาก่อน</text><line x1="185" y1="25" x2="185" y2="95" stroke="#94a3b8" stroke-width="2"/><rect x="170" y="95" width="30" height="25" fill="#ef4444" stroke="#f87171" stroke-width="2" rx="2"/><text x="210" y="60" fill="#ef4444" font-size="11" font-weight="bold">ทุบปฏิเสธราคาสูง</text><line x1="150" y1="125" x2="250" y2="125" stroke="#10b981" stroke-dasharray="3"/><text x="260" y="129" fill="#10b981" font-size="11" font-weight="bold">Entry SELL (หลุด Low)</text></svg>`,
+        internal: "ใน TF M5 ราคาทำ False Breakout ทะลุ High เดิม ล่อให้คนตาม BUY จากนั้นโดนเทขายสวนกลับแบบแท่งแดงยาวทะลุแนวรับย่อย (CHoCH ขาลง)",
+        psychology: "รายย่อยไล่ราคาซื้อที่ยอดดอย สถาบันใช้จังหวะนี้ปล่อยของและเปิดออเดอร์ SELL หนักหน่วง ตบราคาร่วงกลับลงมาปิดต่ำสุดของแท่ง บังคับให้ขา BUY ติดดอยและยอมคายของ",
+        entryAgg: "เปิด SELL ทันทีเมื่อราคาหลุดจุดต่ำสุด (Low) ของแท่ง Shooting Star",
+        entryCon: "รอแท่งถัดไปปิดแท่งแดงคอนเฟิร์ม แล้วรอราคาย่อตัวขึ้นมาทดสอบ 50% ของเนื้อ/ไส้",
+        slRule: "วางไว้เหนือยอดไส้บนสุด 150-200 จุด",
+        tpRule: "TP1 ที่แนวรับแรก, TP2 ที่ฐานจุดเริ่มของรอบขาขึ้น",
+        invalidation: "ราคาปิดแท่งทะลุยอดไส้บนสุดขึ้นไปได้",
+        pitfall: "กด SELL สวนในขณะที่ตลาดเป็น Super Trend ขาขึ้นรุนแรงที่มีข่าวหนุนหลัง",
+        confluence: "ชน Supply Zone H4 + ชน Fibo 78.6% (OTE) + RSI Overbought (>70) เกิด Bearish Divergence"
+      },
+
+      hanging_man: {
+        name: "Hanging Man (คนแขวนคอยอดดอย)",
+        category: "single",
+        direction: "sell",
+        typeBadge: "Single Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "70 - 75%",
+        ratio: "ไส้ล่างยาว 2-3x / เนื้อเล็กอยู่บนสุด / เกิดที่แนวต้าน",
+        tf: "H1 / H4 / D1",
+        volume: "Volume ฝั่งขายเริ่มแทรกซึม",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><path d="M 30 170 L 80 125 L 130 95" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4"/><text x="30" y="190" fill="#10b981" font-size="11">ขาขึ้นนำมาก่อน</text><rect x="170" y="90" width="30" height="25" fill="#ef4444" stroke="#f87171" stroke-width="2" rx="2"/><line x1="185" y1="115" x2="185" y2="185" stroke="#94a3b8" stroke-width="2"/><text x="210" y="150" fill="#ef4444" font-size="11" font-weight="bold">แรงขายทุบลงลึกเป็นครั้งแรก</text></svg>`,
+        internal: "ใน TF เล็ก M5 มีการทุบราคาหลุดแนวรับย่อยลงไปอย่างรุนแรง แม้จะถูกดันกลับขึ้นมาได้ แต่แสดงว่าแนวรับเริ่มปริแตกและมีคนเทขายก้อนใหญ่",
+        psychology: "แม้จะดูเหมือน Hammer แต่การที่ไส้ล่างยาวเกิดขึ้นที่ 'ยอดดอย' แปลว่าเริ่มมีผู้เล่นรายใหญ่เทขายทำกำไรออกมาอย่างหนักหน่วงจนราคาร่วงลงไปลึก เป็นสัญญาณเตือนว่าผู้ซื้อเริ่มคุมตลาดไม่อยู่",
+        entryAgg: "ต้องรอแท่งถัดไปปิดแท่งแดงต่ำกว่าเนื้อเทียนของ Hanging Man จึงจะเปิด SELL ได้ (ห้ามเข้าทันที)",
+        entryCon: "รอแท่งเทียนปิดหลุด Low ของ Hanging Man แล้วเข้า SELL",
+        slRule: "วางเหนือยอด High ของ Hanging Man 150 จุด",
+        tpRule: "TP ที่แนวรับสำคัญด้านล่าง",
+        invalidation: "แท่งถัดไปปิดเขียวใหญ่ทะลุ High ของ Hanging Man",
+        pitfall: "หลงคิดว่าเป็น Hammer แล้วเผลอไปกด BUY ซ้ำบนยอดดอย",
+        confluence: "เกิดที่แนวต้านใหญ่ D1 + ปริมาณ Open Interest หรือ Volume ฝั่งซื้อเริ่มหดตัว"
+      },
+
+      marubozu_bull: {
+        name: "Bullish Marubozu (แท่งเขียวโมเมนตัม 100%)",
+        category: "single",
+        direction: "buy",
+        typeBadge: "Momentum Breakout",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "76 - 84%",
+        ratio: "เนื้อตันยาว ≥ 90% / แทบไร้ไส้ / Close = High",
+        tf: "M15 / H1 / H4",
+        volume: "Volume ระเบิดทะลุเส้นค่าเฉลี่ย",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="160" y="40" width="50" height="130" fill="#10b981" stroke="#34d399" stroke-width="2" rx="2"/><text x="145" y="30" fill="#10b981" font-size="11" font-weight="bold">Close = จุดสูงสุด</text><text x="145" y="190" fill="#10b981" font-size="11" font-weight="bold">Open = จุดต่ำสุด</text><text x="225" y="110" fill="#10b981" font-size="12" font-weight="bold">แรงซื้อครองตลาด 100%</text></svg>`,
+        internal: "ใน TF M1/M5 ทุกแท่งเทียนเรียงตัวเป็นสีเขียวต่อเนื่อง เกิด Fair Value Gap (FVG) ขนาดใหญ่โดยไม่มีการย่อตัวลงมาทดสอบ",
+        psychology: "ผู้ซื้อเข้าคุมตลาดเบ็ดเสร็จตั้งแต่เปิดแท่งจนปิดแท่ง ไม่มีแรงขายต้านทานได้เลย มักเกิดขึ้นเมื่อราคาเบรกทะลุกรอบแนวต้านสำคัญหรือมีข่าวใหญ่หนุนหลัง",
+        entryAgg: "เปิด BUY ทันทีเมื่อแท่งเทียนปิดตัว หรือเปิด Buy Stop เหนือยอด High",
+        entryCon: "รอราคาย่อตัวลงมาทดสอบที่ระดับกึ่งกลาง (50%) ของแท่ง Marubozu หรือทดสอบขอบบนของ FVG",
+        slRule: "วางไว้ใต้กึ่งกลาง 50% ของแท่ง Marubozu หรือใต้ฐาน Open",
+        tpRule: "รันเทรนด์ตามโครงสร้าง BOS ไปยังแนวต้านถัดไป",
+        invalidation: "ราคาปิดแท่งย้อนกลับมากินลึกเกิน 75% ของแท่ง Marubozu",
+        pitfall: "การกระโดดเข้าซื้อตอนปลายแท่งหลังจากราคาพุ่งยาวเกิน 3 เท่าของค่าเฉลี่ย ATR ปกติ",
+        confluence: "เกิด Breakout ทะลุกรอบ Sideway + วอลุ่มเทรดพุ่งสูงเกิน 200%"
+      },
+
+      marubozu_bear: {
+        name: "Bearish Marubozu (แท่งแดงถล่มราคา 100%)",
+        category: "single",
+        direction: "sell",
+        typeBadge: "Momentum Breakout",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "76 - 84%",
+        ratio: "เนื้อตันยาว ≥ 90% / แทบไร้ไส้ / Close = Low",
+        tf: "M15 / H1 / H4",
+        volume: "Volume ฝั่งขายทะลัก",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="160" y="40" width="50" height="130" fill="#ef4444" stroke="#f87171" stroke-width="2" rx="2"/><text x="145" y="30" fill="#ef4444" font-size="11" font-weight="bold">Open = จุดสูงสุด</text><text x="145" y="190" fill="#ef4444" font-size="11" font-weight="bold">Close = จุดต่ำสุด</text><text x="225" y="110" fill="#ef4444" font-size="12" font-weight="bold">แรงขายครองตลาด 100%</text></svg>`,
+        internal: "ใน TF M5 เกิดแท่งแดงเรียงตัวดิ่งลงอย่างรวดเร็ว ทำลายทุกแนวรับย่อยและเกิด Imbalance ขนาดใหญ่",
+        psychology: "ความตื่นตระหนกและการเทขายแบบ Panic Sell ผู้ซื้อถอนคำสั่งซื้อออกจาก Order Book ทำให้ราคาดิ่งทะลุทุกแนวรับอย่างง่ายดาย",
+        entryAgg: "เปิด SELL ทันทีเมื่อแท่งเทียนปิดสมบูรณ์",
+        entryCon: "รอราคาเด้งรีบาวด์กลับมาทดสอบระดับ 50% ของแท่ง Marubozu แล้วเปิด SELL",
+        slRule: "วางเหนือระดับ 50% ของแท่ง หรือเหนือจุด Open",
+        tpRule: "TP ที่แนวรับใหญ่ถัดไป",
+        invalidation: "ราคาปิดแท่งดีดกลับขึ้นมาเกิน 50% ของแท่งแดง",
+        pitfall: "เข้า SELL ตอนที่ราคาดิ่งลงมาชนแนวรับใหญ่ระดับ D1 พอดี",
+        confluence: "เกิดการหลุดกรอบแนวรับสำคัญ (Breakdown) + ADX > 30 ชี้หัวขึ้น"
+      },
+
+      dragonfly_doji: {
+        name: "Dragonfly Doji (โดจิแมลงปอช้อนซื้อ)",
+        category: "single",
+        direction: "buy",
+        typeBadge: "Extreme Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "72 - 79%",
+        ratio: "Open = Close = High / ไส้ล่างยาวพิเศษ",
+        tf: "H1 / H4 / D1",
+        volume: "Volume ช้อนซื้อสูง",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><line x1="185" y1="50" x2="185" y2="175" stroke="#10b981" stroke-width="2.5"/><line x1="160" y1="50" x2="210" y2="50" stroke="#10b981" stroke-width="4"/><text x="135" y="38" fill="#10b981" font-size="11" font-weight="bold">Open = Close = High</text><text x="225" y="120" fill="#10b981" font-size="11">ทุบลงไปแต่ถูกดันกลับ 100%</text></svg>`,
+        internal: "ใน TF ย่อย M5 ราคาถูกทุบลงไปทำจุดต่ำสุดใหม่ แต่เจอแรงซื้อดึงกลับขึ้นมาจนถึงราคาเปิดแท่ง 100% เกิดเป็นรูปแบบ V-Bottom",
+        psychology: "การปฏิเสธราคาต่ำ (Price Rejection) อย่างสมบูรณ์แบบ ฝั่งขายพยายามทุบสุดแรงแต่โดนฝั่งซื้อซัดกลับจนไม่เหลือเนื้อเทียนสีแดงแม้แต่นิดเดียว",
+        entryAgg: "เปิด BUY เมื่อราคาปิดแท่งถัดไปขยับสูงกว่าราคาเปิดของ Doji",
+        entryCon: "รอแท่งคอนเฟิร์มปิดเขียว แล้วเข้าที่ราคาเปิดแท่งถัดไป",
+        slRule: "วางใต้หางแมลงปอ 150 จุด",
+        tpRule: "TP ที่แนวต้านของสวิงก่อนหน้า",
+        invalidation: "ราคาหลุดต่ำกว่าหางของแมลงปอ",
+        pitfall: "เทรด Doji กลางกรอบ Sideway โดยไม่มีแนวรับรองรับ",
+        confluence: "เกิดที่แนวรับเส้น EMA 200 + RSI Oversold (<30)"
+      },
+
+      gravestone_doji: {
+        name: "Gravestone Doji (โดจิป้ายหลุมศพ)",
+        category: "single",
+        direction: "sell",
+        typeBadge: "Extreme Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "72 - 79%",
+        ratio: "Open = Close = Low / ไส้บนยาวพิเศษ",
+        tf: "H1 / H4 / D1",
+        volume: "Volume เทขายถล่ม",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><line x1="185" y1="50" x2="185" y2="175" stroke="#ef4444" stroke-width="2.5"/><line x1="160" y1="175" x2="210" y2="175" stroke="#ef4444" stroke-width="4"/><text x="135" y="195" fill="#ef4444" font-size="11" font-weight="bold">Open = Close = Low</text><text x="225" y="100" fill="#ef4444" font-size="11">ลากขึ้นไปแต่ถูกตบกลับ 100%</text></svg>`,
+        internal: "ใน TF M5 ราคาพุ่งขึ้นทำ High แต่เจอกำแพง Sell Limit ก้อนยักษ์ตบราคาร่วงกลับลงมาปิดที่จุดเปิดเดิม",
+        psychology: "การปฏิเสธราคาสูงแบบเบ็ดเสร็จ ฝั่งซื้อพยายามลากราคาขึ้นไปแต่ถูกฝั่งขายตบราคาร่วงลงมากองที่เดิม เป็นสัญญาณว่าแรงซื้อหมดเกลี้ยงตลาด",
+        entryAgg: "เปิด SELL เมื่อแท่งถัดไปขยับหลุดต่ำกว่าราคาปิดของ Doji",
+        entryCon: "รอแท่งถัดไปปิดแท่งแดงยืนยัน",
+        slRule: "วางเหนือยอดป้ายหลุมศพ 150 จุด",
+        tpRule: "TP ที่แนวรับถัดไป",
+        invalidation: "ราคาพุ่งทะลุยอดป้ายหลุมศพ",
+        pitfall: "เข้าออเดอร์ก่อนแท่ง Doji จะปิดตัวจริง",
+        confluence: "เกิดที่แนวต้าน R2/R3 ของ Pivot Point + CCI ทะลุ +200 แล้วหักหัวลง"
+      },
+
+      // ================= 2. DUAL CANDLESTICKS =================
+      bull_engulfing: {
+        name: "Bullish Engulfing (กลืนกินขาขึ้น)",
+        category: "dual",
+        direction: "buy",
+        typeBadge: "Dual Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "76 - 85%",
+        ratio: "เนื้อเขียว 2 ปิดคลุมเนื้อแดง 1 ทั้งหมด (100%)",
+        tf: "M15 / H1 / H4",
+        volume: "Volume แท่ง 2 สูงกว่าแท่ง 1 เกิน 1.5 เท่า",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="90" y="90" width="28" height="50" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><rect x="140" y="60" width="45" height="105" fill="#10b981" stroke="#34d399" stroke-width="2" rx="2"/><text x="135" y="38" fill="#10b981" font-size="11" font-weight="bold">แท่งเขียว 2 กลืนมิด 100%</text><line x1="195" y1="60" x2="270" y2="60" stroke="#10b981" stroke-dasharray="3"/><circle cx="270" cy="60" r="4" fill="#10b981"/><text x="280" y="64" fill="#10b981" font-size="11" font-weight="bold">Entry BUY</text></svg>`,
+        internal: "ใน TF M15 แท่งแรกเป็นขาลง แต่แท่งที่สองใน TF M5 เกิดการเบรกทะลุ Change of Character (CHoCH) และทำ Break of Structure (BOS) ขาขึ้นรวดเร็ว",
+        psychology: "การเปลี่ยนขั้วอำนาจฉับพลัน แท่งแรกแรงขายยังคุมอยู่ แต่แท่งที่สองแรงซื้อระเบิดตัวกลืนกินคำสั่งขายเดิมทั้งหมด บ่งบอกว่าผู้ซื้อรายใหญ่เข้ามารวบของหมดกระดาน",
+        entryAgg: "เปิด BUY ทันทีที่แท่งที่ 2 ปิดแท่งสมบูรณ์",
+        entryCon: "รอราคาย่อตัวกลับมา 50% ของเนื้อแท่งเขียว หรือทดสอบแนวรับเดิม (Order Block)",
+        slRule: "วางใต้จุดต่ำสุดของแท่งเขียวที่ 2 ลงไป 150 จุด",
+        tpRule: "TP1 ที่แนวต้านแรก, TP2 รันเทรนด์ตามระยะ RR 1:2.5",
+        invalidation: "ราคาหลุดต่ำกว่าจุด Low ของแท่งเขียวที่ 2",
+        pitfall: "แท่งที่ 2 เป็นแค่ Partial Engulfing (กลืนไม่มิด) หรือเกิดในแนวโน้มขาลงที่ไม่มีแนวรับรองรับ",
+        confluence: "แท่งที่ 2 เกิดทับบน Demand Zone / Order Block + RSI ยก Low ทำ Bullish Divergence"
+      },
+
+      bear_engulfing: {
+        name: "Bearish Engulfing (กลืนกินขาลง)",
+        category: "dual",
+        direction: "sell",
+        typeBadge: "Dual Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "76 - 85%",
+        ratio: "เนื้อแดง 2 ปิดคลุมเนื้อเขียว 1 ทั้งหมด (100%)",
+        tf: "M15 / H1 / H4",
+        volume: "Volume แท่งแดง 2 สูงทะลัก",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="90" y="90" width="28" height="50" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><rect x="140" y="60" width="45" height="105" fill="#ef4444" stroke="#f87171" stroke-width="2" rx="2"/><text x="135" y="38" fill="#ef4444" font-size="11" font-weight="bold">แท่งแดง 2 กลืนมิด 100%</text><line x1="195" y1="165" x2="270" y2="165" stroke="#10b981" stroke-dasharray="3"/><circle cx="270" cy="165" r="4" fill="#10b981"/><text x="280" y="169" fill="#10b981" font-size="11" font-weight="bold">Entry SELL</text></svg>`,
+        internal: "ใน TF M5 ราคาพุ่งขึ้นไปกิน Stop Loss เหนือแนวต้าน (Liquidity Sweep) จากนั้นถูกเทขายถล่มลงมาทะลุ Low เดิมทันที",
+        psychology: "สถาบันดักปล่อยของใส่ผู้ซื้อที่ตามเข้ามาไล่ราคา แท่งแดงขนาดใหญ่แสดงถึงแรงเทขายปริมาณมหาศาลที่ลบล้างแรงซื้อของแท่งก่อนหน้าทั้งหมด",
+        entryAgg: "เปิด SELL ทันทีที่แท่งแดงที่ 2 ปิดแท่ง",
+        entryCon: "รอราคาเด้งรีบาวด์ขึ้นมา 50% ของเนื้อแท่งแดง (ทดสอบ Bearish Order Block)",
+        slRule: "วางเหนือจุดสูงสุดของแท่งแดงที่ 2 ขึ้นไป 150 จุด",
+        tpRule: "TP ที่แนวรับถัดไป (RR 1:2+)",
+        invalidation: "ราคาปิดแท่งทะลุ High ของแท่งแดงที่ 2",
+        pitfall: "เข้า SELL ตอนที่แท่งแดงกำลังวิ่งแต่ยังไม่จบแท่ง (เพราะท้ายแท่งอาจดีดกลับทิ้งไส้)",
+        confluence: "ชน Supply Zone H4 + เกิด Bearish Divergence บน MACD"
+      },
+
+      tweezer_bottom: {
+        name: "Tweezer Bottom (แหนบคู่รับอยู่หมัด)",
+        category: "dual",
+        direction: "buy",
+        typeBadge: "Double Rejection",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "72 - 78%",
+        ratio: "ปลายไส้ล่างเท่ากันเป๊ะ 2 แท่ง (Equal Lows)",
+        tf: "M15 / H1",
+        volume: "Volume แท่งที่ 2 ปูดขึ้น",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="110" y="70" width="30" height="50" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><line x1="125" y1="120" x2="125" y2="170" stroke="#cbd5e1" stroke-width="2"/><rect x="155" y="70" width="30" height="50" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><line x1="170" y1="120" x2="170" y2="170" stroke="#cbd5e1" stroke-width="2"/><line x1="90" y1="170" x2="250" y2="170" stroke="#38bdf8" stroke-dasharray="3" stroke-width="2"/><text x="180" y="165" fill="#38bdf8" font-size="11" font-weight="bold">Equal Lows (ทดสอบฐาน 2 รอบ)</text></svg>`,
+        internal: "ใน TF M5 เกิดรูปแบบ Double Bottom สมบูรณ์แบบที่ระดับราคาเดียวกัน โดยแท่งที่สองไม่สามารถทำ Low ต่ำกว่าแท่งแรกได้",
+        psychology: "ตลาดทดสอบแนวรับเดิมซ้ำสองในระยะเวลาอันสั้น แต่แรงขายไม่สามารถกดให้หลุดได้เลย เป็นการยืนยันว่ามีกำแพงเงินหนาแน่นขวางอยู่",
+        entryAgg: "เปิด BUY ทันทีเมื่อแท่งที่ 2 ปิดแท่งเขียว",
+        entryCon: "รอราคาเบรกจุด High ของแท่งคู่ขึ้นไป",
+        slRule: "วางใต้ปลายไส้คู่ 100-150 จุด",
+        tpRule: "TP ที่แนวต้านถัดไป",
+        invalidation: "ราคาหลุดต่ำกว่าแนวเส้นไส้คู่",
+        pitfall: "ปลายไส้ของแท่งที่สองเหลื่อมล้ำต่ำกว่าแท่งแรกเกิน 30 จุด (จะนับเป็น Sweep แทน)",
+        confluence: "ตรงกับระดับ Fibonacci 61.8% หรือ 70.5% OTE พอดี"
+      },
+
+      tweezer_top: {
+        name: "Tweezer Top (แหนบคู่ต้านถล่ม)",
+        category: "dual",
+        direction: "sell",
+        typeBadge: "Double Rejection",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "72 - 78%",
+        ratio: "ปลายไส้บนเท่ากันเป๊ะ 2 แท่ง (Equal Highs)",
+        tf: "M15 / H1",
+        volume: "Volume ฝั่งขายเข้าคุม",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><line x1="125" y1="40" x2="125" y2="90" stroke="#cbd5e1" stroke-width="2"/><rect x="110" y="90" width="30" height="50" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><line x1="170" y1="40" x2="170" y2="90" stroke="#cbd5e1" stroke-width="2"/><rect x="155" y="90" width="30" height="50" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><line x1="90" y1="40" x2="250" y2="40" stroke="#38bdf8" stroke-dasharray="3" stroke-width="2"/><text x="180" y="35" fill="#38bdf8" font-size="11" font-weight="bold">Equal Highs (ทดสอบต้าน 2 รอบ)</text></svg>`,
+        internal: "ใน TF M5 เกิดรูปแบบ Double Top ชัดเจนที่แนวต้านเดิม",
+        psychology: "แรงซื้อพยายามดันราคาขึ้นไปทดสอบจุดสูงสุดเดิมถึงสองครั้งแต่โดนสกัดกั้นทั้งสองครั้ง บ่งบอกว่าแนวต้านนี้มีคำสั่งขายก้อนใหญ่ดักอยู่",
+        entryAgg: "เปิด SELL ทันทีเมื่อแท่งที่ 2 ปิดแท่งแดง",
+        entryCon: "รอราคาปิดแท่งหลุดจุด Low ของแท่งที่สอง",
+        slRule: "วางเหนือยอดไส้คู่ 100-150 จุด",
+        tpRule: "TP ที่แนวรับด้านล่าง",
+        invalidation: "ราคาทะลุยอดไส้คู่ขึ้นไป",
+        pitfall: "เข้าออเดอร์ในขณะที่แท่งที่สองยังเป็นแท่งเขียว",
+        confluence: "ชนแนวต้านใหญ่ H4 + RSI Overbought ชน 70 สองรอบ"
+      },
+
+      piercing_line: {
+        name: "Piercing Line (แทงทะลุ 50%)",
+        category: "dual",
+        direction: "buy",
+        typeBadge: "Penetration Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "70 - 77%",
+        ratio: "แท่ง 2 เปิดต่ำกว่าแท่ง 1 แล้วปิดกินลึก > 50% ของเนื้อแท่ง 1",
+        tf: "H1 / H4 / D1",
+        volume: "Volume แท่ง 2 เพิ่มขึ้นอย่างมีนัยสำคัญ",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="100" y="50" width="35" height="100" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><line x1="80" y1="100" x2="260" y2="100" stroke="#f59e0b" stroke-dasharray="3" stroke-width="1.5"/><text x="190" y="93" fill="#f59e0b" font-size="11">ระดับ 50% ของแท่งแรก</text><rect x="145" y="80" width="35" height="90" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><text x="120" y="190" fill="#10b981" font-size="11" font-weight="bold">แท่งเขียว 2 ปิดทะลุเกิน 50%</text></svg>`,
+        internal: "แท่งที่ 2 เปิด Gap ลงไปล่อให้คน Sell ตาม จากนั้นถูกดึงกลับขึ้นมาทะลุแนวต้านย่อยใน TF M15",
+        psychology: "แม้จะปิดคลุมไม่หมดแบบ Engulfing แต่การที่ราคาเปิดต่ำแล้วสามารถดันกลับขึ้นมาปิด 'เกินครึ่งหนึ่ง (50%)' ของแรงขายเดิม แสดงว่าแรงซื้อมีพละกำลังมากพอที่จะพลิกเกม",
+        entryAgg: "เปิด BUY ที่ราคาเปิดของแท่งที่ 3",
+        entryCon: "รอราคาย่อตัวลงมาทดสอบระดับ 50% ของแท่ง Piercing",
+        slRule: "วางใต้จุดต่ำสุดของแท่งเขียวที่ 2",
+        tpRule: "TP ที่แนวต้านถัดไป",
+        invalidation: "แท่งที่ 2 ปิดต่ำกว่าระดับ 50% ของแท่งแรก",
+        pitfall: "แท่งที่ 2 ปิดไม่ถึงกึ่งกลาง 50% จะถือว่าแรงซื้อยังอ่อนแอ",
+        confluence: "เกิดที่ขอบล่างของ Bollinger Bands (Lower Band Rejection)"
+      },
+
+      dark_cloud: {
+        name: "Dark Cloud Cover (เมฆดำคลุม 50%)",
+        category: "dual",
+        direction: "sell",
+        typeBadge: "Penetration Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "70 - 77%",
+        ratio: "แท่ง 2 เปิดสูงกว่าแท่ง 1 แล้วทุบปิดกินลึก > 50% ของเนื้อแท่ง 1",
+        tf: "H1 / H4 / D1",
+        volume: "Volume แท่งแดง 2 สูงเด่น",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="100" y="70" width="35" height="90" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><line x1="80" y1="115" x2="260" y2="115" stroke="#f59e0b" stroke-dasharray="3" stroke-width="1.5"/><text x="190" y="110" fill="#f59e0b" font-size="11">ระดับ 50% ของแท่งเขียว</text><rect x="145" y="50" width="35" height="95" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><text x="120" y="38" fill="#ef4444" font-size="11" font-weight="bold">แท่งแดง 2 ทุบกินลึกเกิน 50%</text></svg>`,
+        internal: "ราคาเปิดพุ่งขึ้นไปทำ New High หลอกล่อ แล้วถูกเทขายลงมาอย่างหนักจนหลุดแนวรับย่อยใน M15",
+        psychology: "ผู้ซื้อพยายามลากราคาต่อในตอนเปิดแท่ง แต่เจอน้ำตกแรงขายของสถาบันเทถล่มลงมาจนแท่งแดงกินลึกเกิน 50% บ่งบอกว่าผู้ซื้อเสียการควบคุมแล้ว",
+        entryAgg: "เปิด SELL ที่ราคาเปิดของแท่งที่ 3",
+        entryCon: "รอราคาเด้งทดสอบระดับ 50% ของแท่งแดง",
+        slRule: "วางเหนือจุดสูงสุดของแท่งแดงที่ 2",
+        tpRule: "TP ที่แนวรับด้านล่าง",
+        invalidation: "แท่งที่ 2 ปิดไม่ถึงระดับ 50% ของแท่งเขียวแรก",
+        pitfall: "เข้า SELL ทันทีโดยไม่ดูว่าแท่งแดงปิดแท่งสมบูรณ์หรือยัง",
+        confluence: "เกิดที่ขอบบนของ Bollinger Bands (Upper Band Rejection) + ชนแนวต้าน H4"
+      },
+
+      inside_bar: {
+        name: "Inside Bar / Harami (บีบอัดรอระเบิด)",
+        category: "dual",
+        direction: "neutral",
+        typeBadge: "Volatility Squeeze",
+        dirClass: "bg-secondary-subtle text-secondary",
+        winrate: "74 - 82%",
+        ratio: "แท่ง 2 (Child) อยู่ในกรอบ High/Low ของแท่ง 1 (Mother) 100%",
+        tf: "M15 / H1 / H4",
+        volume: "Volume แห้งลงเพื่อสะสมพลัง",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="90" y="40" width="40" height="130" fill="rgba(100, 116, 139, 0.3)" stroke="#64748b" stroke-width="2"/><text x="65" y="15" fill="#94a3b8" font-size="11" font-weight="bold">Mother Bar (แท่งแม่)</text><rect x="145" y="70" width="28" height="70" fill="#f97316" stroke="#fb923c" stroke-width="2"/><text x="135" y="175" fill="#f97316" font-size="11" font-weight="bold">Inside Bar</text><line x1="130" y1="20" x2="240" y2="20" stroke="#10b981" stroke-dasharray="3"/><text x="250" y="24" fill="#10b981" font-size="11" font-weight="bold">Buy Stop (ทะลุ High)</text><line x1="130" y1="190" x2="240" y2="190" stroke="#ef4444" stroke-dasharray="3"/><text x="250" y="194" fill="#ef4444" font-size="11" font-weight="bold">Sell Stop (หลุด Low)</text></svg>`,
+        internal: "ใน TF เล็ก M5 กราฟกำลังบีบตัวเป็นรูปแบบสามเหลี่ยม (Triangle) หรือสภาวะ BB Squeeze สะสมพลังก่อนระเบิด",
+        psychology: "ความผันผวนลดลงฮวบฮาบ ตลาดกำลังหยุดหายใจและสะสมคำสั่งซื้อขายก้อนใหญ่ เพื่อเตรียมตัววิ่งระเบิดเทรนด์ตามทิศทางที่ราคาทะลุ",
+        entryAgg: "ดักวาง <strong>Buy Stop</strong> เหนือ High แท่งแม่ และ <strong>Sell Stop</strong> ใต้ Low แท่งแม่ (Straddle Strategy)",
+        entryCon: "รอให้แท่งที่ 3 ปิดแท่งทะลุกรอบแท่งแม่ออกไปอย่างชัดเจน แล้วเข้าตามน้ำ",
+        slRule: "วางไว้ที่จุดกึ่งกลาง 50% ของแท่งแม่ (Mother Bar)",
+        tpRule: "TP วัดระยะความยาวของแท่งแม่ นำไปบวกต่อจากจุด Breakout",
+        invalidation: "ราคาวิ่งไซด์เวย์ในแท่งแม่นานเกิน 4-5 แท่งโดยไม่ระเบิด",
+        pitfall: "เข้าออเดอร์ในขณะที่ราคายังวิ่งอึดอัดอยู่ในพุงแท่งแม่",
+        confluence: "เกิดร่วมกับ Bollinger Bands Squeeze + วอลุ่มแห้งสนิท"
+      },
+
+      // ================= 3. TRIPLE CANDLESTICKS =================
+      morning_star: {
+        name: "Morning Star (ดาวรุ่งประกายพรึก 3 จังหวะ)",
+        category: "triple",
+        direction: "buy",
+        typeBadge: "Triple Master Reversal",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "78 - 86%",
+        ratio: "1. แดงใหญ่ → 2. ดาวเล็กทิ้งตัว → 3. เขียวใหญ่ปิดกินลึก > 50%",
+        tf: "H1 / H4 / D1",
+        volume: "Volume แท่ง 3 พุ่งสูงเด่น",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="60" y="50" width="30" height="80" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><rect x="105" y="140" width="22" height="20" fill="#f59e0b" stroke="#fbbf24" stroke-width="1.5"/><text x="95" y="185" fill="#f59e0b" font-size="10" font-weight="bold">Star (ดาวพัก)</text><rect x="140" y="60" width="35" height="80" fill="#10b981" stroke="#34d399" stroke-width="2"/><text x="130" y="45" fill="#10b981" font-size="11" font-weight="bold">เขียว 3 ปิดกินลึก</text><line x1="180" y1="60" x2="260" y2="60" stroke="#10b981" stroke-dasharray="3"/><text x="270" y="64" fill="#10b981" font-size="11" font-weight="bold">Entry BUY</text></svg>`,
+        internal: "โครงสร้าง 3 เฟส: 1. ทุบทำ Low → 2. ทำ Liquidity Sweep หรือเกิด Wyckoff Spring → 3. เบรก BOS ทะลุโครงสร้างขาขึ้นรุนแรง",
+        psychology: "รูปแบบการกลับตัวที่ทรงพลังที่สุดในตำราญี่ปุ่น: 1. แรงขายโหมทุบ → 2. เกิดความลังเลหยุดชะงัก (ดาวตรงกลาง) → 3. สถาบันเข้าซื้อจริงดันแท่งเขียวระเบิดกลับคืนมา",
+        entryAgg: "เปิด BUY ทันทีที่แท่งที่ 3 ปิดแท่งสมบูรณ์",
+        entryCon: "รอราคาย่อตัวลงมาทดสอบระดับ 50% ของแท่งดาวหรือแท่งเขียว",
+        slRule: "วางไว้ใต้จุดต่ำสุดของแท่งดาวตรงกลาง (Star Low) 150 จุด",
+        tpRule: "TP ที่ยอด High ของสวิงก่อนหน้า (RR ขั้นต่ำ 1:2.5)",
+        invalidation: "แท่งที่ 3 ปิดไม่ถึงระดับกึ่งกลาง 50% ของแท่งแดงแรก",
+        pitfall: "แท่งที่ 3 มีขนาดเล็กเกินไปแสดงว่าแรงซื้อยังไม่พอ",
+        confluence: "เกิดที่ Demand Zone ใหญ่ + RSI เกิด Bullish Divergence ชัดเจน"
+      },
+
+      evening_star: {
+        name: "Evening Star (ดาวร่วงโรย 3 จังหวะ)",
+        category: "triple",
+        direction: "sell",
+        typeBadge: "Triple Master Reversal",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "78 - 86%",
+        ratio: "1. เขียวใหญ่ → 2. ดาวยอดดอย → 3. แดงใหญ่ทุบปิดกินลึก > 50%",
+        tf: "H1 / H4 / D1",
+        volume: "Volume แท่ง 3 ทุบทะลัก",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="60" y="80" width="30" height="80" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><rect x="105" y="40" width="22" height="20" fill="#f59e0b" stroke="#fbbf24" stroke-width="1.5"/><text x="95" y="25" fill="#f59e0b" font-size="10" font-weight="bold">Star (ยอดดอย)</text><rect x="140" y="70" width="35" height="90" fill="#ef4444" stroke="#f87171" stroke-width="2"/><text x="130" y="175" fill="#ef4444" font-size="11" font-weight="bold">แดง 3 ทุบกินลึก</text><line x1="180" y1="160" x2="260" y2="160" stroke="#10b981" stroke-dasharray="3"/><text x="270" y="164" fill="#10b981" font-size="11" font-weight="bold">Entry SELL</text></svg>`,
+        internal: "โครงสร้าง 3 เฟส: 1. พุ่งทำ High → 2. ติดยอดดอยและล้างสภาพคล่อง → 3. ทุบหลุดโครงสร้าง CHoCH ขาลง",
+        psychology: "1. ขา BUY ดีใจไล่ราคา → 2. ราคาชะงักติดดอยไม่มีคนซื้อต่อ → 3. สถาบันเทขายทิ้งแท่งแดงยาวถล่มตลาด บังคับให้ขา BUY ยอมคายของทั้งหมด",
+        entryAgg: "เปิด SELL ทันทีเมื่อแท่งแดงที่ 3 ปิดสมบูรณ์",
+        entryCon: "รอราคาเด้งทดสอบ 50% ของแท่งแดงที่ 3",
+        slRule: "วางไว้เหนือยอดดาวตรงกลาง 150 จุด",
+        tpRule: "TP ที่แนวรับสำคัญด้านล่าง",
+        invalidation: "แท่งที่ 3 ปิดไม่ถึงระดับ 50% ของแท่งเขียวแรก",
+        pitfall: "เข้า SELL ก่อนที่แท่งที่ 3 จะปิดตัวจริง",
+        confluence: "เกิดที่ Supply Zone H4 + MACD ตัดแกน 0 ลง"
+      },
+
+      three_soldiers: {
+        name: "Three White Soldiers (3 ทหารเสือกระทิงพุ่ง)",
+        category: "triple",
+        direction: "buy",
+        typeBadge: "Trend Dominance",
+        dirClass: "bg-success-subtle text-success",
+        winrate: "75 - 82%",
+        ratio: "แท่งเขียวตันยาว 3 แท่งเรียงตัวยก High/Low สูงขึ้นต่อเนื่อง",
+        tf: "M15 / H1 / H4",
+        volume: "Volume ขยายตัวขึ้นทีละแท่ง",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="60" y="120" width="25" height="50" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><rect x="95" y="80" width="25" height="60" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><rect x="130" y="40" width="25" height="65" fill="#10b981" stroke="#34d399" stroke-width="1.5"/><text x="50" y="195" fill="#10b981" font-size="11" font-weight="bold">3 แท่งเขียวทำ New High ต่อเนื่อง</text></svg>`,
+        internal: "ใน TF M5 ราคาวิ่งเป็นเทรนด์ขาขึ้นที่สมบูรณ์แบบ ยก Higher High (HH) และ Higher Low (HL) อย่างต่อเนื่องไร้แรงต้าน",
+        psychology: "กระแสเงินทุนสถาบันไหลเข้าตลาดอย่างต่อเนื่อง ผู้ซื้อชนะการต่อสู้ทุกแท่งเทียน แสดงถึงการเริ่มรอบขาขึ้นที่แข็งแกร่งที่สุด",
+        entryAgg: "เปิด BUY เมื่อแท่งที่ 3 ปิดตัว (เสี่ยงโดนย่อ)",
+        entryCon: "รอราคาย่อตัว (Pullback) ลงมาทดสอบที่ระดับยอด High ของแท่งที่ 2 แล้วค่อยกด BUY",
+        slRule: "วางใต้จุดต่ำสุดของแท่งที่ 1 หรือแท่งที่ 2",
+        tpRule: "รันเทรนด์ยาวด้วย Trailing Stop",
+        invalidation: "แท่งที่ 3 เกิดไส้บนยาวมากผิดปกติ (Exhaustion Candle)",
+        pitfall: "การไล่ซื้อที่ปลายยอดแท่งที่ 3 เพราะมักจะเจอแรงเทขายทำกำไรระยะสั้น",
+        confluence: "ราคาทะลุผ่านเส้น EMA 200 ขึ้นมาพร้อม ADX > 25"
+      },
+
+      three_crows: {
+        name: "Three Black Crows (3 กาดำทุบกระจาย)",
+        category: "triple",
+        direction: "sell",
+        typeBadge: "Trend Dominance",
+        dirClass: "bg-danger-subtle text-danger",
+        winrate: "75 - 82%",
+        ratio: "แท่งแดงตันยาว 3 แท่งเรียงตัวกด Low ต่ำลงต่อเนื่อง",
+        tf: "M15 / H1 / H4",
+        volume: "Volume ฝั่งขายเพิ่มขึ้นต่อเนื่อง",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="60" y="40" width="25" height="50" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><rect x="95" y="70" width="25" height="60" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><rect x="130" y="110" width="25" height="65" fill="#ef4444" stroke="#f87171" stroke-width="1.5"/><text x="50" y="195" fill="#ef4444" font-size="11" font-weight="bold">3 แท่งแดงทำ New Low ต่อเนื่อง</text></svg>`,
+        internal: "ใน TF M5 เกิดโครงสร้างขาลงรุนแรง ทำลายแนวรับทุกระดับและสร้าง Lower Low (LL) ต่อเนื่อง",
+        psychology: "ผู้ขายคุมตลาดเบ็ดเสร็จ ไร้แรงช้อนซื้อ เกิดแรงเทขายทลายทุกระดับราคา เป็นสัญญาณเริ่มเทรนด์ขาลงรอบใหญ่",
+        entryAgg: "เปิด SELL เมื่อแท่งที่ 3 ปิดตัว",
+        entryCon: "รอราคาเด้งรีบาวด์กลับมาทดสอบแนวต้านของแท่งที่ 2 แล้วเปิด SELL",
+        slRule: "วางเหนือจุดสูงสุดของแท่งที่ 1 หรือแท่งที่ 2",
+        tpRule: "รันเทรนด์ด้วย Trailing Stop สู่แนวรับใหญ่",
+        invalidation: "แท่งที่ 3 ทิ้งไส้ล่างยาวมากผิดปกติ",
+        pitfall: "การกระโดด SELL ที่ปลายแท่ง 3 เสี่ยงเจอแรงดีดกลับ Oversold Bounce",
+        confluence: "ราคาหลุดเส้น EMA 200 ลงมาอย่างเด็ดขาด"
+      },
+
+      // ================= 4. ADVANCED CANDLESTICK TACTICS =================
+      candle_blending: {
+        name: "Candle Blending & MTF X-Ray (สูตรลับเซียนรวมแท่ง)",
+        category: "advanced",
+        direction: "buy",
+        typeBadge: "Pro Secret Technique",
+        dirClass: "bg-dark text-white",
+        winrate: "เพิ่มความเข้าใจโครงสร้าง 100%",
+        ratio: "รวม 2-4 แท่งใน TF เล็ก = 1 แท่ง Pinbar ใน TF ใหญ่",
+        tf: "ใช้เข้าใจทุก Timeframe (M5 ➔ M15 ➔ H1 ➔ H4)",
+        volume: "ดู Volume สุทธิของรอบ",
+        svg: `<svg viewBox="0 0 440 210" fill="none"><rect x="50" y="50" width="25" height="60" fill="#ef4444"/><rect x="85" y="40" width="25" height="90" fill="#10b981"/><line x1="97" y1="130" x2="97" y2="170" stroke="#cbd5e1" stroke-width="2"/><text x="45" y="190" fill="#94a3b8" font-size="10">2 แท่งใน TF M15</text><text x="135" y="110" fill="#f97316" font-size="22" font-weight="bold">=</text><rect x="180" y="40" width="35" height="25" fill="#10b981" stroke="#34d399" stroke-width="2" rx="2"/><line x1="197" y1="65" x2="197" y2="170" stroke="#cbd5e1" stroke-width="2.5"/><text x="225" y="100" fill="#10b981" font-size="11" font-weight="bold">Hammer ไส้ยาว 1 แท่งใน H1</text></svg>`,
+        internal: "แท่งเทียนทุกแท่งบนโลกนี้เป็นเพียงภาพจำลองของการรวมตัวกันของแท่งเทียนใน TF ที่เล็กกว่าเสมอ",
+        psychology: "ช่วยแก้ปัญหาความลังเลของนักเทรด! เช่น เมื่อเห็นรูปแบบ Bullish Engulfing ใน M15 หลายคนอาจไม่แน่ใจ แต่เมื่อรวมแท่ง (Blending) จะพบว่ามันคือ 'Hammer ไส้ยาว 1 แท่งใน H1' ซึ่งบอกทิศทางการปฏิเสธราคาชัดเจน",
+        entryAgg: "ใช้ราคาเปิดของแท่งแรก และราคาปิดของแท่งสุดท้ายในการคำนวณจุดเข้า",
+        entryCon: "สลับไปดูแท่งเทียนที่รวมแล้วใน TF ใหญ่เพื่อยืนยันรูปทรง",
+        slRule: "วางใต้จุดต่ำสุดของกลุ่มแท่งเทียนทั้งหมดที่นำมารวมกัน",
+        tpRule: "TP ตามโครงสร้างแนวต้านของ TF ใหญ่",
+        invalidation: "แท่งใน TF ใหญ่ปิดแท่งเสียทรง",
+        pitfall: "ลืมดูภาพใหญ่ใน TF H4/D1 มัวแต่มองแท่งย่อยใน M1 จนหลงทิศ",
+        confluence: "ใช้ประสานกันระหว่าง 3 Timeframe (Top-Down Analysis: H4 ➔ H1 ➔ M15)"
+      }
+    };
+
+    // ฟังก์ชันสร้างปุ่มเลือกแท่งเทียนทั้งหมด
+    function renderCandleButtons() {
+      const container = document.getElementById('candleButtons');
+      const searchVal = document.getElementById('candleSearch').value.toLowerCase().trim();
+      let matchCount = 0;
+
+      container.innerHTML = Object.keys(candleData).map(key => {
+        const item = candleData[key];
+        const isCurrent = key === currentCandle;
+        
+        // ฟิลเตอร์หมวดหมู่
+        const matchCat = currentCategory === 'all' || item.category === currentCategory;
+        // ฟิลเตอร์ทิศทาง
+        const matchDir = currentDirection === 'all' || item.direction === currentDirection;
+        // ฟิลเตอร์ค้นหา
+        const matchSearch = searchVal === '' || 
+                            item.name.toLowerCase().includes(searchVal) || 
+                            key.toLowerCase().includes(searchVal) ||
+                            item.psychology.toLowerCase().includes(searchVal);
+
+        const isVisible = matchCat && matchDir && matchSearch;
+        if (isVisible) matchCount++;
+
+        return `
+          <button class="candle-pill ${isCurrent ? 'active' : ''}" 
+                  data-key="${key}" 
+                  style="display: ${isVisible ? 'inline-block' : 'none'};" 
+                  onclick="selectCandle('${key}', this)">
+            ${item.name}
+          </button>
+        `;
+      }).join('');
+
+      document.getElementById('total-count-badge').innerText = `แสดง ${matchCount} จาก 23 รูปแบบ`;
+    }
+
+    // กรองหมวดหมู่
+    function filterCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('#catBar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCandleButtons();
+    }
+
+    // กรองทิศทาง BUY / SELL
+    function filterDirection(dir, btn) {
+      currentDirection = dir;
+      document.querySelectorAll('#dirBar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCandleButtons();
+    }
+
+    // ค้นหาข้อความสด
+    function filterCandles() {
+      renderCandleButtons();
+    }
+
+    // เลือกแท่งเทียน
+    function selectCandle(key, btn) {
+      currentCandle = key;
+      document.querySelectorAll('.candle-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCandleDetail();
+    }
+
+    // แสดงผลข้อมูลแท่งเทียนแบบเจาะลึก 1000%
+    function renderCandleDetail() {
+      const c = candleData[currentCandle] || candleData['hammer'];
+
+      document.getElementById('c-title').innerText = c.name;
+      document.getElementById('c-type-badge').innerText = c.typeBadge;
+      document.getElementById('c-direction').innerText = c.direction === 'buy' ? '🟢 โฟกัส BUY' : c.direction === 'sell' ? '🔴 โฟกัส SELL' : '↔️ พักตัว/สะสม';
+      document.getElementById('c-direction').className = `badge ${c.dirClass}`;
+      document.getElementById('c-winrate').innerText = c.winrate;
+      document.getElementById('c-ratio').innerText = c.ratio;
+      document.getElementById('c-tf').innerText = c.tf;
+      document.getElementById('c-volume').innerText = c.volume;
+      document.getElementById('diagram-box').innerHTML = c.svg;
+      document.getElementById('c-internal').innerHTML = c.internal;
+      document.getElementById('c-psychology').innerHTML = c.psychology;
+      document.getElementById('c-entry-agg').innerHTML = c.entryAgg;
+      document.getElementById('c-entry-con').innerHTML = c.entryCon;
+      document.getElementById('c-sl-rule').innerHTML = c.slRule;
+      document.getElementById('c-tp-rule').innerHTML = c.tpRule;
+      document.getElementById('c-invalidation').innerHTML = c.invalidation;
+      document.getElementById('c-pitfall').innerHTML = c.pitfall;
+      document.getElementById('c-confluence').innerHTML = c.confluence;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCandleButtons();
+      renderCandleDetail();
+    });
+  </script>
+</body>
+</html>
