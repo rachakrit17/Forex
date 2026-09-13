@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ศูนย์บัญชาการ 10 สินทรัพย์โลก - Multi-Chart Command Center Pro</title>
+
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ================= Fix UI Mobile Layout & Overflow ================= */
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .control-row::-webkit-scrollbar { display: none; }
+
+    .control-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    .preset-btn, .layout-btn, .tf-btn, .cat-btn {
+      font-size: 0.72rem !important;
+      padding: 5px 12px !important;
+      border-radius: 8px !important;
+      border: 1px solid var(--purple-border) !important;
+      background: #ffffff !important;
+      color: var(--text-muted) !important;
+      cursor: pointer;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    .preset-btn.active, .layout-btn.active, .tf-btn.active, .cat-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+      color: #ffffff !important;
+      border-color: var(--primary-purple) !important;
+      box-shadow: 0 2px 8px var(--purple-glow) !important;
+      font-weight: 600 !important;
+    }
+
+    /* Chart Card */
+    .chart-card {
+      background: #ffffff;
+      border: 1px solid var(--purple-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--cute-shadow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 440px;
+    }
+    .chart-header {
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #faf7ff 0%, #f4ecff 100%);
+      border-bottom: 1px solid var(--purple-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .chart-frame-wrapper {
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 330px;
+      position: relative;
+      background: #000000;
+    }
+    .chart-frame-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .chart-footer {
+      padding: 8px 12px;
+      background: #ffffff;
+      border-top: 1px solid var(--purple-border);
+      font-size: 0.7rem;
+    }
+    .chart-select, .chart-tf-select {
+      font-size: 0.72rem;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--purple-border);
+      background: #ffffff;
+      color: var(--text-main);
+      font-weight: 600;
+      outline: none;
+    }
+    .chart-tf-select {
+      background: var(--purple-soft);
+      color: var(--primary-purple);
+      font-weight: 700;
+    }
+
+    /* ตารางแก้การบีบตัวหนังสือ */
+    .spec-table-container {
+      width: 100%;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--purple-border);
+    }
+    .spec-table {
+      min-width: 780px !important; /* บังคับความกว้างขั้นต่ำเพื่อไม่ให้ข้อความแตก */
+      margin-bottom: 0 !important;
+      background: #ffffff;
+    }
+    .spec-table th, .spec-table td {
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      vertical-align: middle;
+      padding: 8px 10px !important;
+      font-size: 0.72rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="container pt-3">
+    <div class="base-card d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
+          <i class="bi bi-grid-1x2-fill me-1" style="color: var(--primary-purple);"></i> ศูนย์บัญชาการ 10 สินทรัพย์โลก Pro
+        </span>
+      </div>
+
+      <span class="badge px-2.5 py-1.5 rounded-3 text-white" style="background: linear-gradient(135deg, #a855f7, #7c3aed); font-size: 0.72rem;">
+        <i class="bi bi-broadcast me-1"></i> 10 Global Assets Live
+      </span>
+    </div>
+  </header>
+
+  <!-- ==================== OFFCANVAS SIDEBAR ==================== -->
+  <div class="offcanvas offcanvas-start text-light" tabindex="-1" id="sidebarMenu" style="width: 350px;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <h6 class="offcanvas-title fw-bold mb-0" style="color: var(--text-main);">
+        <i class="bi bi-grid-fill me-1" style="color: var(--primary-purple);"></i> สารบัญระบบเทรดครบวงจร
+      </h6>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="container mt-3">
+
+    <!-- 1. แผงควบคุมหลัก (แยกแถวชัดเจน เลื่อนได้ ไม่ซ้อนทับ) -->
+    <div class="base-card mb-3">
+      
+      <!-- แถวที่ 1: สูตรจัดจอ -->
+      <div class="control-row">
+        <span class="control-label text-warning"><i class="bi bi-lightning-charge-fill"></i> สูตรจัดจอ:</span>
+        <button class="preset-btn active" onclick="applyPreset('all10', this)">🌐 10 สินทรัพย์ครบเซ็ต</button>
+        <button class="preset-btn" onclick="applyPreset('gold_mtf', this)">🟡 ทองคำ 4 ไทม์เฟรม</button>
+        <button class="preset-btn" onclick="applyPreset('macro_core', this)">🏛️ 4 เสาหลัก (XAU/BTC/OIL/EUR)</button>
+        <button class="preset-btn" onclick="applyPreset('major7', this)">💱 7 คู่เงินหลัก</button>
+        <button class="preset-btn" onclick="applyPreset('safe_haven', this)">🛡️ สินทรัพย์ปลอดภัย</button>
+        <button class="preset-btn" onclick="applyPreset('commodity_fx', this)">🛢️ สายโภคภัณฑ์</button>
+      </div>
+
+      <!-- แถวที่ 2: สัดส่วนจอ -->
+      <div class="control-row">
+        <span class="control-label"><i class="bi bi-aspect-ratio"></i> สัดส่วนจอ:</span>
+        <button class="layout-btn" onclick="setLayout('1', this)">1 จอ Focus</button>
+        <button class="layout-btn" onclick="setLayout('2', this)">2 จอผ่าซีก</button>
+        <button class="layout-btn" onclick="setLayout('4', this)">4 จอตาราง</button>
+        <button class="layout-btn" onclick="setLayout('6', this)">6 จอบัญชาการ</button>
+        <button class="layout-btn active" onclick="setLayout('10', this)">10 จอเต็มผัง</button>
+      </div>
+
+      <!-- แถวที่ 3: Timeframe ซิงค์ -->
+      <div class="control-row">
+        <span class="control-label"><i class="bi bi-clock-history"></i> ซิงค์ทุกจอ:</span>
+        <button class="tf-btn" onclick="setGlobalTF('1', this)">M1</button>
+        <button class="tf-btn" onclick="setGlobalTF('5', this)">M5</button>
+        <button class="tf-btn active" onclick="setGlobalTF('15', this)">M15</button>
+        <button class="tf-btn" onclick="setGlobalTF('60', this)">H1</button>
+        <button class="tf-btn" onclick="setGlobalTF('240', this)">H4</button>
+        <button class="tf-btn" onclick="setGlobalTF('D', this)">D1</button>
+      </div>
+
+      <!-- แถวที่ 4: สลับตัวเดี่ยว -->
+      <div class="control-row mb-0">
+        <span class="control-label"><i class="bi bi-crosshair"></i> สลับตัวเดี่ยว:</span>
+        <button class="cat-btn active" onclick="filterSingleAsset('all', this)">แสดงทั้งหมด</button>
+        <button class="cat-btn text-warning" onclick="filterSingleAsset('xauusd', this)">🟡 XAUUSD (ทองคำ)</button>
+        <button class="cat-btn text-primary" onclick="filterSingleAsset('btcusd', this)">🔵 BTCUSD (บิตคอยน์)</button>
+        <button class="cat-btn text-danger" onclick="filterSingleAsset('usoil', this)">🔴 USOIL (น้ำมันดิบ)</button>
+        <button class="cat-btn" onclick="filterSingleAsset('eurusd', this)">EURUSD</button>
+        <button class="cat-btn" onclick="filterSingleAsset('gbpusd', this)">GBPUSD</button>
+        <button class="cat-btn" onclick="filterSingleAsset('usdjpy', this)">USDJPY</button>
+        <button class="cat-btn" onclick="filterSingleAsset('audusd', this)">AUDUSD</button>
+        <button class="cat-btn" onclick="filterSingleAsset('usdcad', this)">USDCAD</button>
+        <button class="cat-btn" onclick="filterSingleAsset('nzdusd', this)">NZDUSD</button>
+        <button class="cat-btn" onclick="filterSingleAsset('usdchf', this)">USDCHF</button>
+      </div>
+
+    </div>
+
+    <!-- 2. แถบเรดาร์ความสัมพันธ์ข้ามตลาด -->
+    <div class="base-card mb-3 p-2.5 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-1.5 pb-1 border-bottom">
+        <strong style="font-size: 0.78rem; color: var(--text-main);">
+          <i class="bi bi-diagram-3-fill me-1" style="color: var(--primary-purple);"></i> เรดาร์ตรวจจับความสัมพันธ์ระหว่าง 10 สินทรัพย์ (Intermarket Pulse)
+        </strong>
+        <span class="badge bg-success-subtle text-success" style="font-size: 0.62rem;">Live Matrix</span>
+      </div>
+      <div class="row g-2 text-center" style="font-size: 0.72rem;">
+        <div class="col-6 col-md-3 border-end">
+          <span class="text-muted d-block" style="font-size: 0.65rem;">ทองคำ (XAUUSD) vs ดอลลาร์</span>
+          <strong class="text-danger">ผกผันสูง 82% (Inverse)</strong>
+        </div>
+        <div class="col-6 col-md-3 border-end">
+          <span class="text-muted d-block" style="font-size: 0.65rem;">น้ำมัน (USOIL) vs USDCAD</span>
+          <strong class="text-success">วิ่งสวนทางกัน 85%</strong>
+        </div>
+        <div class="col-6 col-md-3 border-end">
+          <span class="text-muted d-block" style="font-size: 0.65rem;">บิตคอยน์ (Risk Sentiment)</span>
+          <strong style="color: var(--primary-purple);">ชี้นำความกล้าเสี่ยง (Risk-On)</strong>
+        </div>
+        <div class="col-6 col-md-3">
+          <span class="text-muted d-block" style="font-size: 0.65rem;">EURUSD (สัดส่วนดัชนี DXY)</span>
+          <strong class="text-primary">ค้ำน้ำหนักดอลลาร์ 57.6%</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. กริดแสดงกราฟสด TradingView -->
+    <div class="row g-3" id="chartsGridContainer"></div>
+
+    <!-- 4. ตารางคลังข้อมูลสเปกสินทรัพย์ (แก้ปัญหาบีบตัวหนังสือ ลื่นไหลบนมือถือ) -->
+    <div class="base-card mt-3 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main);">
+          <i class="bi bi-journal-text me-1" style="color: var(--primary-purple);"></i> ตารางสเปก & สูตรคำนวณการเทรด 10 สินทรัพย์สากล
+        </h6>
+        <span class="badge bg-light text-muted border">เลื่อนซ้าย-ขวาได้ ↔️</span>
+      </div>
+
+      <div class="spec-table-container">
+        <table class="table table-bordered table-sm spec-table text-center">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 140px;">สินทรัพย์</th>
+              <th style="width: 130px;">ประเภท</th>
+              <th style="width: 180px;">ช่วงเวลาทอง (Active Hours)</th>
+              <th style="width: 150px;">มูลค่าต่อจุด (0.01 Lot)</th>
+              <th style="width: 160px;">ระยะวิ่งเฉลี่ยต่อวัน (ADR)</th>
+              <th style="min-width: 200px;">กลยุทธ์ไม้เด็ดที่ได้เปรียบ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-bold text-warning">XAUUSD (ทองคำ)</td>
+              <td>Safe Haven / Commodity</td>
+              <td>ลอนดอน & นิวยอร์ก (14:00 - 23:00 น.)</td>
+              <td class="text-success fw-bold">100 จุด = $1.00</td>
+              <td>1,500 - 3,500 จุด ($15 - $35)</td>
+              <td>ดัก FVG / Sweep กรอบเอเชียช่วงบ่ายสอง & ชั่วโมง Silver Bullet</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-primary">BTCUSD (บิตคอยน์)</td>
+              <td>Crypto 24/7</td>
+              <td>เทรดได้ 24 ชม. 7 วัน (พีคช่วงค่ำ)</td>
+              <td class="text-success fw-bold">ขยับ $1.00 = $1.00 ต่อ 1 BTC</td>
+              <td>$1,500 - $4,000 ต่อวัน</td>
+              <td>Breakout ตามโมเมนตัม & ดักย่อรับ Fibonacci OTE 61.8%</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-danger">USOIL (น้ำมันดิบ WTI)</td>
+              <td>Energy Commodity</td>
+              <td>ตลาดนิวยอร์ก & สต็อกน้ำมันพุธ 21:30 น.</td>
+              <td class="text-success fw-bold">10 Pips (100 จุด) = $1.00</td>
+              <td>150 - 350 Pips ($1.50 - $3.50)</td>
+              <td>เทรดตามข่าวน้ำมัน EIA & สวนทางคู่เงิน USDCAD</td>
+            </tr>
+            <tr>
+              <td class="fw-bold" style="color: var(--primary-purple);">EURUSD (ยูโร / ดอลลาร์)</td>
+              <td>Major Pair (#1 ของโลก)</td>
+              <td>ลอนดอน & นิวยอร์ก (14:00 - 22:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip (10 จุด) = $0.10</td>
+              <td>60 - 110 Pips</td>
+              <td>สเปรดแคบสุด รันเทรนด์ตาม EMA 50 & ตรวจจับ DXY Divergence</td>
+            </tr>
+            <tr>
+              <td class="fw-bold" style="color: var(--primary-purple);">GBPUSD (ปอนด์ / ดอลลาร์)</td>
+              <td>Major Pair (Cable)</td>
+              <td>ตลาดลอนดอนเปิด (14:00 - 18:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip (10 จุด) = $0.10</td>
+              <td>80 - 150 Pips</td>
+              <td>Judas Swing หลอกล่อช่วงบ่ายสอง แล้วกลับตัวเข้าเทรนด์จริง</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-info">USDJPY (ดอลลาร์ / เยน)</td>
+              <td>Major Pair (Asia / Safe Haven)</td>
+              <td>โตเกียว & นิวยอร์ก (06:00 - 15:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip = ~$0.07 - $0.10</td>
+              <td>70 - 140 Pips</td>
+              <td>เทรดตามส่วนต่างดอกเบี้ย Fed-BOJ & ข่าวเศรษฐกิจญี่ปุ่น</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-success">AUDUSD (ออสซี่ / ดอลลาร์)</td>
+              <td>Commodity Currency</td>
+              <td>ตลาดซิดนีย์ & โตเกียว (06:00 - 13:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip = $0.10</td>
+              <td>50 - 90 Pips</td>
+              <td>วิ่งตามทิศทางราคาแร่เหล็ก ตลาดหุ้นเอเชีย และเศรษฐกิจจีน</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-dark">USDCAD (ดอลลาร์ / แคนาดา)</td>
+              <td>Commodity Currency (Loonie)</td>
+              <td>ตลาดอเมริกา & สต็อกน้ำมันคืนวันพุธ</td>
+              <td class="text-success fw-bold">1 Pip = ~$0.08</td>
+              <td>60 - 100 Pips</td>
+              <td>เทรดผกผันกับราคาน้ำมันโลก (ถ้าน้ำมันขึ้น ให้เปิด SELL USDCAD)</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-secondary">NZDUSD (กีวี / ดอลลาร์)</td>
+              <td>Commodity Currency</td>
+              <td>ตลาดเอเชียช่วงเช้า (05:00 - 12:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip = $0.10</td>
+              <td>45 - 80 Pips</td>
+              <td>เคลื่อนไหวสอดคล้องกับ AUDUSD ตามภาคการส่งออกสินค้าเกษตร</td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-muted">USDCHF (ดอลลาร์ / สวิส)</td>
+              <td>Safe Haven (Swissie)</td>
+              <td>ตลาดยุโรป (14:00 - 22:00 น.)</td>
+              <td class="text-success fw-bold">1 Pip = ~$0.11</td>
+              <td>50 - 90 Pips</td>
+              <td>เปิด Hedging สวนทางกับ EURUSD อย่างสมบูรณ์แบบ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JS SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <!-- 10 Assets Multi-Chart Engine -->
+  <script>
+    const masterAssetsList = [
+      {
+        id: "xauusd",
+        symbol: "OANDA:XAUUSD",
+        name: "XAUUSD (ทองคำ)",
+        category: "gold",
+        type: "Safe Haven / Metal",
+        badgeClass: "bg-warning text-dark",
+        session: "ลอนดอน & นิวยอร์ก (14:00 - 23:00 น.)",
+        pipValue: "0.01 Lot = 100 จุด = $1.00",
+        rule: "ผกผันกับดัชนีดอลลาร์ (DXY) และบอนด์ยิลด์ (US10Y) โดยตรง",
+        defaultTF: "15"
+      },
+      {
+        id: "btcusd",
+        symbol: "BINANCE:BTCUSDT",
+        name: "BTCUSD (บิตคอยน์)",
+        category: "btc",
+        type: "Crypto 24/7",
+        badgeClass: "bg-primary text-white",
+        session: "เทรดได้ 24 ชั่วโมง 7 วัน (พีคช่วงค่ำ)",
+        pipValue: "ขยับ $1.00 = $1.00 ต่อ 1 BTC",
+        rule: "ตัวชี้วัดความกล้าเสี่ยง (Risk-On) วิ่งตามกระแสเงินทุนเทคโนโลยี",
+        defaultTF: "15"
+      },
+      {
+        id: "usoil",
+        symbol: "TVC:USOIL",
+        name: "USOIL (น้ำมันดิบ WTI)",
+        category: "oil",
+        type: "Energy Commodity",
+        badgeClass: "bg-danger text-white",
+        session: "ตลาดนิวยอร์ก & สต็อกน้ำมันพุธ 21:30 น.",
+        pipValue: "0.01 Lot = 10 Pips (100 จุด) = $1.00",
+        rule: "ชี้นำเงินเฟ้อ และผลักดันค่าเงิน CAD ให้แข็งค่าเมื่อราคาพุ่ง",
+        defaultTF: "15"
+      },
+      {
+        id: "eurusd",
+        symbol: "FX:EURUSD",
+        name: "EURUSD (ยูโร / ดอลลาร์)",
+        category: "eur",
+        type: "Major Pair (#1 ของโลก)",
+        badgeClass: "text-white",
+        badgeStyle: "background-color: var(--primary-purple);",
+        session: "ลอนดอน & นิวยอร์ก (14:00 - 22:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip (10 จุด) = $0.10",
+        rule: "มีสัดส่วน 57.6% ในดัชนี DXY สเปรดแคบที่สุด วิ่งตามเทรนด์แม่นยำ",
+        defaultTF: "15"
+      },
+      {
+        id: "gbpusd",
+        symbol: "FX:GBPUSD",
+        name: "GBPUSD (ปอนด์ / ดอลลาร์)",
+        category: "gbp",
+        type: "Major Pair (Cable)",
+        badgeClass: "bg-info text-dark",
+        session: "ตลาดลอนดอนเปิด (14:00 - 18:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip = $0.10",
+        rule: "ผันผวนสูง รอบคลื่นชัดเจน มักเกิด Judas Swing ช่วงบ่ายสอง",
+        defaultTF: "15"
+      },
+      {
+        id: "usdjpy",
+        symbol: "FX:USDJPY",
+        name: "USDJPY (ดอลลาร์ / เยน)",
+        category: "jpy",
+        type: "Major Pair (Asia / Safe Haven)",
+        badgeClass: "bg-secondary text-white",
+        session: "โตเกียว & นิวยอร์ก (06:00 - 15:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip = ~$0.07 - $0.10",
+        rule: "วิ่งตามส่วนต่างดอกเบี้ย Fed-BOJ และสะท้อนเงินทุนไหลเข้าเอเชีย",
+        defaultTF: "15"
+      },
+      {
+        id: "audusd",
+        symbol: "FX:AUDUSD",
+        name: "AUDUSD (ออสเตรเลีย / ดอลลาร์)",
+        category: "aud",
+        type: "Commodity (Aussie)",
+        badgeClass: "bg-success text-white",
+        session: "ตลาดซิดนีย์ & โตเกียว (06:00 - 13:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip = $0.10",
+        rule: "เคลื่อนไหวตามราคาสินค้าโภคภัณฑ์ แร่เหล็ก และเศรษฐกิจจีน",
+        defaultTF: "15"
+      },
+      {
+        id: "usdcad",
+        symbol: "FX:USDCAD",
+        name: "USDCAD (ดอลลาร์ / แคนาดา)",
+        category: "cad",
+        type: "Commodity (Loonie)",
+        badgeClass: "bg-dark text-white",
+        session: "ตลาดอเมริกา & ประกาศสต็อกน้ำมัน",
+        pipValue: "0.01 Lot = 1 Pip = ~$0.08",
+        rule: "วิ่งผกผันกับราคาน้ำมัน (น้ำมันพุ่ง ดัน CAD แข็ง ฉุด USDCAD ร่วง)",
+        defaultTF: "15"
+      },
+      {
+        id: "nzdusd",
+        symbol: "FX:NZDUSD",
+        name: "NZDUSD (นิวซีแลนด์ / ดอลลาร์)",
+        category: "nzd",
+        type: "Commodity (Kiwi)",
+        badgeClass: "bg-light text-dark border",
+        session: "ตลาดเอเชียช่วงเช้า (05:00 - 12:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip = $0.10",
+        rule: "เคลื่อนไหวสอดคล้องกับ AUDUSD ตามภาคการส่งออกและเกษตรกรรม",
+        defaultTF: "15"
+      },
+      {
+        id: "usdchf",
+        symbol: "FX:USDCHF",
+        name: "USDCHF (ดอลลาร์ / ฟรังก์สวิส)",
+        category: "chf",
+        type: "Safe Haven (Swissie)",
+        badgeClass: "bg-light text-muted border",
+        session: "ตลาดยุโรป (14:00 - 22:00 น.)",
+        pipValue: "0.01 Lot = 1 Pip = ~$0.11",
+        rule: "สินทรัพย์หลบภัยยุโรป มักวิ่งตรงข้ามกับ EURUSD เกือบสมบูรณ์",
+        defaultTF: "15"
+      }
+    ];
+
+    let currentLayout = '10';
+    let currentGlobalTF = '15';
+    let activeCharts = JSON.parse(JSON.stringify(masterAssetsList));
+
+    function applyPreset(presetKey, btn) {
+      document.querySelectorAll('#presetBar button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (presetKey === 'all10') {
+        activeCharts = JSON.parse(JSON.stringify(masterAssetsList));
+        setLayout('10', document.querySelector('.layout-btn[onclick*="\'10\'"]'));
+      } else if (presetKey === 'gold_mtf') {
+        activeCharts = [
+          { ...masterAssetsList[0], name: "XAUUSD (D1 - Macro)", defaultTF: "D" },
+          { ...masterAssetsList[0], name: "XAUUSD (H4 - Key Level)", defaultTF: "240" },
+          { ...masterAssetsList[0], name: "XAUUSD (M15 - Structure)", defaultTF: "15" },
+          { ...masterAssetsList[0], name: "XAUUSD (M5 - Trigger)", defaultTF: "5" }
+        ];
+        setLayout('4', document.querySelector('.layout-btn[onclick*="\'4\'"]'));
+      } else if (presetKey === 'macro_core') {
+        activeCharts = [masterAssetsList[0], masterAssetsList[1], masterAssetsList[2], masterAssetsList[3]];
+        setLayout('4', document.querySelector('.layout-btn[onclick*="\'4\'"]'));
+      } else if (presetKey === 'major7') {
+        activeCharts = masterAssetsList.slice(3, 10);
+        setLayout('6', document.querySelector('.layout-btn[onclick*="\'6\'"]'));
+      } else if (presetKey === 'safe_haven') {
+        activeCharts = [masterAssetsList[0], masterAssetsList[5], masterAssetsList[9]];
+        setLayout('4', document.querySelector('.layout-btn[onclick*="\'4\'"]'));
+      } else if (presetKey === 'commodity_fx') {
+        activeCharts = [masterAssetsList[2], masterAssetsList[7], masterAssetsList[6], masterAssetsList[8]];
+        setLayout('4', document.querySelector('.layout-btn[onclick*="\'4\'"]'));
+      }
+    }
+
+    function setLayout(layoutCount, btn) {
+      currentLayout = layoutCount;
+      document.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderChartsGrid();
+    }
+
+    function setGlobalTF(tf, btn) {
+      currentGlobalTF = tf;
+      document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      activeCharts.forEach(c => c.defaultTF = tf);
+      renderChartsGrid();
+    }
+
+    function filterSingleAsset(assetId, btn) {
+      document.querySelectorAll('#assetFilterBar button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (assetId === 'all') {
+        activeCharts = JSON.parse(JSON.stringify(masterAssetsList));
+        setLayout('10', document.querySelector('.layout-btn[onclick*="\'10\'"]'));
+      } else {
+        const found = masterAssetsList.find(a => a.id === assetId);
+        if (found) {
+          activeCharts = [found];
+          setLayout('1', document.querySelector('.layout-btn[onclick*="\'1\'"]'));
+        }
+      }
+    }
+
+    function changeIndividualTF(index, newTF) {
+      if (activeCharts[index]) {
+        activeCharts[index].defaultTF = newTF;
+        const iframe = document.getElementById(`iframe-${index}`);
+        if (iframe) {
+          const item = activeCharts[index];
+          iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(item.symbol)}&interval=${newTF}&theme=light&style=1&timezone=Asia%2FBangkok&locale=th_TH`;
+        }
+      }
+    }
+
+    function changeIndividualAsset(index, assetId) {
+      const assetData = masterAssetsList.find(a => a.id === assetId);
+      if (assetData) {
+        activeCharts[index] = { ...assetData, defaultTF: activeCharts[index].defaultTF || currentGlobalTF };
+        renderChartsGrid();
+      }
+    }
+
+    function renderChartsGrid() {
+      const container = document.getElementById('chartsGridContainer');
+      let displayCount = parseInt(currentLayout);
+      if (isNaN(displayCount)) displayCount = 10;
+
+      let itemsToRender = activeCharts.slice(0, displayCount);
+      if (itemsToRender.length === 0) itemsToRender = [masterAssetsList[0]];
+
+      let colClass = "col-12 col-lg-6";
+      if (displayCount === 1) colClass = "col-12";
+      else if (displayCount === 2) colClass = "col-12 col-lg-6";
+      else if (displayCount === 4) colClass = "col-12 col-lg-6";
+      else if (displayCount === 6) colClass = "col-12 col-md-6 col-xl-4";
+      else if (displayCount >= 10) colClass = "col-12 col-md-6 col-xl-4 col-xxl-3";
+
+      container.innerHTML = itemsToRender.map((item, index) => {
+        const tf = item.defaultTF || currentGlobalTF;
+        return `
+          <div class="${colClass}">
+            <div class="chart-card">
+              
+              <div class="chart-header">
+                <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                  <select class="chart-select" onchange="changeIndividualAsset(${index}, this.value)">
+                    ${masterAssetsList.map(a => `
+                      <option value="${a.id}" ${a.id === item.id ? 'selected' : ''}>${a.name}</option>
+                    `).join('')}
+                  </select>
+
+                  <select class="chart-tf-select" onchange="changeIndividualTF(${index}, this.value)">
+                    <option value="1" ${tf === '1' ? 'selected' : ''}>M1</option>
+                    <option value="5" ${tf === '5' ? 'selected' : ''}>M5</option>
+                    <option value="15" ${tf === '15' ? 'selected' : ''}>M15</option>
+                    <option value="60" ${tf === '60' ? 'selected' : ''}>H1</option>
+                    <option value="240" ${tf === '240' ? 'selected' : ''}>H4</option>
+                    <option value="D" ${tf === 'D' ? 'selected' : ''}>D1</option>
+                  </select>
+                </div>
+
+                <span class="badge ${item.badgeClass || ''}" style="${item.badgeStyle || ''} font-size: 0.62rem;">
+                  ${item.type}
+                </span>
+              </div>
+
+              <div class="chart-frame-wrapper">
+                <iframe 
+                  id="iframe-${index}"
+                  src="https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(item.symbol)}&interval=${tf}&theme=light&style=1&timezone=Asia%2FBangkok&locale=th_TH" 
+                  scrolling="no" 
+                  allowtransparency="true">
+                </iframe>
+              </div>
+
+              <div class="chart-footer">
+                <div class="d-flex justify-content-between text-muted mb-1 flex-wrap gap-1">
+                  <span>⏱️ <strong>เวลาทอง:</strong> ${item.session}</span>
+                  <span class="text-success fw-bold">🧮 ${item.pipValue}</span>
+                </div>
+                <div class="text-muted" style="font-size: 0.68rem; line-height: 1.4;">
+                  💡 <strong>ความสัมพันธ์:</strong> ${item.rule}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderChartsGrid();
+    });
+  </script>
+</body>
+</html>

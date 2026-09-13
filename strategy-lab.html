@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ห้องวิจัยหลอมกลยุทธ์ 3D ควอนตัม - 3D Strategy Quantum Forge Pro</title>
+
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --cyber-bg: #090314;
+      --cyber-panel: #130924;
+      --cyber-card: #1c0e36;
+      --cyber-purple: #8b5cf6;
+      --cyber-neon: #c084fc;
+      --cyber-gold: #facc15;
+      --cyber-cyan: #38bdf8;
+      --cyber-green: #10b981;
+      --cyber-red: #f43f5e;
+      --cyber-border: rgba(168, 85, 247, 0.35);
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e0b38 0%, #0c0418 60%, #05010a 100%);
+      color: #f3e8ff;
+      font-family: 'Prompt', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      padding-bottom: 75px;
+    }
+
+    /* 3D Viewport Reactor Stage */
+    .viewport-3d-wrapper {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      border-radius: 24px;
+      background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, rgba(5, 1, 10, 0.9) 80%);
+      border: 2px solid var(--cyber-border);
+      box-shadow: 0 0 35px rgba(139, 92, 246, 0.25), inset 0 0 30px rgba(124, 58, 237, 0.2);
+      overflow: hidden;
+      touch-action: none;
+    }
+    #reactorCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewport-overlay-ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    .hud-chip {
+      background: rgba(19, 9, 36, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--cyber-border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--cyber-neon);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: auto;
+    }
+
+    /* Node Card Stacks */
+    .lab-card {
+      background: var(--cyber-panel);
+      border: 1.5px solid var(--cyber-border);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .node-item-card {
+      background: var(--cyber-card);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .node-item-card:hover {
+      border-color: var(--cyber-neon);
+      transform: translateX(3px);
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
+    }
+    .node-item-card.selected-for-edit {
+      border-color: var(--cyber-cyan);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+      background: #231244;
+    }
+
+    .node-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    /* Parameter Inputs */
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .param-field {
+      background: rgba(9, 3, 20, 0.6);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 8px;
+      padding: 6px 8px;
+    }
+    .param-field label {
+      font-size: 0.62rem;
+      color: #d8b4fe;
+      display: block;
+      margin-bottom: 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .param-field input, .param-field select {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      padding: 0;
+    }
+
+    /* Catalog Drawer Item */
+    .catalog-card {
+      background: #180c2e;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s ease;
+    }
+    .catalog-card:hover {
+      background: #28134d;
+      border-color: var(--cyber-neon);
+      transform: translateX(4px);
+    }
+
+    /* Gauge and Stats */
+    .cyber-stat-box {
+      background: rgba(19, 9, 36, 0.8);
+      border: 1px solid var(--cyber-border);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .btn-forge-action {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #ec4899 100%);
+      border: 1px solid #c084fc;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      border-radius: 14px;
+      padding: 12px;
+      width: 100%;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-forge-action:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 35px rgba(236, 72, 153, 0.6);
+      color: #ffffff;
+    }
+
+    .sop-step-box {
+      background: rgba(28, 14, 54, 0.6);
+      border-left: 4px solid var(--cyber-neon);
+      border-radius: 0 12px 12px 0;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="container pt-3 mb-2">
+    <div class="lab-card d-flex justify-content-between align-items-center flex-wrap gap-2 p-2.5">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="bi bi-list fs-5 text-white"></i>
+        </button>
+        <span class="fw-bold" style="font-size: 0.95rem; color: #ffffff;">
+          <i class="bi bi-box-seam me-1 text-warning"></i> ห้องวิจัยหลอมกลยุทธ์ 3D ควอนตัม Pro
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge px-2.5 py-1.5 rounded-3 text-white" style="background: linear-gradient(135deg, #a855f7, #ec4899); font-size: 0.72rem;">
+          <i class="bi bi-stars me-1 text-warning"></i> 3D Particle Hologram
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== OFFCANVAS SIDEBAR ==================== -->
+  <div class="offcanvas offcanvas-start text-light" tabindex="-1" id="sidebarMenu" style="width: 350px; background: #0e051a;">
+    <div class="offcanvas-header border-bottom border-purple-subtle">
+      <h6 class="offcanvas-title fw-bold mb-0 text-white">
+        <i class="bi bi-grid-fill me-1" style="color: var(--cyber-neon);"></i> สารบัญระบบเทรดครบวงจร
+      </h6>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- ==================== MAIN 3D WORKSPACE ==================== -->
+  <main class="container">
+
+    <!-- 1. จอแสดงผลึกแกนปฏิกรณ์ 3D Quantum Reactor -->
+    <div class="viewport-3d-wrapper mb-3" id="viewportStage">
+      <canvas id="reactorCanvas"></canvas>
+
+      <!-- HUD UI ซ้อนบนจอ 3D -->
+      <div class="viewport-overlay-ui">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="hud-chip">
+            <span class="spinner-grow spinner-grow-sm text-success" style="width: 7px; height: 7px;"></span>
+            <span>CORE STATUS: SYNCHRONIZED</span>
+          </div>
+          <div class="hud-chip" id="hudActiveCount">
+            NODES LINKED: 0
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-end">
+          <div class="hud-chip" style="font-size: 0.62rem; color: #a78bfa;">
+            <i class="bi bi-arrows-move me-1"></i> ลากนิ้วหมุน 3D อิสระ / สกอลล์ย่อขยาย
+          </div>
+          <div class="text-end">
+            <span class="badge bg-warning text-dark fw-bold px-2 py-0.5 rounded-pill mb-1" id="hudGradeBadge" style="font-size: 0.65rem;">
+              GRADE S+
+            </span>
+            <div class="fs-4 fw-bold text-warning" id="hudConfluenceScore" style="font-family: 'JetBrains Mono'; line-height: 1;">
+              94.5%
+            </div>
+            <small class="text-white-50" style="font-size: 0.58rem;">CONFLUENCE SCORE</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. แผงควบคุมกลยุทธ์ & แท่นประกอบโหนด -->
+    <div class="row g-3 mb-3">
+      
+      <!-- ฝั่งซ้าย: แท่นจัดการโหนดกลยุทธ์ (Node Sockets Manager) -->
+      <div class="col-lg-6">
+        <div class="lab-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom border-purple-subtle">
+            <div>
+              <h6 class="fw-bold mb-0 text-white" style="font-size: 0.88rem;">
+                <i class="bi bi-diagram-3-fill me-1" style="color: var(--cyber-neon);"></i> แท่นเชื่อมต่อโหนดกลยุทธ์ (Active Nodes)
+              </h6>
+              <small class="text-white-50" style="font-size: 0.68rem;">คลิกที่โหนดเพื่อดูผลึก 3D และปรับจูนพารามิเตอร์</small>
+            </div>
+
+            <button class="btn btn-sm btn-outline-danger py-0 px-2" style="font-size: 0.65rem;" onclick="clearAllNodes()">
+              <i class="bi bi-trash"></i> เคลียร์
+            </button>
+          </div>
+
+          <!-- กล่องใส่โหนดที่ติดตั้งอยู่ -->
+          <div id="nodesContainer" style="max-height: 380px; overflow-y: auto; padding-right: 4px;"></div>
+
+          <!-- ปุ่มเพิ่มโหนดเข้าแท่น 3D -->
+          <button class="btn btn-outline-light w-100 mt-2 py-2 fw-bold" style="border: 1.5px dashed var(--cyber-neon); border-radius: 14px; font-size: 0.8rem;" data-bs-toggle="modal" data-bs-target="#catalogModal">
+            <i class="bi bi-plus-circle-fill me-1 text-warning"></i> เพิ่มชิ้นส่วนใหม่เข้าสู่แกน 3D (Add Component)
+          </button>
+        </div>
+      </div>
+
+      <!-- ฝั่งขวา: พิมพ์เขียวกลยุทธ์ & สถิติประเมินแบบสถาบัน (Synthesized Intelligence) -->
+      <div class="col-lg-6">
+        <div class="lab-card h-100 d-flex flex-column justify-content-between">
+          
+          <div>
+            <div class="d-flex justify-content-between align-items-start mb-2 pb-2 border-bottom border-purple-subtle">
+              <div>
+                <span class="badge" id="strategyArchetypeBadge" style="background: linear-gradient(135deg, #a855f7, #ec4899); font-size: 0.65rem;">
+                  ICT/SMC QUANT MODEL
+                </span>
+                <h5 class="fw-bold mb-0 mt-1 text-white" id="strategyGeneratedName">
+                  Apex Silver Bullet Void Hunter
+                </h5>
+                <small class="text-white-50" id="strategyTaglineText" style="font-size: 0.72rem;">
+                  ระบบรอยแยกสภาพคล่องสถาบัน หลอมรวมจาก 0 โหนด
+                </small>
+              </div>
+
+              <button class="btn btn-sm btn-outline-info py-1 px-2" style="font-size: 0.7rem;" onclick="copyStrategySOP()">
+                <i class="bi bi-clipboard-check me-1"></i> คัดลอก SOP
+              </button>
+            </div>
+
+            <!-- สเตตัส 4 มิติคำนวณสดตามพารามิเตอร์ -->
+            <div class="row g-2 mb-3">
+              <div class="col-6 col-md-3">
+                <div class="cyber-stat-box">
+                  <small class="text-white-50 d-block" style="font-size: 0.62rem;">WIN RATE</small>
+                  <strong class="fs-5 text-success" id="valWinRate">78.5%</strong>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="cyber-stat-box">
+                  <small class="text-white-50 d-block" style="font-size: 0.62rem;">AVG RISK:REWARD</small>
+                  <strong class="fs-5 text-warning" id="valRR">1 : 2.6</strong>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="cyber-stat-box">
+                  <small class="text-white-50 d-block" style="font-size: 0.62rem;">PROFIT FACTOR</small>
+                  <strong class="fs-5 text-primary" id="valPF">2.45</strong>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="cyber-stat-box">
+                  <small class="text-white-50 d-block" style="font-size: 0.62rem;">EXPECTANCY</small>
+                  <strong class="fs-5" style="color: #67e8f9;" id="valExpectancy">+1.42 R</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- แผนผังปฏิบัติการเทรด 4 ขั้นตอน (Step-by-Step SOP) -->
+            <div class="mb-2">
+              <small class="text-white-50 fw-bold d-block mb-1.5" style="font-size: 0.68rem;">
+                <i class="bi bi-terminal me-1 text-warning"></i> แผนปฏิบัติการเทรดหน้างานทีละขั้นตอน (INSTITUTIONAL SOP):
+              </small>
+              <div id="sopStepsContainer" style="max-height: 200px; overflow-y: auto; padding-right: 4px;"></div>
+            </div>
+          </div>
+
+          <!-- ปุ่มกระตุ้นการสังเคราะห์ใหม่ -->
+          <div class="mt-2 pt-2 border-top border-purple-subtle">
+            <button class="btn-forge-action" onclick="pulse3DCoreAndSynthesize()">
+              <i class="bi bi-lightning-charge-fill me-1"></i> จุดประกายแกนควอนตัม & สังเคราะห์ SOP ใหม่ (TRIGGER FUSION)
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODAL คลังชิ้นส่วน 20+ FOREX COMPONENTS ==================== -->
+  <div class="modal fade" id="catalogModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-4 border-0" style="background: #17092c; color: #fff; border: 1.5px solid var(--cyber-border) !important;">
+        <div class="modal-header border-bottom border-purple-subtle">
+          <h6 class="modal-title fw-bold text-white">
+            <i class="bi bi-plus-square-fill me-1" style="color: var(--cyber-neon);"></i> คลังชิ้นส่วน Forex & SMC 10000%
+          </h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body p-3">
+          
+          <!-- หมวด 1: Smart Money Concepts (SMC) & Liquidity -->
+          <small class="text-warning fw-bold d-block mb-1" style="font-size: 0.7rem; font-family: 'JetBrains Mono';">
+            [CATEGORY 1: SMC & LIQUIDITY ENGINE]
+          </small>
+          
+          <div class="catalog-card" onclick="spawnNewNode('fvg')">
+            <div>
+              <strong class="small d-block text-white">Fair Value Gap (FVG / Imbalance)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">รอยแยกราคาไม่สมดุล ดักรอ Consequent Encroachment (50%)</small>
+            </div>
+            <span class="badge bg-warning text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('order_block')">
+            <div>
+              <strong class="small d-block text-white">High-Probability Order Block (OB)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">แท่งคำสั่งก้อนสุดท้ายของสถาบันก่อนเกิด Displacement ทำลายโครงสร้าง</small>
+            </div>
+            <span class="badge bg-warning text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('liq_sweep')">
+            <div>
+              <strong class="small d-block text-white">Liquidity Sweep (BSL / SSL Purge)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">การกระชากกิน Stop Loss เหนือยอด Asian High หรือใต้ Equal Lows</small>
+            </div>
+            <span class="badge bg-warning text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('mss_choch')">
+            <div>
+              <strong class="small d-block text-white">Market Structure Shift (MSS / CHoCH)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">การเบรกโครงสร้างสวิงแรกใน Timeframe ย่อยพร้อมแท่ง Displacement ตัน</small>
+            </div>
+            <span class="badge bg-warning text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('breaker')">
+            <div>
+              <strong class="small d-block text-white">Breaker Block (Failed Order Block)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">ออร์เดอร์บล็อกที่ถูกทะลุแล้วกลับขั้วกลายเป็นแนวต้าน/แนวรับสถาบัน</small>
+            </div>
+            <span class="badge bg-warning text-dark">+ ADD</span>
+          </div>
+
+          <!-- หมวด 2: Indicators & Oscillators -->
+          <small class="text-info fw-bold d-block mt-3 mb-1" style="font-size: 0.7rem; font-family: 'JetBrains Mono';">
+            [CATEGORY 2: TECHNICAL INDICATORS & OSCILLATORS]
+          </small>
+
+          <div class="catalog-card" onclick="spawnNewNode('ema')">
+            <div>
+              <strong class="small d-block text-white">Exponential Moving Average (EMA)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">เส้นค่าเฉลี่ยถ่วงน้ำหนัก (กรองแนวโน้มหลัก 20 / 50 / 200)</small>
+            </div>
+            <span class="badge bg-info text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('rsi')">
+            <div>
+              <strong class="small d-block text-white">Relative Strength Index (RSI Divergence)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">ตรวจจับแรงเฉื่อยและสัญญาณไดเวอร์เจนต์ขัดแย้งของราคา</small>
+            </div>
+            <span class="badge bg-info text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('bollinger')">
+            <div>
+              <strong class="small d-block text-white">Bollinger Bands (Volatility Envelope)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">กรอบเบี่ยงเบนมาตรฐาน ตรวจจับการบีบอัด Squeeze & การดีดขอบนอก</small>
+            </div>
+            <span class="badge bg-info text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('supertrend')">
+            <div>
+              <strong class="small d-block text-white">Supertrend ATR Trailing Engine</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">เกราะนำทางตามเทรนด์และใช้เป็นจุด Trailing Stop ไดนามิก</small>
+            </div>
+            <span class="badge bg-info text-dark">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('stoch')">
+            <div>
+              <strong class="small d-block text-white">Stochastic Oscillator (%K / %D Cross)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">หาจุดกลับตัวในโซนปลายขอบ Oversold (&lt;20) และ Overbought (&gt;80)</small>
+            </div>
+            <span class="badge bg-info text-dark">+ ADD</span>
+          </div>
+
+          <!-- หมวด 3: Mathematical & Execution Constraints -->
+          <small class="text-danger fw-bold d-block mt-3 mb-1" style="font-size: 0.7rem; font-family: 'JetBrains Mono';">
+            [CATEGORY 3: TIMING, FIBONACCI & RISK PROTOCOLS]
+          </small>
+
+          <div class="catalog-card" onclick="spawnNewNode('fibo_ote')">
+            <div>
+              <strong class="small d-block text-white">Fibonacci Optimal Trade Entry (OTE)</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">ระดับย่อตัวลึก 61.8% - 70.5% - 78.6% สัดส่วนทองคำธรรมชาติ</small>
+            </div>
+            <span class="badge bg-danger text-white">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('killzone')">
+            <div>
+              <strong class="small d-block text-white">IPDA Killzone Timing Filter</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">ล็อกเวลาเฝ้าจอเฉพาะชั่วโมงสถาบันทำราคา Silver Bullet หรือ London Open</small>
+            </div>
+            <span class="badge bg-danger text-white">+ ADD</span>
+          </div>
+
+          <div class="catalog-card" onclick="spawnNewNode('risk_guard')">
+            <div>
+              <strong class="small d-block text-white">R-Multiple Risk & Trade Management</strong>
+              <small class="text-white-50" style="font-size: 0.65rem;">กฎเลื่อน Stop Loss บังหน้าทุน (Break-Even) และแบ่งปิดกำไร 50%</small>
+            </div>
+            <span class="badge bg-danger text-white">+ ADD</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <!-- True 3D Particle & Node Engine Logic -->
+  <script>
+    // ================= 1. ชิ้นส่วนสารตั้งต้นแม่แบบ (Forex Component Blueprints) =================
+    const catalogTemplates = {
+      fvg: {
+        type: 'SMC', name: 'Fair Value Gap (FVG)', color: 0xfacc15, badgeClass: 'bg-warning text-dark',
+        params: { timeframe: 'M5', minGapPoints: 150, mitigationThreshold: '50% Consequent Encroachment', directionBias: 'Pro-Trend Only' }
+      },
+      order_block: {
+        type: 'SMC', name: 'Order Block (OB)', color: 0xf59e0b, badgeClass: 'bg-warning text-dark',
+        params: { timeframe: 'M15', freshState: 'Unmitigated (สดใหม่)', bufferSL: 60, volumeThreshold: '2.0x Average Volume' }
+      },
+      liq_sweep: {
+        type: 'SMC', name: 'Liquidity Sweep (Purge)', color: 0xec4899, badgeClass: 'bg-danger text-white',
+        params: { targetPool: 'Asian Session High/Low', sweepStyle: 'Wick Only (ปิดกลับในกรอบ)', timeframe: 'H1' }
+      },
+      mss_choch: {
+        type: 'TRIGGER', name: 'Market Structure Shift (MSS)', color: 0x10b981, badgeClass: 'bg-success text-white',
+        params: { timeframe: 'M5', breakCriteria: 'Full Candle Body Close', requireDisplacement: 'True (แท่งตันยาว)' }
+      },
+      breaker: {
+        type: 'SMC', name: 'Breaker Block', color: 0xd946ef, badgeClass: 'bg-warning text-dark',
+        params: { timeframe: 'M15', polarityFlip: 'Confirmed on Retest', bufferSL: 70 }
+      },
+      ema: {
+        type: 'INDICATOR', name: 'Exponential Moving Average', color: 0x38bdf8, badgeClass: 'bg-info text-dark',
+        params: { period: 200, timeframe: 'H1', method: 'EMA (Exponential)', appliedPrice: 'Close' }
+      },
+      rsi: {
+        type: 'MOMENTUM', name: 'RSI Momentum / Divergence', color: 0x06b6d4, badgeClass: 'bg-info text-dark',
+        params: { period: 14, timeframe: 'M15', mode: 'Regular Divergence', overbought: 70, oversold: 30 }
+      },
+      bollinger: {
+        type: 'VOLATILITY', name: 'Bollinger Bands', color: 0x818cf8, badgeClass: 'bg-info text-dark',
+        params: { period: 20, deviation: 2.0, timeframe: 'M15', triggerMode: 'Outside Band Reversal' }
+      },
+      supertrend: {
+        type: 'TREND', name: 'Supertrend ATR Trailing', color: 0x22c55e, badgeClass: 'bg-success text-white',
+        params: { atrPeriod: 10, multiplier: 3.0, timeframe: 'M15', trailingRole: 'Dynamic Stop Loss' }
+      },
+      stoch: {
+        type: 'MOMENTUM', name: 'Stochastic Oscillator', color: 0x14b8a6, badgeClass: 'bg-info text-dark',
+        params: { kPeriod: 14, dPeriod: 3, slowing: 3, extremeCrossZone: 'Oversold < 20 / Overbought > 80' }
+      },
+      fibo_ote: {
+        type: 'MATH', name: 'Fibonacci OTE (Optimal Entry)', color: 0xfbbf24, badgeClass: 'bg-warning text-dark',
+        params: { targetZone: '61.8% - 70.5% - 78.6%', discountRule: 'Buy Only Below 50% Equilibrium', anchorSwing: 'External Swing Range' }
+      },
+      killzone: {
+        type: 'TIMING', name: 'IPDA Execution Killzone', color: 0xef4444, badgeClass: 'bg-danger text-white',
+        params: { activeSession: 'NY AM Silver Bullet (21:00 - 22:00 น.)', newsAvoidanceBuffer: '15 Mins Before/After Red News' }
+      },
+      risk_guard: {
+        type: 'RISK', name: 'R-Multiple Risk Management', color: 0x3b82f6, badgeClass: 'bg-primary text-white',
+        params: { riskPerTradePercent: '1.0% Equity', targetRewardRR: '1 : 2.5 R:R', breakevenRule: 'Move SL to BE @ +1.0R', partialTPRule: 'Scale Out 50% @ Target 1' }
+      }
+    };
+
+    // อาร์เรย์เก็บโหนดที่กำลังทำงานในแท่น 3D
+    let activeNodes = [];
+    let nodeIdCounter = 1;
+
+    // ================= 2. Three.js 3D Interactive Reactor Core =================
+    let scene, camera, renderer;
+    let coreMesh, wireCore, orbitalRings = [], nodeMeshes = [], beamLines = [], particleField;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let rotationVelocity = { x: 0.003, y: 0.005 };
+
+    function initThreeDReactor() {
+      const stage = document.getElementById('viewportStage');
+      const canvas = document.getElementById('reactorCanvas');
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(50, stage.offsetWidth / stage.offsetHeight, 0.1, 1000);
+      camera.position.set(0, 0, 8.5);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(stage.offsetWidth, stage.offsetHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // 1. แกนปฏิกรณ์ทรงกลวง Solid Core (Icosahedron)
+      const coreGeo = new THREE.IcosahedronGeometry(1.35, 1);
+      const coreMat = new THREE.MeshPhongMaterial({
+        color: 0x7c3aed,
+        emissive: 0x3b0764,
+        shininess: 100,
+        wireframe: false,
+        transparent: true,
+        opacity: 0.85
+      });
+      coreMesh = new THREE.Mesh(coreGeo, coreMat);
+      scene.add(coreMesh);
+
+      // 2. เปลือกนอก Wireframe Lattice
+      const wireGeo = new THREE.IcosahedronGeometry(1.65, 1);
+      const wireMat = new THREE.MeshBasicMaterial({ color: 0xc084fc, wireframe: true, transparent: true, opacity: 0.35 });
+      wireCore = new THREE.Mesh(wireGeo, wireMat);
+      scene.add(wireCore);
+
+      // 3. วงแหวนวงโคจร 3 ชั้น (Orbital Gyro Rings)
+      const ringSpecs = [
+        { radius: 2.6, color: 0x8b5cf6, rotX: Math.PI / 3, rotY: 0 },
+        { radius: 3.2, color: 0x38bdf8, rotX: -Math.PI / 4, rotY: Math.PI / 6 },
+        { radius: 3.8, color: 0xfacc15, rotX: Math.PI / 6, rotY: -Math.PI / 3 }
+      ];
+
+      ringSpecs.forEach(spec => {
+        const rGeo = new THREE.TorusGeometry(spec.radius, 0.02, 16, 120);
+        const rMat = new THREE.MeshBasicMaterial({ color: spec.color, transparent: true, opacity: 0.45 });
+        const ring = new THREE.Mesh(rGeo, rMat);
+        ring.rotation.x = spec.rotX;
+        ring.rotation.y = spec.rotY;
+        scene.add(ring);
+        orbitalRings.push(ring);
+      });
+
+      // 4. ฝูงอนุภาคแสง Quantum Dust Particles
+      const pCount = 120;
+      const pGeo = new THREE.BufferGeometry();
+      const pPos = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount * 3; i++) {
+        pPos[i] = (Math.random() - 0.5) * 16;
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const pMat = new THREE.PointsMaterial({ size: 0.06, color: 0xa855f7, transparent: true, opacity: 0.6 });
+      particleField = new THREE.Points(pGeo, pMat);
+      scene.add(particleField);
+
+      // แสงไฟนีออน
+      const light1 = new THREE.PointLight(0xa855f7, 3, 50);
+      light1.position.set(5, 5, 5);
+      scene.add(light1);
+
+      const light2 = new THREE.PointLight(0x38bdf8, 2, 50);
+      light2.position.set(-5, -5, 5);
+      scene.add(light2);
+
+      const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambient);
+
+      // ระบบ Touch & Mouse Drag Rotation ใน 3D
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        scene.rotation.y += deltaX * 0.008;
+        scene.rotation.x += deltaY * 0.008;
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', () => isDragging = false);
+      canvas.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+        scene.rotation.y += deltaX * 0.008;
+        scene.rotation.x += deltaY * 0.008;
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }, { passive: true });
+
+      animate3D();
+
+      window.addEventListener('resize', () => {
+        if (!stage) return;
+        camera.aspect = stage.offsetWidth / stage.offsetHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(stage.offsetWidth, stage.offsetHeight);
+      });
+    }
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+
+      if (coreMesh && wireCore) {
+        coreMesh.rotation.y += 0.006;
+        coreMesh.rotation.x += 0.003;
+        wireCore.rotation.y -= 0.004;
+        wireCore.rotation.z += 0.002;
+      }
+
+      orbitalRings.forEach((r, idx) => {
+        r.rotation.z += (idx + 1) * 0.002;
+      });
+
+      if (particleField) {
+        particleField.rotation.y += 0.0008;
+      }
+
+      // หมุนโหนดดาวเทียมรอบแกนกลาง
+      const timeSec = performance.now() * 0.001;
+      nodeMeshes.forEach((mesh, i) => {
+        const angle = timeSec * 0.4 + (i * ((Math.PI * 2) / nodeMeshes.length));
+        const radius = 3.2;
+        mesh.position.x = Math.cos(angle) * radius;
+        mesh.position.z = Math.sin(angle) * radius;
+        mesh.position.y = Math.sin(angle * 2) * 0.8;
+        mesh.rotation.y += 0.03;
+
+        // อัปเดตเส้นลำแสงเชื่อมต่อกลับสู่แกนกลาง (Laser Beams)
+        if (beamLines[i]) {
+          const positions = beamLines[i].geometry.attributes.position.array;
+          positions[0] = 0; positions[1] = 0; positions[2] = 0;
+          positions[3] = mesh.position.x;
+          positions[4] = mesh.position.y;
+          positions[5] = mesh.position.z;
+          beamLines[i].geometry.attributes.position.needsUpdate = true;
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    // ================= 3. ระบบซิงค์โหนดในโลก 3D (3D Node Spawner & Synchronizer) =================
+    function sync3DWorldNodes() {
+      // เคลียร์โหนด 3D เดิม
+      nodeMeshes.forEach(m => scene.remove(m));
+      beamLines.forEach(l => scene.remove(l));
+      nodeMeshes = [];
+      beamLines = [];
+
+      document.getElementById('hudActiveCount').innerText = `NODES LINKED: ${activeNodes.length}`;
+
+      activeNodes.forEach((node, idx) => {
+        // สร้างผลึกเหลี่ยม 3 มิติ (Octahedron Satellites)
+        const geo = new THREE.OctahedronGeometry(0.32, 0);
+        const mat = new THREE.MeshPhongMaterial({
+          color: node.color || 0xc084fc,
+          emissive: 0x3b0764,
+          shininess: 90,
+          flatShading: true
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        scene.add(mesh);
+        nodeMeshes.push(mesh);
+
+        // สร้างเส้นลำแสงเชื่อมต่อ (Energy Beam Line)
+        const lineGeo = new THREE.BufferGeometry();
+        const linePositions = new Float32Array([0, 0, 0, 0, 0, 0]);
+        lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+        const lineMat = new THREE.LineBasicMaterial({ color: node.color || 0xa855f7, transparent: true, opacity: 0.5 });
+        const line = new THREE.Line(lineGeo, lineMat);
+        scene.add(line);
+        beamLines.push(line);
+      });
+    }
+
+    // เพิ่มโหนดใหม่
+    function spawnNewNode(templateKey) {
+      const tmpl = catalogTemplates[templateKey];
+      if (!tmpl) return;
+
+      const newNode = {
+        id: nodeIdCounter++,
+        key: templateKey,
+        name: tmpl.name,
+        type: tmpl.type,
+        color: tmpl.color,
+        badgeClass: tmpl.badgeClass,
+        params: JSON.parse(JSON.stringify(tmpl.params))
+      };
+
+      activeNodes.push(newNode);
+      sync3DWorldNodes();
+      renderNodeCards();
+
+      // ปิด modal
+      const modalEl = document.getElementById('catalogModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+
+      pulse3DCoreAndSynthesize();
+    }
+
+    function removeNodeById(id) {
+      activeNodes = activeNodes.filter(n => n.id !== id);
+      sync3DWorldNodes();
+      renderNodeCards();
+      pulse3DCoreAndSynthesize();
+    }
+
+    function clearAllNodes() {
+      activeNodes = [];
+      sync3DWorldNodes();
+      renderNodeCards();
+      pulse3DCoreAndSynthesize();
+    }
+
+    // เรนเดอร์การ์ดปรับจูนพารามิเตอร์ละเอียดในฝั่ง UI
+    function renderNodeCards() {
+      const container = document.getElementById('nodesContainer');
+
+      if (activeNodes.length === 0) {
+        container.innerHTML = `
+          <div class="text-center p-4 border border-secondary border-opacity-25 rounded-4 text-white-50" style="background: rgba(0,0,0,0.2);">
+            <i class="bi bi-cpu fs-2 d-block mb-1 text-warning opacity-75"></i>
+            <strong class="d-block text-white">ยังไม่มีชิ้นส่วนเชื่อมต่อในแกน 3D</strong>
+            <small style="font-size: 0.72rem;">กดปุ่ม "+ เพิ่มชิ้นส่วนใหม่" ด้านล่างเพื่อส่งโหนดขึ้นสู่วงโคจร 3 มิติ</small>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = activeNodes.map(node => {
+        const paramKeys = Object.keys(node.params);
+
+        return `
+          <div class="node-item-card">
+            <div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom border-secondary border-opacity-25">
+              <div class="d-flex align-items-center gap-1.5">
+                <span class="node-badge ${node.badgeClass}">${node.type}</span>
+                <strong class="text-white small" style="font-size: 0.8rem;">${node.name}</strong>
+              </div>
+              <button class="btn btn-sm text-danger border-0 p-0" onclick="removeNodeById(${node.id})">
+                <i class="bi bi-x-circle-fill fs-6"></i>
+              </button>
+            </div>
+
+            <!-- กล่องพารามิเตอร์ของโหนดนี้ -->
+            <div class="param-grid">
+              ${paramKeys.map(k => `
+                <div class="param-field">
+                  <label>${k.toUpperCase()}</label>
+                  <input type="text" value="${node.params[k]}" 
+                         onchange="updateNodeParamValue(${node.id}, '${k}', this.value)">
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateNodeParamValue(id, key, val) {
+      const found = activeNodes.find(n => n.id === id);
+      if (found) {
+        found.params[key] = val;
+        pulse3DCoreAndSynthesize();
+      }
+    }
+
+    // ================= 4. ระบบคำนวณและสร้าง SOP กลยุทธ์สถาบัน 10000% =================
+    function pulse3DCoreAndSynthesize() {
+      // แอนิเมชันแฟลชแกน 3D
+      if (coreMesh) {
+        coreMesh.scale.set(1.45, 1.45, 1.45);
+        setTimeout(() => coreMesh.scale.set(1, 1, 1), 220);
+      }
+
+      if (activeNodes.length === 0) {
+        document.getElementById('strategyGeneratedName').innerText = "แกนปฏิกรณ์ว่างเปล่า";
+        document.getElementById('strategyTaglineText').innerText = "กรุณาเชื่อมต่อชิ้นส่วนเข้าสู่ระบบ 3D";
+        document.getElementById('valWinRate').innerText = "0%";
+        document.getElementById('valRR').innerText = "1 : 0";
+        document.getElementById('valPF').innerText = "0.00";
+        document.getElementById('valExpectancy').innerText = "0 R";
+        document.getElementById('hudConfluenceScore').innerText = "0.0%";
+        document.getElementById('sopStepsContainer').innerHTML = "<small class='text-white-50'>ไม่มีข้อมูลโหนดในระบบ</small>";
+        return;
+      }
+
+      // วิเคราะห์ส่วนประกอบ
+      const hasSMC = activeNodes.some(n => n.type === 'SMC');
+      const hasFVG = activeNodes.some(n => n.key === 'fvg');
+      const hasOB = activeNodes.some(n => n.key === 'order_block');
+      const hasSweep = activeNodes.some(n => n.key === 'liq_sweep');
+      const hasMSS = activeNodes.some(n => n.key === 'mss_choch');
+      const hasEMA = activeNodes.some(n => n.key === 'ema');
+      const hasRSI = activeNodes.some(n => n.key === 'rsi');
+      const hasSupertrend = activeNodes.some(n => n.key === 'supertrend');
+      const hasFibo = activeNodes.some(n => n.key === 'fibo_ote');
+      const hasTiming = activeNodes.some(n => n.key === 'killzone');
+      const hasRisk = activeNodes.some(n => n.key === 'risk_guard');
+
+      // คำนวณสถิติทางคณิตศาสตร์
+      let baseWinRate = 55.0;
+      let baseRR = 1.8;
+      let scoreConfluence = 60.0;
+
+      if (hasFVG) { baseWinRate += 6.5; baseRR += 0.3; scoreConfluence += 8; }
+      if (hasOB) { baseWinRate += 5.0; baseRR += 0.4; scoreConfluence += 7; }
+      if (hasSweep) { baseWinRate += 8.5; baseRR += 0.5; scoreConfluence += 12; }
+      if (hasMSS) { baseWinRate += 7.0; scoreConfluence += 9; }
+      if (hasEMA) { baseWinRate += 4.5; scoreConfluence += 6; }
+      if (hasRSI) { baseWinRate += 4.0; baseRR += 0.2; scoreConfluence += 5; }
+      if (hasFibo) { baseWinRate += 5.5; baseRR += 0.4; scoreConfluence += 7; }
+      if (hasTiming) { baseWinRate += 7.5; scoreConfluence += 10; }
+      if (hasRisk) { baseWinRate += 5.0; scoreConfluence += 8; }
+
+      // บัฟคอมโบพิเศษ (Synergy Boosts)
+      if (hasFVG && hasMSS && hasTiming) {
+        baseWinRate += 6.0;
+        baseRR += 0.4;
+        scoreConfluence += 10;
+      }
+      if (hasSweep && hasMSS) {
+        baseWinRate += 5.5;
+        baseRR += 0.5;
+      }
+
+      baseWinRate = Math.min(88.5, Math.max(45.0, baseWinRate));
+      baseRR = Math.min(4.2, Math.max(1.4, baseRR));
+      scoreConfluence = Math.min(99.0, Math.max(50.0, scoreConfluence));
+
+      const profitFactor = ((baseWinRate / 100) * baseRR) / ((1 - (baseWinRate / 100)) * 1.0);
+      const expectancy = ((baseWinRate / 100) * baseRR) - ((1 - (baseWinRate / 100)) * 1.0);
+
+      // สร้างชื่อกลยุทธ์เฉพาะตัวแบบฉลาด
+      let title = "SMC Hybrid Execution";
+      let archetype = "INSTITUTIONAL QUANT";
+      let grade = "A";
+
+      if (hasSweep && hasMSS) {
+        title = "Hydra Liquidity Purge Engine";
+        archetype = "ASYMMETRIC REVERSAL";
+      } else if (hasFVG && hasTiming) {
+        title = "Apex Silver Bullet Void Hunter";
+        archetype = "PRECISION SCALPER M5";
+      } else if (hasEMA && hasFibo) {
+        title = "Golden Wave Trend Crusader";
+        archetype = "SWING TREND FOLLOWING";
+      } else if (hasSupertrend || hasRSI) {
+        title = "Vanguard Momentum Reversal";
+        archetype = "MOMENTUM CONFLUENCE";
+      }
+
+      if (scoreConfluence >= 90) grade = "S+";
+      else if (scoreConfluence >= 80) grade = "S";
+      else if (scoreConfluence >= 70) grade = "A+";
+
+      // อัปเดตข้อมูลบนหน้าจอ
+      document.getElementById('strategyGeneratedName').innerText = title;
+      document.getElementById('strategyArchetypeBadge').innerText = archetype;
+      document.getElementById('strategyTaglineText').innerText = `กลยุทธ์ผ่านการคำนวณหลอมรวม ${activeNodes.length} โหนดความน่าจะเป็นระดับสถาบัน`;
+      document.getElementById('valWinRate').innerText = `${baseWinRate.toFixed(1)}%`;
+      document.getElementById('valRR').innerText = `1 : ${baseRR.toFixed(1)}`;
+      document.getElementById('valPF').innerText = profitFactor.toFixed(2);
+      document.getElementById('valExpectancy').innerText = `+${expectancy.toFixed(2)} R`;
+      document.getElementById('hudConfluenceScore').innerText = `${scoreConfluence.toFixed(1)}%`;
+      document.getElementById('hudGradeBadge').innerText = `GRADE ${grade}`;
+
+      renderSOPSteps();
+    }
+
+    // สร้างคู่มือเทรดสถาบัน 4 ขั้นตอน (Step-by-Step SOP)
+    function renderSOPSteps() {
+      const container = document.getElementById('sopStepsContainer');
+
+      const smcNodes = activeNodes.filter(n => n.type === 'SMC');
+      const indNodes = activeNodes.filter(n => n.type === 'INDICATOR' || n.type === 'MOMENTUM' || n.type === 'TREND');
+      const triggerNodes = activeNodes.filter(n => n.type === 'TRIGGER');
+      const timeNode = activeNodes.find(n => n.key === 'killzone');
+      const riskNode = activeNodes.find(n => n.key === 'risk_guard');
+
+      const step1 = indNodes.length > 0 
+        ? `ตรวจเช็คทิศทางใหญ่ด้วย <strong>${indNodes.map(n => n.name).join(', ')}</strong> เพื่อกำหนด Bias หากราคาอยู่เหนือเกณฑ์ให้เปิดคำสั่งหน้า BUY เท่านั้น`
+        : "เปิดกราฟ Daily/H4 ระบุเทรนด์หลักของโครงสร้างราคา External Market Structure (Higher High / Lower Low)";
+
+      const step2 = smcNodes.length > 0
+        ? `ลากเส้นมาร์กกรอบ <strong>${smcNodes.map(n => n.name).join(' & ')}</strong> บน Timeframe M15/H1 และตั้ง Draw on Liquidity (DOL) ไว้ที่ยอดสวิงฝั่งตรงข้าม`
+        : "มาร์กแนวรับ-แนวต้านหลักหรือโซน Supply / Demand ที่มีนัยสำคัญ";
+
+      let step3 = triggerNodes.length > 0
+        ? `รอให้ราคาเดินทางมาแตะสัมผัสโซน สลับไปดู Timeframe M1/M5 รอยืนยันสัญญาณ <strong>${triggerNodes.map(n => n.name).join(', ')}</strong> แล้วกดส่งคำสั่งทันที`
+        : "รอแท่งเทียน Price Action ยืนยันการปฏิเสธราคา (Rejection Wick) ใน Timeframe ย่อยแล้วเปิดออเดอร์";
+
+      if (timeNode) {
+        step3 = `[ช่วงเวลา: <strong>${timeNode.params.activeSession}</strong>] ` + step3;
+      }
+
+      const step4 = riskNode
+        ? `คุมความเสี่ยงไม้ละ <strong>${riskNode.params.riskPerTradePercent}</strong> | วางเป้าหมายขั้นต่ำ <strong>${riskNode.params.targetRewardRR}</strong><br>• การบังหน้าทุน: ${riskNode.params.breakevenRule}<br>• การทำกำไร: ${riskNode.params.partialTPRule}`
+        : "วาง Stop Loss นอกกรอบโครงสร้างสวิงเดิม และตั้งเป้า Take Profit ขั้นต่ำ 1:2 R:R ห้ามเลื่อน SL หนีเด็ดขาด";
+
+      container.innerHTML = `
+        <div class="sop-step-box">
+          <strong class="d-block small text-warning mb-0.5">PHASE 1: MACRO BIAS SCREENING</strong>
+          <span class="small text-white-50" style="font-size: 0.72rem; line-height: 1.45;">${step1}</span>
+        </div>
+        <div class="sop-step-box">
+          <strong class="d-block small text-warning mb-0.5">PHASE 2: INSTITUTIONAL POI SETUP</strong>
+          <span class="small text-white-50" style="font-size: 0.72rem; line-height: 1.45;">${step2}</span>
+        </div>
+        <div class="sop-step-box">
+          <strong class="d-block small text-warning mb-0.5">PHASE 3: LTF TRIGGER EXECUTION</strong>
+          <span class="small text-white-50" style="font-size: 0.72rem; line-height: 1.45;">${step3}</span>
+        </div>
+        <div class="sop-step-box mb-0">
+          <strong class="d-block small text-warning mb-0.5">PHASE 4: R-MULTIPLE & RISK PROTOCOL</strong>
+          <span class="small text-white-50" style="font-size: 0.72rem; line-height: 1.45;">${step4}</span>
+        </div>
+      `;
+    }
+
+    function copyStrategySOP() {
+      const name = document.getElementById('strategyGeneratedName').innerText;
+      const wr = document.getElementById('valWinRate').innerText;
+      const rr = document.getElementById('valRR').innerText;
+      
+      let text = `⚡ [3D QUANT STRATEGY BLUEPRINT: ${name}]\n`;
+      text += `• Confluence Score: ${document.getElementById('hudConfluenceScore').innerText} | Grade: ${document.getElementById('hudGradeBadge').innerText}\n`;
+      text += `• Expected Win Rate: ${wr} | Average R:R: ${rr} | Profit Factor: ${document.getElementById('valPF').innerText}\n`;
+      text += `• Active Linked Nodes (${activeNodes.length}):\n`;
+      activeNodes.forEach((n, i) => {
+        text += `  ${i + 1}. [${n.type}] ${n.name} -> ${JSON.stringify(n.params)}\n`;
+      });
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert('คัดลอกพิมพ์เขียวกลยุทธ์ 3D ลง Clipboard เรียบร้อยแล้วครับ! ⚡');
+      });
+    }
+
+    // เริ่มต้นระบบ: ใส่ชุดเริ่มต้น Silver Bullet + FVG + MSS
+    document.addEventListener('DOMContentLoaded', () => {
+      initThreeDReactor();
+
+      // ค่าเริ่มต้น
+      activeNodes = [
+        { id: nodeIdCounter++, key: 'fvg', name: catalogTemplates.fvg.name, type: catalogTemplates.fvg.type, color: catalogTemplates.fvg.color, badgeClass: catalogTemplates.fvg.badgeClass, params: { ...catalogTemplates.fvg.params } },
+        { id: nodeIdCounter++, key: 'mss_choch', name: catalogTemplates.mss_choch.name, type: catalogTemplates.mss_choch.type, color: catalogTemplates.mss_choch.color, badgeClass: catalogTemplates.mss_choch.badgeClass, params: { ...catalogTemplates.mss_choch.params } },
+        { id: nodeIdCounter++, key: 'killzone', name: catalogTemplates.killzone.name, type: catalogTemplates.killzone.type, color: catalogTemplates.killzone.color, badgeClass: catalogTemplates.killzone.badgeClass, params: { ...catalogTemplates.killzone.params } },
+        { id: nodeIdCounter++, key: 'risk_guard', name: catalogTemplates.risk_guard.name, type: catalogTemplates.risk_guard.type, color: catalogTemplates.risk_guard.color, badgeClass: catalogTemplates.risk_guard.badgeClass, params: { ...catalogTemplates.risk_guard.params } }
+      ];
+
+      sync3DWorldNodes();
+      renderNodeCards();
+      pulse3DCoreAndSynthesize();
+    });
+  </script>
+</body>
+</html>

@@ -1,106 +1,185 @@
 :root {
-  --primary-orange: #f97316;
-  --primary-orange-hover: #ea580c;
-  --orange-soft: #fff7ed;
-  --orange-border: #fed7aa;
-  --bg-body: #fafaf9;
+  --primary-purple: #8b5cf6;
+  --primary-purple-hover: #7c3aed;
+  --purple-soft: #f5f0ff;
+  --purple-light: #ede9fe;
+  --purple-border: #ddd6fe;
+  --purple-glow: rgba(139, 92, 246, 0.2);
+  --bg-body: #faf7ff;
   --card-bg: #ffffff;
-  --text-main: #1c1917;
-  --text-muted: #78716c;
+  --text-main: #2e1065;
+  --text-muted: #7c6f93;
   --bull-green: #10b981;
-  --bear-red: #ef4444;
+  --bear-red: #f43f5e;
+  --cute-shadow: 0 8px 24px rgba(139, 92, 246, 0.06);
 }
 
-* {
+/* ================= 1. ป้องกันจอล้น & บังคับตัดคำทั่วทั้งระบบ ================= */
+*, *::before, *::after {
   box-sizing: border-box;
+  min-width: 0;
 }
 
-body {
-  font-family: 'Prompt', sans-serif;
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
   background-color: var(--bg-body);
+  font-family: 'Prompt', sans-serif;
   color: var(--text-main);
   padding-bottom: 95px;
-  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* การ์ดและกล่องบทเรียน */
+/* ป้องกันตัวหนังสือและโค้ดยาวทะลุขอบ */
+p, span, strong, small, div, label, td, th, h1, h2, h3, h4, h5, h6, a, li {
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  word-wrap: break-word !important;
+}
+
+code {
+  color: var(--primary-purple-hover);
+  font-size: 0.85em;
+  background-color: var(--purple-soft);
+  padding: 2px 6px;
+  border-radius: 6px;
+  word-break: break-all !important;
+  white-space: pre-wrap !important;
+}
+
+/* ป้องกัน Flex และ Grid ขยายทะลุหน้าจอ */
+.row {
+  margin-left: -6px;
+  margin-right: -6px;
+}
+
+.row > * {
+  padding-left: 6px;
+  padding-right: 6px;
+  min-width: 0 !important;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* ================= 2. การ์ดและกล่องเนื้อหา ================= */
 .base-card {
   background-color: var(--card-bg);
-  border: 1px solid #f0ece9;
+  border: 1px solid var(--purple-border);
   border-radius: 18px;
-  padding: 1.15rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  padding: 1.1rem;
+  box-shadow: var(--cute-shadow);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .lesson-box {
   background-color: #ffffff;
-  border: 1px solid #e7e5e4;
-  border-left: 4px solid var(--primary-orange);
-  border-radius: 14px;
-  padding: 1.25rem;
-  margin-bottom: 1.2rem;
+  border: 1px solid var(--purple-border);
+  border-left: 5px solid var(--primary-purple);
+  border-radius: 16px;
+  padding: 1.15rem;
+  margin-bottom: 1.1rem;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.03);
+  width: 100%;
+  max-width: 100%;
 }
 
 .example-box {
-  background-color: var(--orange-soft);
-  border: 1px dashed var(--orange-border);
-  border-radius: 12px;
+  background-color: var(--purple-soft);
+  border: 1.5px dashed var(--purple-border);
+  border-radius: 14px;
   padding: 0.9rem;
   margin-top: 0.75rem;
+  width: 100%;
 }
 
-/* ปุ่มและแถบนำทาง */
+/* ================= 3. ตาราง & สารบัญ ================= */
+.table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+}
+
+table {
+  width: 100% !important;
+  margin-bottom: 0;
+}
+
+/* ================= 4. ปุ่ม & แถบนำทาง ================= */
+.badge {
+  white-space: normal !important;
+  line-height: 1.35;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn-hamburger {
-  background-color: var(--orange-soft);
-  color: var(--primary-orange);
-  border: 1px solid var(--orange-border);
-  width: 42px;
-  height: 42px;
+  background-color: var(--purple-soft);
+  color: var(--primary-purple);
+  border: 1px solid var(--purple-border);
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 .btn-hamburger:hover {
-  background-color: var(--primary-orange);
+  background-color: var(--primary-purple);
   color: #ffffff;
+  box-shadow: 0 4px 12px var(--purple-glow);
 }
 
-.btn-orange-action {
-  background-color: var(--primary-orange);
+.btn-purple-action {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: 500;
-  transition: 0.2s;
+  padding: 8px 16px;
+  transition: 0.25s ease;
+  box-shadow: 0 4px 12px var(--purple-glow);
+  width: 100%;
 }
-.btn-orange-action:hover {
-  background-color: var(--primary-orange-hover);
+.btn-purple-action:hover {
+  background: linear-gradient(135deg, #9333ea, #6d28d9);
   color: white;
+  transform: translateY(-1px);
 }
 
 /* แถบเลื่อนแนวนอน */
 .horizontal-scroll {
   display: flex;
   gap: 6px;
-  overflow-x: auto;
+  overflow-x: auto !important;
   white-space: nowrap;
   padding: 4px 2px 8px 2px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  width: 100%;
 }
-.horizontal-scroll::-webkit-scrollbar {
-  display: none;
-}
+.horizontal-scroll::-webkit-scrollbar { display: none; }
 
-/* ปุ่ม Pills */
+/* ปุ่มแคปซูล Pill */
 .cat-btn, .indi-pill, .candle-pill, .news-pill {
   border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 500;
   padding: 6px 14px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--purple-border);
   background-color: #ffffff;
   color: var(--text-muted);
   flex-shrink: 0;
@@ -108,121 +187,98 @@ body {
   cursor: pointer;
 }
 
-.cat-btn.active {
-  background-color: var(--text-main);
+.cat-btn.active, .indi-pill.active, .candle-pill.active, .news-pill.active {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
   color: #ffffff;
-  border-color: var(--text-main);
+  border-color: var(--primary-purple);
+  box-shadow: 0 3px 10px var(--purple-glow);
 }
 
-.indi-pill.active, .candle-pill.active, .news-pill.active {
-  background-color: var(--primary-orange);
-  color: #ffffff;
-  border-color: var(--primary-orange);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
-}
-
-/* กล่อง Diagram SVG */
+/* ================= 5. กล่องไดอะแกรม SVG & เกจวัด ================= */
 .diagram-container {
-  background: #0b1329;
-  border-radius: 14px;
+  background: #201033;
+  border-radius: 16px;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #1e293b;
-  min-height: 220px;
+  border: 1.5px solid #3b2269;
+  min-height: 200px;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 .diagram-container svg {
   width: 100%;
   height: auto;
-  max-height: 220px;
+  max-height: 210px;
 }
 
-/* เกจวัด */
 .metric-bar {
   height: 8px;
   border-radius: 4px;
-  background-color: #e2e8f0;
+  background-color: var(--purple-light);
   overflow: hidden;
+  width: 100%;
 }
 
 .step-badge {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background-color: var(--primary-orange);
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
   color: white;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: bold;
   flex-shrink: 0;
 }
 
 .structure-tag {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: bold;
   padding: 2px 6px;
   border-radius: 6px;
 }
 
-.clock-display {
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
 .timeline-bar {
-  height: 14px;
-  background: #e2e8f0;
-  border-radius: 8px;
+  height: 12px;
+  background: var(--purple-light);
+  border-radius: 10px;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .timeline-progress {
   height: 100%;
-  background: linear-gradient(90deg, #f97316, #ea580c);
-  border-radius: 8px;
+  background: linear-gradient(90deg, #c084fc, #7c3aed);
+  border-radius: 10px;
   transition: width 0.5s ease;
 }
 
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.status-dot.online {
-  background-color: #10b981;
-  box-shadow: 0 0 8px #10b981;
-}
-.status-dot.offline {
-  background-color: #94a3b8;
-}
-
-/* Bottom Nav */
+/* ================= 6. แถบนำทางล่าง (Bottom Navbar) ================= */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 68px;
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid #f0ece9;
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--purple-border);
   display: flex;
   justify-content: space-around;
   align-items: center;
   z-index: 1030;
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 -4px 20px rgba(139, 92, 246, 0.08);
 }
 
 .nav-item-btn {
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   cursor: pointer;
   flex: 1;
   border: none;
@@ -232,13 +288,14 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  padding: 0;
 }
 .nav-item-btn i {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   margin-bottom: 2px;
 }
 .nav-item-btn.active {
-  color: var(--primary-orange);
+  color: var(--primary-purple);
   font-weight: 600;
 }
 .nav-item-btn.active i {

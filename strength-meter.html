@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>เรดาร์วัดความแข็งแกร่งค่าเงินสด Real-Time - Currency Strength Radar Pro</title>
+
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .strength-card {
+      background: #ffffff;
+      border: 1px solid var(--purple-border);
+      border-radius: 16px;
+      padding: 12px;
+      transition: all 0.2s ease;
+      height: 100%;
+    }
+    .strength-card:hover {
+      border-color: var(--primary-purple);
+      box-shadow: 0 4px 14px var(--purple-glow);
+    }
+    .strength-bar-bg {
+      height: 10px;
+      background: #ede9fe;
+      border-radius: 6px;
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+    .strength-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .control-row::-webkit-scrollbar { display: none; }
+
+    .pair-badge {
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-scroll-container {
+      width: 100%;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--purple-border);
+    }
+    .matrix-table {
+      min-width: 620px !important;
+      margin-bottom: 0 !important;
+      background: #ffffff;
+    }
+    .matrix-table th, .matrix-table td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 8px 6px !important;
+      font-size: 0.72rem;
+    }
+    .matrix-cell-pos {
+      background-color: #f0fdf4;
+      color: #15803d;
+      font-weight: 700;
+    }
+    .matrix-cell-neg {
+      background-color: #fff1f2;
+      color: #b91c1c;
+      font-weight: 700;
+    }
+    .matrix-cell-neutral {
+      background-color: #f8fafc;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="container pt-3">
+    <div class="base-card d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
+          <i class="bi bi-speedometer2 me-1" style="color: var(--primary-purple);"></i> เรดาร์ค่าเงินสด Real-Time Pro
+        </span>
+      </div>
+
+      <span class="badge px-2.5 py-1.5 rounded-3 text-white" style="background: linear-gradient(135deg, #a855f7, #7c3aed); font-size: 0.72rem;">
+        <i class="bi bi-broadcast me-1"></i> Live Market Feed
+      </span>
+    </div>
+  </header>
+
+  <!-- ==================== OFFCANVAS SIDEBAR ==================== -->
+  <div class="offcanvas offcanvas-start text-light" tabindex="-1" id="sidebarMenu" style="width: 350px;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <h6 class="offcanvas-title fw-bold mb-0" style="color: var(--text-main);">
+        <i class="bi bi-grid-fill me-1" style="color: var(--primary-purple);"></i> สารบัญระบบเทรดครบวงจร
+      </h6>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="container mt-3">
+
+    <!-- 1. ตารางเรดาร์ความแข็งแกร่งสดจาก TradingView (Live Forex Heatmap Widget) -->
+    <div class="base-card mb-3 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+        <strong style="font-size: 0.82rem; color: var(--text-main);">
+          <i class="bi bi-broadcast me-1 text-danger"></i> ตารางเรดาร์ความแข็งแกร่งสกุลเงินสด (Live Forex Heatmap)
+        </strong>
+        <span class="badge bg-danger text-white" style="font-size: 0.62rem;">Real-time Feed</span>
+      </div>
+
+      <div style="width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid var(--purple-border);">
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js" async>
+          {
+            "width": "100%",
+            "height": "400",
+            "currencies": [
+              "EUR",
+              "USD",
+              "JPY",
+              "GBP",
+              "CHF",
+              "AUD",
+              "CAD",
+              "NZD"
+            ],
+            "isTransparent": false,
+            "colorTheme": "light",
+            "locale": "th_TH"
+          }
+          </script>
+        </div>
+        <!-- TradingView Widget END -->
+      </div>
+    </div>
+
+    <!-- 2. แผงควบคุมจำลองสภาวะตลาด & คำนวณคู่เทรด (Interactive Analysis Engine) -->
+    <div class="base-card mb-3">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 pb-2 border-bottom">
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main);">
+            <i class="bi bi-sliders me-1" style="color: var(--primary-purple);"></i> เครื่องมือวิเคราะห์คู่เทรดเจาะลึก (Match-Up Analyzer)
+          </h6>
+          <small class="text-muted" style="font-size: 0.7rem;">เลือกจำลองสภาวะกระแสเงินเพื่อคัดกรองคู่ Buy / Sell ที่ได้เปรียบสูงสุด</small>
+        </div>
+        <span class="badge bg-light text-muted border" id="active-scenario-tag">สภาวะ: ดอลลาร์แข็งค่าครองตลาด</span>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label text-warning"><i class="bi bi-lightning-charge-fill"></i> สภาวะตลาด:</span>
+        <button class="cat-btn active" onclick="applyScenario('usd_strong', this)">🔥 USD มหาอำนาจ</button>
+        <button class="cat-btn" onclick="applyScenario('risk_on', this)">🚀 Risk-On (โภคภัณฑ์นำตลาด)</button>
+        <button class="cat-btn" onclick="applyScenario('risk_off', this)">🛡️ Risk-Off (ปลอดภัย)</button>
+        <button class="cat-btn" onclick="applyScenario('jpy_weak', this)">📉 JPY อ่อนค่าหนัก</button>
+        <button class="cat-btn" onclick="applyScenario('eur_gbp_rally', this)">🇪🇺 ยุโรปฟื้นตัว</button>
+      </div>
+    </div>
+
+    <!-- 3. มาตรวัดพลัง 8 สกุลเงิน & ตัวช่วยจับคู่ -->
+    <div class="base-card mb-3 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2.5 pb-1 border-bottom">
+        <strong style="font-size: 0.82rem; color: var(--text-main);">
+          <i class="bi bi-bar-chart-fill me-1" style="color: var(--primary-purple);"></i> ดัชนีพลังสัมพัทธ์ 8 สกุลเงินหลัก (Scale 0.0 - 10.0)
+        </strong>
+        <span class="badge" style="background-color: var(--purple-soft); color: var(--primary-purple); font-size: 0.65rem;">
+          Power Index
+        </span>
+      </div>
+
+      <div class="row g-2.5" id="strengthMetersContainer"></div>
+    </div>
+
+    <!-- 4. แนะนำคู่จับคู่ BUY / SELL ที่ได้เปรียบสุด -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="base-card h-100" style="border-left: 5px solid #10b981;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong class="text-success small"><i class="bi bi-arrow-up-circle-fill"></i> คู่เงินฝั่ง BUY ที่ได้เปรียบสูงสุด (Strong > Weak)</strong>
+            <span class="badge bg-success text-white" style="font-size: 0.6rem;">โฟกัสหน้าซื้อ</span>
+          </div>
+          <div class="space-y-1.5" id="topBuyList"></div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="base-card h-100" style="border-left: 5px solid #f43f5e;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong class="text-danger small"><i class="bi bi-arrow-down-circle-fill"></i> คู่เงินฝั่ง SELL ที่ได้เปรียบสูงสุด (Weak < Strong)</strong>
+            <span class="badge bg-danger text-white" style="font-size: 0.6rem;">โฟกัสหน้าขาย</span>
+          </div>
+          <div class="space-y-1.5" id="topSellList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ตาราง Heatmap Matrix 28 คู่เงิน -->
+    <div class="base-card mb-3 bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main);">
+            <i class="bi bi-grid-3x3 me-1" style="color: var(--primary-purple);"></i> ตาราง Heatmap Matrix เปรียบเทียบความสัมพันธ์ 28 คู่เงิน
+          </h6>
+          <small class="text-muted" style="font-size: 0.7rem;">ตัวหน้าเทียบตัวบน: เขียว = BUY / แดง = SELL</small>
+        </div>
+        <span class="badge bg-light text-muted border" style="font-size: 0.65rem;">เลื่อนซ้าย-ขวาได้ ↔️</span>
+      </div>
+
+      <div class="table-scroll-container">
+        <table class="table table-bordered matrix-table">
+          <thead class="table-light">
+            <tr>
+              <th style="background-color: var(--purple-soft); color: var(--primary-purple); font-weight: 700;">Base \ Quote</th>
+              <th>USD</th>
+              <th>EUR</th>
+              <th>GBP</th>
+              <th>JPY</th>
+              <th>AUD</th>
+              <th>CAD</th>
+              <th>CHF</th>
+              <th>NZD</th>
+            </tr>
+          </thead>
+          <tbody id="matrixTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JS SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <script>
+    const scenarios = {
+      usd_strong: {
+        title: "สภาวะ: ดอลลาร์แข็งค่าครองตลาด (USD Dominance)",
+        scores: { USD: 8.8, CAD: 6.2, EUR: 4.8, GBP: 4.5, AUD: 3.8, NZD: 3.4, CHF: 3.0, JPY: 1.6 }
+      },
+      risk_on: {
+        title: "สภาวะ: Risk-On เงินไหลเข้าโภคภัณฑ์ (Commodity Rally)",
+        scores: { AUD: 8.9, NZD: 8.4, CAD: 7.6, GBP: 6.0, EUR: 5.5, USD: 3.5, CHF: 2.8, JPY: 1.4 }
+      },
+      risk_off: {
+        title: "สภาวะ: Risk-Off กังวลสงคราม/วิกฤต (Safe Haven Flight)",
+        scores: { JPY: 8.7, CHF: 8.2, USD: 7.9, EUR: 4.2, GBP: 3.6, CAD: 3.1, AUD: 2.0, NZD: 1.8 }
+      },
+      jpy_weak: {
+        title: "สภาวะ: เยนอ่อนค่ารุนแรง ดอกเบี้ยติดลบ (Yen Dump)",
+        scores: { USD: 8.4, GBP: 8.1, EUR: 7.5, AUD: 7.0, CAD: 6.8, NZD: 6.2, CHF: 5.5, JPY: 1.0 }
+      },
+      eur_gbp_rally: {
+        title: "สภาวะ: ฝั่งยุโรปฟื้นตัวแข็งแกร่ง (European Breakout)",
+        scores: { EUR: 8.6, GBP: 8.3, CHF: 6.4, USD: 5.0, CAD: 4.6, AUD: 3.9, NZD: 3.5, JPY: 2.1 }
+      }
+    };
+
+    let currentScores = { ...scenarios.usd_strong.scores };
+    const currencyInfo = {
+      USD: { name: "ดอลลาร์สหรัฐ", flag: "🇺🇸" },
+      EUR: { name: "ยูโรโซน", flag: "🇪🇺" },
+      GBP: { name: "ปอนด์อังกฤษ", flag: "🇬🇧" },
+      JPY: { name: "เยนญี่ปุ่น", flag: "🇯🇵" },
+      AUD: { name: "ดอลลาร์ออสเตรเลีย", flag: "🇦🇺" },
+      CAD: { name: "ดอลลาร์แคนาดา", flag: "🇨🇦" },
+      CHF: { name: "ฟรังก์สวิส", flag: "🇨🇭" },
+      NZD: { name: "ดอลลาร์นิวซีแลนด์", flag: "🇳🇿" }
+    };
+
+    function applyScenario(scKey, btn) {
+      document.querySelectorAll('.control-row button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const sc = scenarios[scKey] || scenarios.usd_strong;
+      currentScores = { ...sc.scores };
+      document.getElementById('active-scenario-tag').innerText = sc.title;
+
+      renderAll();
+    }
+
+    function renderStrengthMeters() {
+      const container = document.getElementById('strengthMetersContainer');
+      const sorted = Object.keys(currentScores).sort((a, b) => currentScores[b] - currentScores[a]);
+
+      container.innerHTML = sorted.map((cur, rank) => {
+        const val = currentScores[cur];
+        const info = currencyInfo[cur];
+        const pct = (val / 10) * 100;
+        
+        let statusBadge = "ปานกลาง";
+        let barColor = "background-color: var(--primary-purple);";
+        let textColor = "color: var(--primary-purple);";
+
+        if (val >= 7.5) {
+          statusBadge = "แข็งแกร่งมาก 🔥";
+          barColor = "background: linear-gradient(90deg, #10b981, #059669);";
+          textColor = "text-success";
+        } else if (val >= 5.5) {
+          statusBadge = "เริ่มแข็งค่า 📈";
+          barColor = "background: linear-gradient(90deg, #8b5cf6, #7c3aed);";
+          textColor = "color: var(--primary-purple);";
+        } else if (val <= 2.5) {
+          statusBadge = "อ่อนแอมาก ⚠️";
+          barColor = "background: linear-gradient(90deg, #f43f5e, #e11d48);";
+          textColor = "text-danger";
+        } else if (val <= 4.0) {
+          statusBadge = "เริ่มอ่อนค่า 📉";
+          barColor = "background: linear-gradient(90deg, #f59e0b, #d97706);";
+          textColor = "text-warning";
+        }
+
+        return `
+          <div class="col-6 col-md-3">
+            <div class="strength-card">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex align-items-center gap-1.5">
+                  <span style="font-size: 1.1rem;">${info.flag}</span>
+                  <div>
+                    <strong class="d-block" style="color: var(--text-main); font-size: 0.85rem; line-height: 1.1;">${cur}</strong>
+                    <small class="text-muted" style="font-size: 0.62rem;">อันดับ ${rank + 1}</small>
+                  </div>
+                </div>
+                <span class="fs-5 fw-bold ${textColor}" style="font-family: monospace;">${val.toFixed(1)}</span>
+              </div>
+
+              <div class="strength-bar-bg my-1.5">
+                <div class="strength-bar-fill" style="width: ${pct}%; ${barColor}"></div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.65rem;">
+                <span>${info.name}</span>
+                <span class="fw-bold ${textColor}">${statusBadge}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMatchUps() {
+      const sorted = Object.keys(currentScores).sort((a, b) => currentScores[b] - currentScores[a]);
+      const strongest = sorted.slice(0, 2);
+      const weakest = sorted.slice(-2).reverse();
+
+      const buyList = document.getElementById('topBuyList');
+      const sellList = document.getElementById('topSellList');
+
+      const buyPairs = [
+        { pair: `${strongest[0]}/${weakest[0]}`, diff: (currentScores[strongest[0]] - currentScores[weakest[0]]).toFixed(1) },
+        { pair: `${strongest[0]}/${weakest[1]}`, diff: (currentScores[strongest[0]] - currentScores[weakest[1]]).toFixed(1) },
+        { pair: `${strongest[1]}/${weakest[0]}`, diff: (currentScores[strongest[1]] - currentScores[weakest[0]]).toFixed(1) }
+      ];
+
+      buyList.innerHTML = buyPairs.map(p => `
+        <div class="pair-badge bg-light border border-success-subtle">
+          <div class="d-flex align-items-center gap-1.5">
+            <span class="badge bg-success text-white">BUY</span>
+            <strong style="color: var(--text-main);">${p.pair}</strong>
+          </div>
+          <span class="text-success fw-bold">+${p.diff} Spread</span>
+        </div>
+      `).join('');
+
+      const sellPairs = [
+        { pair: `${weakest[0]}/${strongest[0]}`, diff: (currentScores[weakest[0]] - currentScores[strongest[0]]).toFixed(1) },
+        { pair: `${weakest[0]}/${strongest[1]}`, diff: (currentScores[weakest[0]] - currentScores[strongest[1]]).toFixed(1) },
+        { pair: `${weakest[1]}/${strongest[0]}`, diff: (currentScores[weakest[1]] - currentScores[strongest[0]]).toFixed(1) }
+      ];
+
+      sellList.innerHTML = sellPairs.map(p => `
+        <div class="pair-badge bg-light border border-danger-subtle">
+          <div class="d-flex align-items-center gap-1.5">
+            <span class="badge bg-danger text-white">SELL</span>
+            <strong style="color: var(--text-main);">${p.pair}</strong>
+          </div>
+          <span class="text-danger fw-bold">${p.diff} Spread</span>
+        </div>
+      `).join('');
+    }
+
+    function renderMatrixTable() {
+      const currencies = ["USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "NZD"];
+      const tbody = document.getElementById('matrixTableBody');
+
+      tbody.innerHTML = currencies.map(base => {
+        return `
+          <tr>
+            <td class="fw-bold" style="background-color: var(--purple-soft); color: var(--text-main);">${currencyInfo[base].flag} ${base}</td>
+            ${currencies.map(quote => {
+              if (base === quote) return `<td class="matrix-cell-neutral">-</td>`;
+              const diff = (currentScores[base] - currentScores[quote]);
+              if (diff >= 1.5) return `<td class="matrix-cell-pos">BUY (+${diff.toFixed(1)})</td>`;
+              else if (diff <= -1.5) return `<td class="matrix-cell-neg">SELL (${diff.toFixed(1)})</td>`;
+              else return `<td class="matrix-cell-neutral">Sideway (${diff > 0 ? '+' : ''}${diff.toFixed(1)})</td>`;
+            }).join('')}
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      renderStrengthMeters();
+      renderMatchUps();
+      renderMatrixTable();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>

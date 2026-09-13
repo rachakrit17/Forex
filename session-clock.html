@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>นาฬิการอบตลาดโลก & เขตสังหาร - Market Session Clock Pro</title>
+
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ================= Mobile Optimized Clock Styles ================= */
+    .clock-digit-main {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      font-size: clamp(2rem, 7vw, 2.75rem);
+      line-height: 1.1;
+    }
+    .clock-digit {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+    .session-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .pulse-animation {
+      animation: pulseGlow 1.5s infinite;
+    }
+    @keyframes pulseGlow {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .killzone-card {
+      background: #ffffff;
+      border: 1px solid var(--purple-border);
+      border-radius: 16px;
+      padding: 0.9rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.04);
+      height: 100%;
+    }
+    .killzone-card.active-kz {
+      border-color: var(--primary-purple);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+      background: var(--purple-soft);
+    }
+    .killzone-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* ตารางรองรับมือถือ เลื่อนได้ ไม่บีบตัวอักษรแตก */
+    .table-scroll-container {
+      width: 100%;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--purple-border);
+    }
+    .table-scroll-container table {
+      min-width: 640px !important;
+      margin-bottom: 0 !important;
+      background: #ffffff;
+    }
+    .table-scroll-container th, .table-scroll-container td {
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      vertical-align: middle;
+      padding: 8px 10px !important;
+      font-size: 0.72rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="container pt-3">
+    <div class="base-card d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
+          <i class="bi bi-clock-history me-1" style="color: var(--primary-purple);"></i> นาฬิกา 4 ตลาดโลก & เขตสังหาร Pro
+        </span>
+      </div>
+
+      <span class="badge border px-2.5 py-1.5 rounded-3 text-white" style="background: linear-gradient(135deg, #a855f7, #7c3aed); font-size: 0.72rem;">
+        <span class="session-indicator bg-success me-1 pulse-animation"></span> เวลาจริง GMT+7
+      </span>
+    </div>
+  </header>
+
+  <!-- ==================== OFFCANVAS SIDEBAR ==================== -->
+  <div class="offcanvas offcanvas-start text-light" tabindex="-1" id="sidebarMenu" style="width: 350px;">
+    <div class="offcanvas-header border-bottom bg-light">
+      <h6 class="offcanvas-title fw-bold mb-0" style="color: var(--text-main);">
+        <i class="bi bi-grid-fill me-1" style="color: var(--primary-purple);"></i> สารบัญระบบเทรดครบวงจร
+      </h6>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3"></div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="container mt-3">
+
+    <!-- 1. ดิจิทัลคล็อกเวลาไทยสด & แผงควบคุมสภาวะตลาดโลก Real-Time -->
+    <div class="base-card mb-3 bg-white">
+      <div class="row g-3 align-items-center">
+        
+        <div class="col-md-6 border-end-md">
+          <div class="d-flex justify-content-between align-items-baseline mb-1">
+            <small class="text-muted" style="font-size: 0.72rem;">เวลาปัจจุบันในประเทศไทย (GMT+7 กรุงเทพฯ)</small>
+            <span class="badge border" id="day-name" style="background-color: var(--purple-soft); color: var(--primary-purple); border-color: var(--purple-border) !important;">วัน...</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 flex-wrap">
+            <span class="clock-digit-main" id="local-time">00:00:00</span>
+            <small class="text-muted fw-bold" id="current-date" style="font-size: 0.75rem;">-</small>
+          </div>
+
+          <!-- ตัวนับเวลาถอยหลังสู่เหตุการณ์ตลาดถัดไป -->
+          <div class="p-2 rounded-3 border mt-2 bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split" style="color: var(--primary-purple);"></i> ช่วงเวลาสำคัญถัดไป:</small>
+              <strong style="color: var(--primary-purple);" class="small" id="next-event-title">กำลังคำนวณ...</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-baseline mt-0.5">
+              <span class="text-muted" style="font-size: 0.68rem;" id="next-event-time">--:-- น.</span>
+              <span class="badge" id="next-event-countdown" style="background-color: var(--primary-purple); color: #fff; font-size: 0.68rem;">เหลืออีก --:--:--</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <small class="text-muted d-block mb-1" style="font-size: 0.72rem;">สถานะสภาพคล่อง & ความผันผวน (Liquidity Pulse)</small>
+          <div class="p-2.5 rounded-3 border bg-light">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-1 mb-1">
+              <strong class="small" style="color: var(--text-main);" id="active-session-label">กำลังคำนวณ...</strong>
+              <span class="badge" id="overlap-badge" style="font-size: 0.68rem;">-</span>
+            </div>
+            <p class="text-muted mb-2" id="session-recommendation" style="font-size: 0.72rem; line-height: 1.45;">-</p>
+
+            <!-- เกจวัดความหนาแน่น Volume & สเปรดทองคำ -->
+            <div class="row g-2 text-center pt-1 border-top">
+              <div class="col-6 border-end">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">ระดับวอลุ่มตลาดโลก</small>
+                <strong id="vol-level" class="text-success" style="font-size: 0.75rem;">ปานกลาง</strong>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block" style="font-size: 0.62rem;">สภาวะสเปรดทองคำ</small>
+                <strong id="spread-level" style="color: var(--primary-purple); font-size: 0.75rem;">แคบปกติ (0.15 - 0.25$)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. นาฬิกา 4 มหานครศูนย์กลางการเงินโลก (4 Major Sessions) -->
+    <div class="row g-2 mb-3">
+      
+      <!-- ซิดนีย์ -->
+      <div class="col-6 col-md-3">
+        <div class="base-card text-center h-100 p-2.5" id="card-sydney">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-bold" style="color: var(--text-main);">🇦🇺 ซิดนีย์</span>
+            <span class="session-indicator bg-secondary" id="dot-sydney"></span>
+          </div>
+          <span class="fs-5 clock-digit d-block my-1" id="time-sydney">00:00:00</span>
+          <small class="text-muted d-block" style="font-size: 0.65rem;">04:00 - 13:00 น.</small>
+          <span class="badge bg-light text-muted border mt-1" style="font-size: 0.62rem;" id="badge-sydney">ปิดทำการ</span>
+        </div>
+      </div>
+
+      <!-- โตเกียว -->
+      <div class="col-6 col-md-3">
+        <div class="base-card text-center h-100 p-2.5" id="card-tokyo">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-bold" style="color: var(--text-main);">🇯🇵 โตเกียว</span>
+            <span class="session-indicator bg-secondary" id="dot-tokyo"></span>
+          </div>
+          <span class="fs-5 clock-digit d-block my-1" id="time-tokyo">00:00:00</span>
+          <small class="text-muted d-block" style="font-size: 0.65rem;">06:00 - 15:00 น.</small>
+          <span class="badge bg-light text-muted border mt-1" style="font-size: 0.62rem;" id="badge-tokyo">ปิดทำการ</span>
+        </div>
+      </div>
+
+      <!-- ลอนดอน -->
+      <div class="col-6 col-md-3">
+        <div class="base-card text-center h-100 p-2.5" id="card-london">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-bold" style="color: var(--text-main);">🇬🇧 ลอนดอน</span>
+            <span class="session-indicator bg-secondary" id="dot-london"></span>
+          </div>
+          <span class="fs-5 clock-digit d-block my-1" id="time-london">00:00:00</span>
+          <small class="text-muted d-block" style="font-size: 0.65rem;">14:00 - 23:00 น.</small>
+          <span class="badge bg-light text-muted border mt-1" style="font-size: 0.62rem;" id="badge-london">ปิดทำการ</span>
+        </div>
+      </div>
+
+      <!-- นิวยอร์ก -->
+      <div class="col-6 col-md-3">
+        <div class="base-card text-center h-100 p-2.5" id="card-ny">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-bold" style="color: var(--text-main);">🇺🇸 นิวยอร์ก</span>
+            <span class="session-indicator bg-secondary" id="dot-ny"></span>
+          </div>
+          <span class="fs-5 clock-digit d-block my-1" id="time-ny">00:00:00</span>
+          <small class="text-muted d-block" style="font-size: 0.65rem;">19:00 - 04:00 น.</small>
+          <span class="badge bg-light text-muted border mt-1" style="font-size: 0.62rem;" id="badge-ny">ปิดทำการ</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. แถบไทม์ไลน์ 24 ชั่วโมง & Golden Overlap Monitor -->
+    <div class="base-card mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main);">
+          <i class="bi bi-bar-chart-steps me-1" style="color: var(--primary-purple);"></i> แผนที่เวลา 24 ชั่วโมง & ช่วงตลาดเปิดชนกัน (Golden Overlaps)
+        </h6>
+        <span class="badge" id="timeline-pct-badge" style="background-color: var(--purple-soft); color: var(--primary-purple); font-size: 0.65rem;">ผ่านไป 0% ของวัน</span>
+      </div>
+
+      <div class="d-flex justify-content-between text-muted mb-1" style="font-size: 0.62rem;">
+        <span>00:00</span>
+        <span>06:00 (เอเชีย)</span>
+        <span>13:00 (แฟรงก์เฟิร์ต)</span>
+        <span>14:00 (ลอนดอน)</span>
+        <span>19:00 (นิวยอร์ก)</span>
+        <span>23:59</span>
+      </div>
+
+      <div class="timeline-bar mb-2.5">
+        <div class="timeline-progress" id="day-progress" style="width: 0%;"></div>
+      </div>
+
+      <div class="row g-2">
+        <!-- Overlap 1: London + NY -->
+        <div class="col-md-6">
+          <div class="p-2.5 rounded-3 border h-100" style="background-color: #fff1f2; border-color: #fecdd3 !important;">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="text-danger small"><i class="bi bi-fire"></i> 🔥 London & NY Overlap (19:00 - 22:00 น.)</strong>
+              <span class="badge bg-danger text-white" style="font-size: 0.6rem;">สวิงแรงที่สุด</span>
+            </div>
+            <p class="text-muted mb-0" style="font-size: 0.72rem; line-height: 1.45;">
+              ช่วงเวลาที่มีวอลุ่มการซื้อขายมากกว่า 70% ของทั้งโลก ข่าวกล่องแดงสหรัฐฯ ประกาศ ราคาทองคำ (XAUUSD) และคู่เงิน USD วิ่งเป็นเทรนด์ยาวที่สุดในรอบวัน
+            </p>
+          </div>
+        </div>
+
+        <!-- Overlap 2: Tokyo + London -->
+        <div class="col-md-6">
+          <div class="p-2.5 rounded-3 border h-100" style="background-color: #fffbeb; border-color: #fef3c7 !important;">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="text-warning small"><i class="bi bi-lightning-charge"></i> ⚡ Tokyo & London Overlap (13:00 - 15:00 น.)</strong>
+              <span class="badge bg-warning text-dark" style="font-size: 0.6rem;">London Breakout</span>
+            </div>
+            <p class="text-muted mb-0" style="font-size: 0.72rem; line-height: 1.45;">
+              ตลาดยุโรป (Frankfurt/London) เริ่มส่งคำสั่งซื้อขายก้อนแรก มักเกิดการกระชากหลุดกรอบราคาของตลาดเอเชีย เหมาะกับคู่เงิน GBPJPY, EURJPY และ EURUSD
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. พิมพ์เขียวสถาบัน: ICT Killzones 6 เฟสเต็ม -->
+    <div class="base-card mb-3">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.88rem; color: var(--text-main);">
+            <i class="bi bi-crosshair me-1" style="color: var(--bear-red);"></i> ICT Killzones & Silver Bullet Playbook
+          </h6>
+          <small class="text-muted" style="font-size: 0.7rem;">ช่วงเวลาเฉพาะที่อัลกอริทึมสถาบัน (IPDA) เข้าส่งคำสั่งทำราคา</small>
+        </div>
+        <span class="badge text-white" style="background-color: var(--primary-purple); font-size: 0.65rem;">Smart Money Concepts</span>
+      </div>
+
+      <div class="row g-2.5">
+        
+        <!-- 1. Asian Range -->
+        <div class="col-md-6">
+          <div class="killzone-card" id="kz-card-asian">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main);" class="small">1. Asian Range (สร้างสภาพคล่อง)</strong>
+              <span class="killzone-badge bg-light text-muted border" id="kz-badge-asian">06:00 - 11:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> กราฟมักบีบตัววิ่งในกรอบแคบๆ เพื่อสะสมคำสั่ง Stop Loss ของรายย่อยไว้ที่ขอบบน (Asian High) และขอบล่าง (Asian Low)<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> มาร์กเส้นราคาสูงสุดและต่ำสุดของช่วงนี้ไว้ เพื่อรอดูการกวาดสภาพคล่อง (Sweep) ในตลาดลอนดอน
+            </p>
+            <div class="p-1.5 rounded-2 bg-light border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>สินทรัพย์เด่น:</strong> AUDUSD, NZDUSD, USDJPY, ไซด์เวย์กรอบแคบในทองคำ
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Frankfurt Pre-Open -->
+        <div class="col-md-6">
+          <div class="killzone-card" id="kz-card-frankfurt">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main);" class="small">2. Frankfurt Open (หยั่งเชิงสภาพคล่อง)</strong>
+              <span class="killzone-badge bg-light text-muted border" id="kz-badge-frankfurt">13:00 - 14:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> วอลุ่มแรกของยุโรปเริ่มเข้า เริ่มมีการทดสอบราคาเบรกหลุด Asian High/Low ชั่วคราวเพื่อเช็กสภาพคล่อง<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> อย่าเพิ่งผลีผลามตามน้ำ ให้จับตารอดูแท่งเทียนทิ้งไส้ Reject โซน
+            </p>
+            <div class="p-1.5 rounded-2 bg-light border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>สินทรัพย์เด่น:</strong> EURUSD, EURJPY, GBPUSD เริ่มมีวอลุ่มขยับ
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. London Open Killzone -->
+        <div class="col-md-6">
+          <div class="killzone-card" id="kz-card-london">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main);" class="small">3. London Open (Judas Swing หลอกล่อ)</strong>
+              <span class="killzone-badge text-white" style="background-color: var(--primary-purple);" id="kz-badge-london">14:00 - 17:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> มักเกิด <strong>Judas Swing</strong> โดยกระชากราคาหลุด Asian High หรือ Low เพื่อกิน Stop Loss ของเม่า ก่อนจะวิ่งกลับตัวไปยังทิศทางจริงของวัน<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> รอราคากวาด Asian Low/High จบ แล้วเกิด CHoCH ใน TF M5 ➔ ยิงออเดอร์ตามทิศทางจริง
+            </p>
+            <div class="p-1.5 rounded-2 bg-light border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>สินทรัพย์เด่น:</strong> GBPUSD, EURUSD, XAUUSD, GBPJPY
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. New York Open Killzone -->
+        <div class="col-md-6">
+          <div class="killzone-card" id="kz-card-ny">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main);" class="small">4. New York Open (ตลาดอเมริกา & ข่าว)</strong>
+              <span class="killzone-badge text-white bg-danger" id="kz-badge-ny">19:00 - 22:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> มีการประกาศตัวเลขเศรษฐกิจกล่องแดง (CPI, NFP, GDP) วอลุ่มมหาศาล มักเป็นการวิ่งขยายตัวตามเทรนด์ลอนดอน (Continuation) หรือกลับทิศครั้งใหญ่หากข่าวขัดแย้ง<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> รอ 15 นาทีหลังข่าวออก ดักเข้าตามแนว Order Block ในทิศทางของเทรนด์
+            </p>
+            <div class="p-1.5 rounded-2 bg-light border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>สินทรัพย์เด่น:</strong> XAUUSD (ทองคำ), US30, NAS100, EURUSD, USDJPY
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. ICT Silver Bullet -->
+        <div class="col-md-6">
+          <div class="killzone-card border-warning" style="background-color: var(--purple-soft);" id="kz-card-silver">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main); font-size: 0.78rem;"><i class="bi bi-bullseye" style="color: var(--primary-purple);"></i> 5. ICT Silver Bullet (ชั่วโมงทองคำสถาบัน)</strong>
+              <span class="killzone-badge text-white" style="background-color: #ec4899;" id="kz-badge-silver">21:00 - 22:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> ช่วงเวลา 1 ชั่วโมงที่มีการส่งคำสั่งของอัลกอริทึมอย่างแม่นยำที่สุด มักเกิด FVG (Fair Value Gap) คุณภาพสูงหลังผ่านพ้นความผันผวนของข่าวแรก<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> ดักเข้าที่ FVG แรกที่เกิดขึ้นหลังการเบรกโครงสร้าง เก็บกำไรระยะ 300 - 600 จุด (ทองคำ) หรือ 20 - 35 Pips อย่างรวดเร็ว
+            </p>
+            <div class="p-1.5 rounded-2 bg-white border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>เป้าหมายสถิติ:</strong> Win Rate สถิติ 78%+ บน Timeframe M5
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. London Close -->
+        <div class="col-md-6">
+          <div class="killzone-card" id="kz-card-close">
+            <div class="d-flex justify-content-between align-items-center mb-1.5">
+              <strong style="color: var(--text-main);" class="small">6. London Close (ปิดทำกำไรประจำวัน)</strong>
+              <span class="killzone-badge bg-light text-muted border" id="kz-badge-close">22:00 - 01:00 น.</span>
+            </div>
+            <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.5;">
+              • <strong>พฤติกรรมสถาบัน:</strong> เทรดเดอร์ฝั่งลอนดอนเริ่มปิดทำกำไร (Profit Taking) ทำให้ราคามักเกิดการย่อตัวสวนทางกับเทรนด์ของวัน (Mean Reversion Retracement)<br>
+              • <strong>กลยุทธ์ทำกำไร:</strong> ทยอยปิดทำกำไรไม้รันเทรนด์ ไม่ควรเปิดออเดอร์ใหม่ไล่ราคาตามน้ำ
+            </p>
+            <div class="p-1.5 rounded-2 bg-light border small text-muted" style="font-size: 0.68rem;">
+              🎯 <strong>ข้อควรระวัง:</strong> วอลุ่มเริ่มชะลอตัว สเปรดจะเริ่มถ่างกว้างขึ้นหลังเที่ยงคืน
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 5. ตาราง Matrix แนะนำคู่เงิน & สินทรัพย์ตามรอบเวลาตลาด (รองรับมือถือ) -->
+    <div class="base-card bg-white">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main);">
+          <i class="bi bi-grid-3x3-gap-fill me-1" style="color: var(--primary-purple);"></i> Asset Playbook Matrix (เลือกเทรดสินทรัพย์ให้ถูกช่วงเวลา)
+        </h6>
+        <span class="badge bg-light text-muted border" style="font-size: 0.65rem;">เลื่อนซ้าย-ขวาได้ ↔️</span>
+      </div>
+
+      <div class="table-scroll-container">
+        <table class="table table-bordered table-sm small text-center mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 150px;">สินทรัพย์</th>
+              <th style="width: 140px;">เอเชีย (06:00-13:00)</th>
+              <th style="width: 160px;">ลอนดอน (14:00-18:00)</th>
+              <th style="width: 160px;">นิวยอร์ก (19:00-23:00)</th>
+              <th style="width: 140px;">ดึก (00:00-05:00)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-bold text-warning">ทองคำ (XAUUSD)</td>
+              <td><span class="badge bg-light text-muted border">กรอบแคบ 300-600 จุด</span></td>
+              <td><span class="badge" style="background-color: var(--purple-soft); color: var(--primary-purple);">เริ่มเบรก 800-1,500 จุด</span></td>
+              <td><span class="badge bg-danger text-white fw-bold">พีคสุด 1,500-3,500 จุด 🔥</span></td>
+              <td><span class="badge bg-light text-muted border">ชะลอตัว/สเปรดถ่าง</span></td>
+            </tr>
+            <tr>
+              <td class="fw-bold" style="color: var(--primary-purple);">EURUSD / GBPUSD</td>
+              <td><span class="badge bg-light text-muted border">20 - 35 Pips</span></td>
+              <td><span class="badge" style="background-color: var(--purple-soft); color: var(--primary-purple); font-weight: bold;">50 - 90 Pips (Judas)</span></td>
+              <td><span class="badge bg-danger text-white fw-bold">70 - 130 Pips 🔥</span></td>
+              <td><span class="badge bg-light text-muted border">พักฐาน</span></td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-info">GBPJPY / EURJPY</td>
+              <td><span class="badge bg-light text-muted border">30 - 50 Pips (มีวอลุ่ม JPY)</span></td>
+              <td><span class="badge bg-danger text-white fw-bold">80 - 150 Pips สวิงแรง 🔥</span></td>
+              <td><span class="badge" style="background-color: var(--purple-soft); color: var(--primary-purple);">60 - 100 Pips</span></td>
+              <td><span class="badge bg-light text-muted border">พักฐาน</span></td>
+            </tr>
+            <tr>
+              <td class="fw-bold text-success">AUDUSD / NZDUSD</td>
+              <td><span class="badge bg-success-subtle text-success fw-bold">40 - 70 Pips (ตลาดบ้านตัวเอง)</span></td>
+              <td><span class="badge bg-light text-muted border">30 - 50 Pips</span></td>
+              <td><span class="badge" style="background-color: var(--purple-soft); color: var(--primary-purple);">40 - 80 Pips</span></td>
+              <td><span class="badge bg-light text-muted border">พักฐาน</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JS SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="workspace-core.js"></script>
+
+  <!-- Live Market Clock & Institutional Engine -->
+  <script>
+    function updateClocks() {
+      const now = new Date();
+
+      // 1. เวลาไทยท้องถิ่น (GMT+7)
+      const thHours = now.getHours();
+      const thMinutes = now.getMinutes();
+      const thSeconds = now.getSeconds();
+      const totalSecondsPassed = (thHours * 3600) + (thMinutes * 60) + thSeconds;
+
+      document.getElementById('local-time').innerText = 
+        String(thHours).padStart(2, '0') + ':' + 
+        String(thMinutes).padStart(2, '0') + ':' + 
+        String(thSeconds).padStart(2, '0');
+
+      const days = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
+      document.getElementById('day-name').innerText = days[now.getDay()];
+      document.getElementById('current-date').innerText = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      // 2. คำนวณเวลา 4 เมืองใหญ่
+      const sydHour = (thHours + 3) % 24;
+      document.getElementById('time-sydney').innerText = String(sydHour).padStart(2, '0') + ':' + String(thMinutes).padStart(2, '0') + ':' + String(thSeconds).padStart(2, '0');
+
+      const tyoHour = (thHours + 2) % 24;
+      document.getElementById('time-tokyo').innerText = String(tyoHour).padStart(2, '0') + ':' + String(thMinutes).padStart(2, '0') + ':' + String(thSeconds).padStart(2, '0');
+
+      const lonHour = (thHours - 6 + 24) % 24;
+      document.getElementById('time-london').innerText = String(lonHour).padStart(2, '0') + ':' + String(thMinutes).padStart(2, '0') + ':' + String(thSeconds).padStart(2, '0');
+
+      const nyHour = (thHours - 11 + 24) % 24;
+      document.getElementById('time-ny').innerText = String(nyHour).padStart(2, '0') + ':' + String(thMinutes).padStart(2, '0') + ':' + String(thSeconds).padStart(2, '0');
+
+      // 3. ตรวจสอบสถานะเปิด-ปิด 4 ตลาด
+      const isSydOpen = thHours >= 4 && thHours < 13;
+      updateSessionStatus('sydney', isSydOpen);
+
+      const isTyoOpen = thHours >= 6 && thHours < 15;
+      updateSessionStatus('tokyo', isTyoOpen);
+
+      const isLonOpen = thHours >= 14 && thHours < 23;
+      updateSessionStatus('london', isLonOpen);
+
+      const isNyOpen = thHours >= 19 || thHours < 4;
+      updateSessionStatus('ny', isNyOpen);
+
+      // 4. ตรวจสอบสถานะ ICT Killzones ปัจจุบัน
+      const isAsianKZ = thHours >= 6 && thHours < 11;
+      const isFrankfurtKZ = thHours >= 13 && thHours < 14;
+      const isLondonKZ = thHours >= 14 && thHours < 17;
+      const isNyKZ = thHours >= 19 && thHours < 22;
+      const isSilverKZ = thHours >= 21 && thHours < 22;
+      const isCloseKZ = thHours >= 22 || thHours < 1;
+
+      updateKillzoneCard('asian', isAsianKZ, '06:00 - 11:00 น.');
+      updateKillzoneCard('frankfurt', isFrankfurtKZ, '13:00 - 14:00 น.');
+      updateKillzoneCard('london', isLondonKZ, '14:00 - 17:00 น.');
+      updateKillzoneCard('ny', isNyKZ, '19:00 - 22:00 น.');
+      updateKillzoneCard('silver', isSilverKZ, '21:00 - 22:00 น.');
+      updateKillzoneCard('close', isCloseKZ, '22:00 - 01:00 น.');
+
+      // 5. คำนวณ Liquidity Pulse & Volume Level
+      const statusLabel = document.getElementById('active-session-label');
+      const overlapBadge = document.getElementById('overlap-badge');
+      const recText = document.getElementById('session-recommendation');
+      const volLevel = document.getElementById('vol-level');
+      const spreadLevel = document.getElementById('spread-level');
+
+      if (isLonOpen && isNyOpen) {
+        statusLabel.innerText = '🔥 ตลาดเปิดชนกัน: ลอนดอน + นิวยอร์ก';
+        overlapBadge.className = 'badge bg-danger text-white pulse-animation';
+        overlapBadge.innerText = 'Golden Hours (วอลุ่มสูงสุด)';
+        recText.innerText = '⚡ แนะนำ: XAUUSD, EURUSD, GBPUSD สภาพคล่องระดับโลก วิ่งตามเทรนด์ยาวที่สุด';
+        volLevel.innerText = 'สูงสุดขีด (Extreme Peak) 🔥';
+        volLevel.className = 'text-danger fw-bold';
+        spreadLevel.innerText = 'แคบที่สุดในรอบวัน (0.10 - 0.18$)';
+        spreadLevel.className = 'text-success fw-bold';
+      } else if (isTyoOpen && isLonOpen) {
+        statusLabel.innerText = '⚡ ตลาดเปิดชนกัน: โตเกียว + ลอนดอน';
+        overlapBadge.className = 'badge text-white';
+        overlapBadge.style.backgroundColor = 'var(--primary-purple)';
+        overlapBadge.innerText = 'London Open Breakout';
+        recText.innerText = '🎯 แนะนำ: GBPJPY, EURJPY, XAUUSD เริ่มมีวอลุ่มกวาดสภาพคล่อง Judas Swing';
+        volLevel.innerText = 'สูง (High)';
+        volLevel.className = 'text-primary fw-bold';
+        spreadLevel.innerText = 'แคบปกติ (0.15 - 0.22$)';
+        spreadLevel.className = 'text-primary fw-bold';
+      } else if (isLonOpen) {
+        statusLabel.innerText = '🇬🇧 ตลาดลอนดอนกำลังเปิดทำการ';
+        overlapBadge.className = 'badge text-white';
+        overlapBadge.style.backgroundColor = 'var(--primary-purple)';
+        overlapBadge.innerText = 'London Active';
+        recText.innerText = '📈 โฟกัสคู่เงินตระกูล GBP / EUR และทองคำ เริ่มสร้าง High/Low ประจำวัน';
+        volLevel.innerText = 'สูงปานกลาง';
+        volLevel.className = 'text-primary';
+        spreadLevel.innerText = 'ปกติ (0.15 - 0.25$)';
+        spreadLevel.className = 'text-primary';
+      } else if (isNyOpen) {
+        statusLabel.innerText = '🇺🇸 ตลาดนิวยอร์กกำลังเปิดทำการ';
+        overlapBadge.className = 'badge text-white';
+        overlapBadge.style.backgroundColor = 'var(--primary-purple)';
+        overlapBadge.innerText = 'New York Active';
+        recText.innerText = '📊 เทรดตามเทรนด์ต่อเนื่องและเตรียมจัดการออเดอร์ก่อนตลาดลอนดอนปิด';
+        volLevel.innerText = 'สูงปานกลาง';
+        volLevel.className = 'text-primary';
+        spreadLevel.innerText = 'ปกติ (0.18 - 0.25$)';
+        spreadLevel.className = 'text-primary';
+      } else if (isTyoOpen || isSydOpen) {
+        statusLabel.innerText = '🇯🇵 ตลาดเอเชียกำลังเปิดทำการ';
+        overlapBadge.className = 'badge bg-success-subtle text-success';
+        overlapBadge.innerText = 'Asian Session';
+        recText.innerText = '↔️ เล่นกรอบแคบใน AUD / JPY หรือรอสะสมกรอบ Asian High/Low ในทองคำ';
+        volLevel.innerText = 'ปานกลาง (Sideway)';
+        volLevel.className = 'text-muted';
+        spreadLevel.innerText = 'ปกติ (0.20 - 0.28$)';
+        spreadLevel.className = 'text-muted';
+      } else {
+        statusLabel.innerText = '🌙 ตลาดส่วนใหญ่ปิดทำการ (Off-Hours / Rollover)';
+        overlapBadge.className = 'badge bg-light text-muted border';
+        overlapBadge.innerText = 'Low Liquidity';
+        recText.innerText = '⚠️ ช่วงเวลาสเปรดถ่างและสภาพคล่องต่ำที่สุด ห้ามเปิดออเดอร์ใหม่';
+        volLevel.innerText = 'ต่ำมาก (Low)';
+        volLevel.className = 'text-secondary';
+        spreadLevel.innerText = 'ระวังถ่างกว้าง (0.50 - 3.00$+) ⚠️';
+        spreadLevel.className = 'text-danger fw-bold';
+      }
+
+      // 6. แถบเปอร์เซ็นต์ความคืบหน้าของวัน
+      const dayPercent = (totalSecondsPassed / 86400) * 100;
+      document.getElementById('day-progress').style.width = dayPercent.toFixed(1) + '%';
+      document.getElementById('timeline-pct-badge').innerText = `ผ่านไป ${dayPercent.toFixed(0)}% ของวัน`;
+
+      // 7. คำนวณเวลานับถอยหลังสู่เหตุการณ์สำคัญถัดไป
+      calculateNextEvent(thHours, thMinutes, thSeconds);
+    }
+
+    function calculateNextEvent(h, m, s) {
+      const events = [
+        { name: "ซิดนีย์เปิด", targetHour: 4, targetMin: 0 },
+        { name: "โตเกียว & Asian Range เปิด", targetHour: 6, targetMin: 0 },
+        { name: "Frankfurt Open (ยุโรปเปิด)", targetHour: 13, targetMin: 0 },
+        { name: "London Open Killzone (ลอนดอนเปิด)", targetHour: 14, targetMin: 0 },
+        { name: "New York Open Killzone (อเมริกาเปิด)", targetHour: 19, targetMin: 0 },
+        { name: "ICT Silver Bullet (ชั่วโมงทองคำ)", targetHour: 21, targetMin: 0 },
+        { name: "London Close (ปิดทำกำไร)", targetHour: 22, targetMin: 0 }
+      ];
+
+      const currentSecOfDay = (h * 3600) + (m * 60) + s;
+      let nextEv = null;
+      let diffSec = Infinity;
+
+      for (let ev of events) {
+        let evSec = (ev.targetHour * 3600) + (ev.targetMin * 60);
+        if (evSec > currentSecOfDay) {
+          nextEv = ev;
+          diffSec = evSec - currentSecOfDay;
+          break;
+        }
+      }
+
+      if (!nextEv) {
+        nextEv = events[0];
+        diffSec = (86400 - currentSecOfDay) + (events[0].targetHour * 3600);
+      }
+
+      const cdHours = Math.floor(diffSec / 3600);
+      const cdMins = Math.floor((diffSec % 3600) / 60);
+      const cdSecs = diffSec % 60;
+
+      document.getElementById('next-event-title').innerText = nextEv.name;
+      document.getElementById('next-event-time').innerText = `เวลา ${String(nextEv.targetHour).padStart(2, '0')}:${String(nextEv.targetMin).padStart(2, '0')} น.`;
+      document.getElementById('next-event-countdown').innerText = `เหลืออีก ${String(cdHours).padStart(2, '0')}:${String(cdMins).padStart(2, '0')}:${String(cdSecs).padStart(2, '0')}`;
+    }
+
+    function updateSessionStatus(city, isOpen) {
+      const card = document.getElementById(`card-${city}`);
+      const dot = document.getElementById(`dot-${city}`);
+      const badge = document.getElementById(`badge-${city}`);
+
+      if (isOpen) {
+        card.style.borderColor = 'var(--primary-purple)';
+        dot.className = 'session-indicator bg-success pulse-animation';
+        badge.className = 'badge border mt-1';
+        badge.style.backgroundColor = '#f0fdf4';
+        badge.style.color = '#10b981';
+        badge.style.borderColor = '#bbf7d0';
+        badge.innerText = 'เปิดทำการ 🟢';
+      } else {
+        card.style.borderColor = 'var(--purple-border)';
+        dot.className = 'session-indicator bg-secondary';
+        badge.className = 'badge bg-light text-muted border mt-1';
+        badge.innerText = 'ปิดทำการ';
+      }
+    }
+
+    function updateKillzoneCard(name, isActive, defaultTime) {
+      const card = document.getElementById(`kz-card-${name}`);
+      const badge = document.getElementById(`kz-badge-${name}`);
+      if (!card) return;
+
+      if (isActive) {
+        card.classList.add('active-kz');
+        if (badge) {
+          badge.className = 'killzone-badge text-white bg-danger pulse-animation';
+          badge.innerText = `${defaultTime} (กำลังเกิดขึ้น 🔥)`;
+        }
+      } else {
+        card.classList.remove('active-kz');
+        if (badge) {
+          if (name === 'london') {
+            badge.className = 'killzone-badge text-white';
+            badge.style.backgroundColor = 'var(--primary-purple)';
+          } else if (name === 'ny') {
+            badge.className = 'killzone-badge text-white bg-danger';
+          } else if (name === 'silver') {
+            badge.className = 'killzone-badge text-white';
+            badge.style.backgroundColor = '#ec4899';
+          } else {
+            badge.className = 'killzone-badge bg-light text-muted border';
+          }
+          badge.innerText = defaultTime;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateClocks();
+      setInterval(updateClocks, 1000);
+    });
+  </script>
+</body>
+</html>
